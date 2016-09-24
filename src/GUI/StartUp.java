@@ -29,7 +29,9 @@ public class StartUp  {
 
 		panel.setLayout(null);
 
-	
+	/**
+	 * Created Labels
+	 */
 		titleLabel.setBounds(150,10,150,150);
 		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
 		panel.add(titleLabel);
