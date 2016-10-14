@@ -73,5 +73,17 @@ public class StartView {
 				
 			}
 		});
+		
+		/**
+		 * Sends you to Main Page
+		 */
+		loginButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				MainPageView main = new MainPageView();
+				frame = main.frame;
+				
+			}
+		});
 	}
 }
