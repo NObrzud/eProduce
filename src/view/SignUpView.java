@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -74,6 +77,19 @@ public class SignUpView {
 		
 		submitButton.setBounds(220, 230, 75, 20);
 		panel.add(submitButton);
+		
+		/**
+		 * Cancels sign up and moves back to login screen
+		 */
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				StartView sv = new StartView();
+				frame = sv.frame;
+				frame.setVisible(true);
+				
+			}
+		});
 	}
 
 }
