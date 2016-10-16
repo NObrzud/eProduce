@@ -10,12 +10,16 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import controller.eProduceController;
+
 
 
 public class SignUpView {
 	public JFrame frame= new JFrame("eProduce - Signup");
 	private JPanel panel = new JPanel();
 	
+	public eProduceController controller = new eProduceController();
+
 	private JTextField firstNameTF = new JTextField();
 	private JTextField lastNameTF = new JTextField();
 	private JTextField emailTF = new JTextField();	
@@ -87,9 +91,33 @@ public class SignUpView {
 				StartView sv = new StartView();
 				frame = sv.frame;
 				frame.setVisible(true);
-				
-			}
+			}	
 		});
+		submitButton.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						if(!(firstNameTF.getText().equals("")) && !(lastNameTF.getText().equals("")) && !emailTF.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
+								   && !(passwordPF.getText().equals("")) && passwordPF.getText().equals(rePasswordPF.getText()))			   //are not null, and password and confirm pass are equal...
+							{
+								if(controller.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
+								{
+									frame.dispose();
+									StartView sv = new StartView();
+									frame = sv.frame;
+									frame.setVisible(true);
+								}
+								else
+								{
+									System.out.println("Create new account failed on database-side"); //temporary way to handle db-side account failing
+								}
+							}
+						else
+						{
+							System.out.println("Invalid input. Please make sure all fields are filled and passwords match."); //temporary way to handle invalid input
+						}
+					}
+				});
 	}
 
 }

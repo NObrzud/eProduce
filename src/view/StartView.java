@@ -79,9 +79,16 @@ public class StartView {
 		 */
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MainPageView main = new MainPageView();
-				frame = main.frame;
+				   if(!(passwordPF.getText().equals("")) && controller.validateLogin(emailTF, passwordPF))
+		            {	           
+		            	frame.dispose();
+		            	MainPageView mp = new MainPageView();
+		            	frame = mp.frame;
+		            }
+		            else
+		            {
+		            	System.out.println("Incorrect login. Please try again."); //temporary handling, TODO: discuss how to handle and implement
+		            }
 				
 			}
 		});
