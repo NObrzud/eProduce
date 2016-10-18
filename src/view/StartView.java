@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -87,7 +88,7 @@ public class StartView {
 		            }
 		            else
 		            {
-		            	System.out.println("Incorrect login. Please try again."); //temporary handling, TODO: discuss how to handle and implement
+		            	  JOptionPane.showMessageDialog(frame, "Incorrect login. Please try again."); //temporary handling, TODO: discuss how to handle and implement
 		            }
 				
 			}

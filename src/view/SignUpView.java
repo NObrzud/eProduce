@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -102,6 +103,7 @@ public class SignUpView {
 							{
 								if(controller.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
 								{
+									  JOptionPane.showMessageDialog(frame, "Incorrect login. Please try again.");
 									frame.dispose();
 									StartView sv = new StartView();
 									frame = sv.frame;
