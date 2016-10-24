@@ -103,7 +103,7 @@ public class SignUpView {
 							{
 								if(controller.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
 								{
-									  JOptionPane.showMessageDialog(frame, "Incorrect login. Please try again.");
+									JOptionPane.showMessageDialog(frame, "Account has been successfully created!");
 									frame.dispose();
 									StartView sv = new StartView();
 									frame = sv.frame;
@@ -111,12 +111,12 @@ public class SignUpView {
 								}
 								else
 								{
-									System.out.println("Create new account failed on database-side"); //temporary way to handle db-side account failing
+									JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
 								}
 							}
 						else
 						{
-							System.out.println("Invalid input. Please make sure all fields are filled and passwords match."); //temporary way to handle invalid input
+							 JOptionPane.showMessageDialog(frame, "Invalid input. Please make sure all fields are filled and passwords match."); //temporary way to handle invalid input
 						}
 					}
 				});

@@ -82,7 +82,7 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
+			//System.exit(-1);
 			return false;
 		}
 	}

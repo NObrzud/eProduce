@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -68,7 +70,18 @@ public class MainPageView {
 		rigthSide.add(myAccount);
 		rigthSide.add(logout);
 		
-	
+		/*
+		 * Log outs action button listener logs the user out
+		 */
+		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				StartView start = new StartView();
+				start.frame.setVisible(true);
+				
+			}
+		});
+		
 		topPanel.add(leftSide,BorderLayout.WEST);
 		topPanel.add(rigthSide,BorderLayout.EAST);
 		
@@ -116,6 +129,7 @@ public class MainPageView {
 	        listModel.addElement("Great Britain");
 	        listModel.addElement("Japan");
 	        listings = new JList<>(listModel);
+	  
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
 		
