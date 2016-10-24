@@ -3,11 +3,7 @@ package controller;
 import model.User;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class eProduceController {
 	private User userModel;
@@ -25,10 +21,12 @@ public class eProduceController {
 	 * Tests the entered username and password against the database. 
 	 * NOTE: username and password are both case-sensitive, e.g. "Test" != "test"
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean validateLogin(JTextField user, JPasswordField pass)
 	{
 		return (db.validateLogin(user.getText(), pass.getText()));
 	}
+	@SuppressWarnings("deprecation")
 	public  boolean createNewAccount(JTextField firstNameTF, JTextField lastNameTF, JTextField emailTF,
 									   JPasswordField passwordPF, JPasswordField rePasswordPF) 
 	{

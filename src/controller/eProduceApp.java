@@ -3,7 +3,6 @@ package controller;
 import javax.swing.SwingUtilities;
 
 import view.MainPageView;
-import view.StartView;
 
 public class eProduceApp {
 	public static void main(String[] args) {
