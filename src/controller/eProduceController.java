@@ -1,13 +1,11 @@
 package controller;
 
 import javax.swing.JPasswordField;
-<<<<<<< HEAD
+
 import javax.swing.JTextField;
 
 import model.User;
-=======
 
->>>>>>> 9539d4bdea3eb198a21ceca74cdb12bb4c083a2c
 
 public class eProduceController {
 	private User userModel;
