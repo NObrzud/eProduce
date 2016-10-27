@@ -22,8 +22,8 @@ public class AdminMainPageView {
 	 */
 	public AdminMainPageView(){
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		int xSize = ((int) tk.getScreenSize().getWidth());
-		int ySize = ((int) tk.getScreenSize().getHeight());
+		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
+		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
 		frame.setSize(xSize, ySize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

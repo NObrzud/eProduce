@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class User {
 	private String firstName;
 	private String lastName;
@@ -7,6 +9,8 @@ public class User {
 	private String password;
 	private int blocked;
 	private int admin;
+	private double currentRating;
+	private ArrayList<Double> allRatings;
 	
 	public User(String firstName, String lastName, String email, String password, int blocked, int admin){
 		this.firstName = firstName;
@@ -53,5 +57,23 @@ public class User {
 	public void setAdmin(int admin) {
 		this.admin = admin;
 	}
+
+	public double getCurrentRating() {
+		return currentRating;
+	}
+
+	public void setCurrentRating(double currentRating) {
+		this.currentRating = currentRating;
+	}
 	
+	public void addRating(double value){
+		allRatings.add(value);
+		double temp = 0;
+		for(int i = 0; i<allRatings.size(); i++){
+			temp += allRatings.get(i);
+		}
+		temp = temp / allRatings.size();
+		currentRating = temp;
+	}
+		
 }

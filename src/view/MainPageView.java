@@ -29,8 +29,8 @@ public class MainPageView {
 	 */
 	public MainPageView() {
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		int xSize = ((int) tk.getScreenSize().getWidth());
-		int ySize = ((int) tk.getScreenSize().getHeight());
+		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
+		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
 		frame.setSize(xSize, ySize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -51,7 +51,7 @@ public class MainPageView {
 	 */
 	
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce");
+		JLabel titleLabel = new JLabel("eProduce - Home");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
 		JPanel rigthSide = new JPanel();
@@ -95,6 +95,15 @@ public class MainPageView {
 		JButton myMeetings = new JButton();
 		JButton myTickets = new JButton();
 	
+		myTickets.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				TicketView tix = new TicketView();
+				tix.frame.setVisible(true);
+				
+			}
+		});
+		
 		
 		myLists.setText("MyLists");
 		myMeetings.setText("MyMeetings");

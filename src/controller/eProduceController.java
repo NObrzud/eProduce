@@ -1,13 +1,9 @@
 package controller;
 
-import model.User;
-import javax.swing.JTextField;
 import javax.swing.JPasswordField;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.swing.JTextField;
+
+import model.User;
 
 public class eProduceController {
 	private User userModel;
