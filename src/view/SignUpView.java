@@ -117,7 +117,14 @@ public class SignUpView {
 							}
 						else
 						{
-							 JOptionPane.showMessageDialog(frame, "Invalid input. Please make sure all fields are filled and passwords match."); //temporary way to handle invalid input
+							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+							if(firstNameTF.getText().equals("")) emptyFieldMsg += "      First Name\n";
+							if(lastNameTF.getText().equals("")) emptyFieldMsg += "      Last Name\n";
+							if(emailTF.getText().equals("")) emptyFieldMsg += "      Email\n";
+							if(passwordPF.getText().equals("")) emptyFieldMsg += "      Password\n";
+							if(rePasswordPF.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
+							if(!passwordPF.getText().equals(rePasswordPF.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
+							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
 						}
 					}
 				});
