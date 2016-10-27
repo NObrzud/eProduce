@@ -11,8 +11,10 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -87,9 +89,29 @@ public class MainPageView {
 		
 		myAccount.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
+				/*frame.dispose();
 				MyAccountView start = new MyAccountView();
-				start.frame.setVisible(true);
+				start.frame.setVisible(true);*/
+				JPanel accPanel = new JPanel();
+				accPanel.setLayout(new GridLayout(0,1));
+				JTextField fname = new JTextField(20);
+				JTextField lname = new JTextField(20);
+				JTextField email = new JTextField(20);
+				JTextField password = new JTextField(20);
+				JTextField passConfirm = new JTextField(20);
+				accPanel.add(new JLabel("First Name:"));
+				accPanel.add(fname);
+				accPanel.add(new JLabel("Last Name:"));
+				accPanel.add(lname);
+				accPanel.add(new JLabel("Email:"));
+				accPanel.add(email);
+				accPanel.add(new JLabel("Password:"));
+				accPanel.add(password);
+				accPanel.add(new JLabel("Confirm Password:"));
+				accPanel.add(passConfirm);
+				
+				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
+				
 				
 			}
 		});
@@ -133,6 +155,7 @@ public class MainPageView {
 	 */
 	public void middlePanel(){
 		JTextField search = new JTextField();
+		JComboBox sort;
 		JTextField listing1 = new JTextField("Listings1");
 		JTextField listing2 = new JTextField("Listings2");
 		JTextField listing3 = new JTextField("Listings3");
@@ -158,9 +181,11 @@ public class MainPageView {
 		JPanel listing = new JPanel();
 		JPanel rightSide = new JPanel();
 		
-		
 		search.setText("Search.....");
 		search.setColumns(50);
+		
+		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
+		sort = new JComboBox(comboBoxInputs);
 		
 		listing1.setEditable(false);
 		listing2.setEditable(false);
@@ -206,6 +231,7 @@ public class MainPageView {
 		
 		
 		leftSide.add(search);
+		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		middlePanel.add(listing,BorderLayout.CENTER);
 		middlePanel.add(rightSide,BorderLayout.EAST);
