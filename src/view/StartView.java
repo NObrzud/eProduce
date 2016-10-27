@@ -30,6 +30,7 @@ public class StartView {
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		 frame.setLocationRelativeTo(null); 
 		JPanel panel = new JPanel();
 		frame.add(panel);
 
@@ -79,9 +80,11 @@ public class StartView {
 		 * Sends you to Main Page
 		 */
 		loginButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				   if(!(passwordPF.getText().equals("")) && controller.validateLogin(emailTF, passwordPF))
-		            {	           
+		            {
+					  
 		            	frame.dispose();
 		            	MainPageView mp = new MainPageView();
 		            	frame = mp.frame;

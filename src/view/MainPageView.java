@@ -3,17 +3,16 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -82,6 +81,18 @@ public class MainPageView {
 			}
 		});
 		
+		/*
+		 * My Account action button listener
+		 */
+		
+		myAccount.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				MyAccountView start = new MyAccountView();
+				start.frame.setVisible(true);
+				
+			}
+		});
 		topPanel.add(leftSide,BorderLayout.WEST);
 		topPanel.add(rigthSide,BorderLayout.EAST);
 		
@@ -122,30 +133,82 @@ public class MainPageView {
 	 */
 	public void middlePanel(){
 		JTextField search = new JTextField();
-		JList<String> listings;
+		JTextField listing1 = new JTextField("Listings1");
+		JTextField listing2 = new JTextField("Listings2");
+		JTextField listing3 = new JTextField("Listings3");
+		JTextField listing4 = new JTextField("Listings4");
+		JTextField listing5 = new JTextField("Listings5");
+		JTextField listing6 = new JTextField("Listings6");
+		JTextField listing7 = new JTextField("Listings7");
+		JTextField listing8 = new JTextField("Listings8");
+		JTextField listing9 = new JTextField("Listings9");
+		JTextField listing10 = new JTextField("Listings10");
+		JButton listbtn1 = new JButton("Select");
+		JButton listbtn2 = new JButton("Select");
+		JButton listbtn3 = new JButton("Select");
+		JButton listbtn4 = new JButton("Select");
+		JButton listbtn5 = new JButton("Select");
+		JButton listbtn6 = new JButton("Select");
+		JButton listbtn7 = new JButton("Select");
+		JButton listbtn8 = new JButton("Select");
+		JButton listbtn9 = new JButton("Select");
+		JButton listbtn10 = new JButton("Select");
+		
 		JPanel leftSide = new JPanel();
+		JPanel listing = new JPanel();
+		JPanel rightSide = new JPanel();
+		
 		
 		search.setText("Search.....");
-		search.setColumns(20);
+		search.setColumns(50);
 		
-		  DefaultListModel<String> listModel = new DefaultListModel<>();
-	        listModel.addElement("USA");
-	        listModel.addElement("India");
-	        listModel.addElement("Vietnam");
-	        listModel.addElement("Canada");
-	        listModel.addElement("Denmark");
-	        listModel.addElement("France");
-	        listModel.addElement("Great Britain");
-	        listModel.addElement("Japan");
-	        listings = new JList<>(listModel);
-	  
+		listing1.setEditable(false);
+		listing2.setEditable(false);
+		listing3.setEditable(false);
+		listing4.setEditable(false);
+		listing5.setEditable(false);
+		listing6.setEditable(false);
+		listing7.setEditable(false);
+		listing8.setEditable(false);
+		listing9.setEditable(false);
+		listing10.setEditable(false);
+		
+		
+		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
+		listing.add(listing1);
+		listing.add(listing2);
+		listing.add(listing3);
+		listing.add(listing4);
+		listing.add(listing5);
+		listing.add(listing6);
+		listing.add(listing7);
+		listing.add(listing8);
+		listing.add(listing9);
+		listing.add(listing10);
+
+		rightSide.setLayout(new GridLayout(10,1));
+		rightSide.add(listbtn1);
+		rightSide.add(listbtn2);
+		rightSide.add(listbtn3);
+		rightSide.add(listbtn4);
+		rightSide.add(listbtn5);
+		rightSide.add(listbtn6);
+		rightSide.add(listbtn7);
+		rightSide.add(listbtn8);
+		rightSide.add(listbtn9);
+		rightSide.add(listbtn10);
+		
+		
+		
+		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
 		
 		
 		leftSide.add(search);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
-		middlePanel.add(listings,BorderLayout.CENTER);
+		middlePanel.add(listing,BorderLayout.CENTER);
+		middlePanel.add(rightSide,BorderLayout.EAST);
 		
 	}
 }

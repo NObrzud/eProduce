@@ -42,7 +42,7 @@ public class SignUpView {
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		
+		frame.setLocationRelativeTo(null); 
 		frame.add(panel);
 		
 		panel.setLayout(null);
@@ -96,6 +96,7 @@ public class SignUpView {
 		});
 		submitButton.addActionListener(new ActionListener()
 				{
+					@SuppressWarnings("deprecation")
 					public void actionPerformed(ActionEvent e)
 					{
 						if(!(firstNameTF.getText().equals("")) && !(lastNameTF.getText().equals("")) && !emailTF.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
