@@ -10,11 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import controller.eProduceController;
+import model.User;
 
 
 public class MyAccountView {
 	public JFrame frame= new JFrame("eProduce - MyAccount");
 	private JPanel panel = new JPanel();
+	private User currentUser = new User();
 	
 	public eProduceController controller = new eProduceController();
 
@@ -37,7 +39,7 @@ public class MyAccountView {
 		frame.setSize(300, 250);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		 frame.setLocationRelativeTo(null); 
+		frame.setLocationRelativeTo(null); 
 		frame.add(panel);
 		
 		panel.setLayout(null);
@@ -85,6 +87,11 @@ public class MyAccountView {
 			}	
 		});
 	
+	}
+	public MyAccountView(User user)
+	{
+		this(); //default constructor
+		currentUser = user;
 	}
 }
 

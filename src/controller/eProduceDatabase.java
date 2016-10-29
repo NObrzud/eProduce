@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import model.User;
+
 public class eProduceDatabase {
 	String myDB;
 	Connection DBConn;
@@ -25,7 +27,7 @@ public class eProduceDatabase {
 	/*
 	 * Looks for the user in db, compares password, if it matches returns true. if not returns false.
 	 */
-	public boolean validateLogin(String user, String pass)
+	public boolean validateLogin(User model, String user, String pass)
 	{
 		try {
 			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
@@ -41,6 +43,7 @@ public class eProduceDatabase {
 			{
 				if(returnValues.getString("password").equals(pass))// && returnValues.getInt("isbanned") == 0) //password matches, and unbanned. let them in
 				{	
+					setModelValuesAfterLogin(model, returnValues);
 					DBConn.close();
 					return true;
 				}
@@ -58,6 +61,24 @@ public class eProduceDatabase {
 			System.exit(-1);
 			return false;
 		}
+	}
+	private void setModelValuesAfterLogin(User user, ResultSet returnValues) 
+	{
+		try {
+			user.setAdmin(returnValues.getInt("isAdmin"));
+			user.setBlocked(returnValues.getInt("isBlocked"));
+			user.setCurrentRating(returnValues.getInt("currentRating"));
+			user.setEmail(returnValues.getString("username"));
+			user.setPassword(returnValues.getString("password"));
+			user.setFirstName(returnValues.getString("firstName"));
+			user.setLastName(returnValues.getString("lastName"));
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			System.exit(-1);
+			
+		}
+		
+		
 	}
 	public boolean createAccount(String first, String last, String email, String pass) 
 	{

@@ -17,6 +17,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.User;
+
 
 
 public class TicketView {
@@ -24,6 +26,7 @@ public class TicketView {
 	public JPanel sidePanel = new JPanel();
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
+	private User currentUser;
 	
 	public TicketView(){
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -42,6 +45,11 @@ public class TicketView {
 		frame.add(sidePanel, BorderLayout.WEST);
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
+	}
+	public TicketView(User user)
+	{
+		this();//default constructor
+		currentUser = user;
 	}
 	
 	public void topPanel(){

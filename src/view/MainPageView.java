@@ -18,12 +18,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.User;
+
 public class MainPageView {
 
 	public JFrame frame = new JFrame("eProduce");
 	public JPanel sidePanel = new JPanel();
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
+	private User currentUser;
 
 	/**
 	 * Set the main page up in this method each method called is a panel.
@@ -47,6 +50,10 @@ public class MainPageView {
 		frame.setVisible(true);
 
 	}
+	public MainPageView(User user) {		
+		this(); //default constructor
+		currentUser = user;
+	}
 	/*
 	 * This a method to hold all of the top panel information
 	 */
@@ -55,11 +62,11 @@ public class MainPageView {
 		JLabel titleLabel = new JLabel("eProduce - Home");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
-		JPanel rigthSide = new JPanel();
+		JPanel rightSide = new JPanel();
 		JPanel leftSide = new JPanel();
 		
 		topPanel.setLayout(new BorderLayout());
-		rigthSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		myAccount.setText("MyAccount");
@@ -68,14 +75,15 @@ public class MainPageView {
 		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
 		
 		leftSide.add(titleLabel);
-		rigthSide.add(myAccount);
-		rigthSide.add(logout);
+		rightSide.add(myAccount);
+		rightSide.add(logout);
 		
 		/*
 		 * Log outs action button listener logs the user out
 		 */
 		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				currentUser = null;
 				frame.dispose();
 				StartView start = new StartView();
 				start.frame.setVisible(true);
@@ -94,11 +102,11 @@ public class MainPageView {
 				start.frame.setVisible(true);*/
 				JPanel accPanel = new JPanel();
 				accPanel.setLayout(new GridLayout(0,1));
-				JTextField fname = new JTextField(20);
-				JTextField lname = new JTextField(20);
-				JTextField email = new JTextField(20);
-				JTextField password = new JTextField(20);
-				JTextField passConfirm = new JTextField(20);
+				JTextField fname = new JTextField(currentUser.getFirstName(),20);
+				JTextField lname = new JTextField(currentUser.getLastName(),20);
+				JTextField email = new JTextField(currentUser.getEmail(),20);
+				JTextField password = new JTextField(currentUser.getPassword().replaceAll(".","*"),20);
+				JTextField passConfirm = new JTextField(currentUser.getPassword().replaceAll(".","*"),20);
 				accPanel.add(new JLabel("First Name:"));
 				accPanel.add(fname);
 				accPanel.add(new JLabel("Last Name:"));
@@ -116,7 +124,7 @@ public class MainPageView {
 			}
 		});
 		topPanel.add(leftSide,BorderLayout.WEST);
-		topPanel.add(rigthSide,BorderLayout.EAST);
+		topPanel.add(rightSide,BorderLayout.EAST);
 		
 	
 	}
@@ -131,7 +139,7 @@ public class MainPageView {
 		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				TicketView tix = new TicketView();
+				TicketView tix = new TicketView(currentUser);
 				tix.frame.setVisible(true);
 				
 			}

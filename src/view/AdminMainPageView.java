@@ -12,11 +12,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.User;
+
 public class AdminMainPageView {
 
 	public JFrame frame = new JFrame("eProduce-Admin");
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
+	private User currentUser;
 	/*
 	 * The Main frame that holds everything
 	 */
@@ -36,6 +39,11 @@ public class AdminMainPageView {
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
 
+	}
+	public AdminMainPageView(User user)
+	{
+		this(); //default constructor
+		currentUser = user;
 	}
 	/*
 	 * The top panel that holds the title and the log out button

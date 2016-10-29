@@ -20,6 +20,10 @@ public class User {
 		this.blocked = blocked;
 		this.admin = admin;
 	}
+	public User()
+	{
+		
+	}
 	
 	public String getFirstName() {
 		return firstName;

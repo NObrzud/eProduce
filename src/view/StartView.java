@@ -12,6 +12,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controller.eProduceController;
+import model.User;
 
 public class StartView {
 	eProduceController controller = new eProduceController();
@@ -25,8 +26,10 @@ public class StartView {
 	private JLabel passwordLabel = new JLabel("Password");
 	private JButton loginButton = new JButton("Login");
 	private JButton signUpButton = new JButton("Sign Up");
+	private User currentUser;
 
 	public StartView() {
+		currentUser = new User();
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -82,12 +85,19 @@ public class StartView {
 		loginButton.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				   if(!(passwordPF.getText().equals("")) && controller.validateLogin(emailTF, passwordPF))
+				   if(!(passwordPF.getText().equals("")) && controller.validateLogin(currentUser, emailTF, passwordPF))
 		            {
-					  
 		            	frame.dispose();
-		            	MainPageView mp = new MainPageView();
-		            	frame = mp.frame;
+					   if(currentUser.getAdmin() == 1)
+					   {
+						   AdminMainPageView amp = new AdminMainPageView(currentUser);
+						   frame = amp.frame;
+					   }
+					   else
+		               {
+						   MainPageView mp = new MainPageView(currentUser);
+						   frame = mp.frame;
+		               }
 		            }
 		            else
 		            {

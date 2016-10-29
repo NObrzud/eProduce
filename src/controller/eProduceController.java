@@ -24,9 +24,9 @@ public class eProduceController {
 	 * NOTE: username and password are both case-sensitive, e.g. "Test" != "test"
 	 */
 	@SuppressWarnings("deprecation")
-	public boolean validateLogin(JTextField user, JPasswordField pass)
+	public boolean validateLogin(User model, JTextField user, JPasswordField pass)
 	{
-		return (db.validateLogin(user.getText(), pass.getText()));
+		return (db.validateLogin(model, user.getText(), pass.getText()));
 	}
 	@SuppressWarnings("deprecation")
 	public  boolean createNewAccount(JTextField firstNameTF, JTextField lastNameTF, JTextField emailTF,
