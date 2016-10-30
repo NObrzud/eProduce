@@ -107,6 +107,33 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
+	public boolean updateAccount(String first, String last, String email, String pass, String rePass) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			updateString = "update eProduce.users set firstname=\'"+first+"\',lastname=\'"+last+"\',username=\'"+email+"\',password=\'"+pass+"\' where username=\'"+email+"\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+			return true;
+			/*if(returnVal == 0) // 1 new account was created
+			{
+				return true;
+			}
+			else
+				return false;*/
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+			return false;
+		}
+	}
 	
 	
 }

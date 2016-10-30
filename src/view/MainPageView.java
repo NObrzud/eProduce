@@ -16,8 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import controller.eProduceController;
 import model.User;
 
 public class MainPageView {
@@ -27,6 +29,7 @@ public class MainPageView {
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
+	private eProduceController controller = new eProduceController();
 
 	/**
 	 * Set the main page up in this method each method called is a panel.
@@ -105,8 +108,10 @@ public class MainPageView {
 				JTextField fname = new JTextField(currentUser.getFirstName(),20);
 				JTextField lname = new JTextField(currentUser.getLastName(),20);
 				JTextField email = new JTextField(currentUser.getEmail(),20);
-				JTextField password = new JTextField(currentUser.getPassword().replaceAll(".","*"),20);
-				JTextField passConfirm = new JTextField(currentUser.getPassword().replaceAll(".","*"),20);
+				JPasswordField password = new JPasswordField(currentUser.getPassword(),20);
+				password.setEchoChar('*');
+				JPasswordField passConfirm = new JPasswordField(currentUser.getPassword(),20);
+				passConfirm.setEchoChar('*');
 				accPanel.add(new JLabel("First Name:"));
 				accPanel.add(fname);
 				accPanel.add(new JLabel("Last Name:"));
@@ -119,7 +124,37 @@ public class MainPageView {
 				accPanel.add(passConfirm);
 				
 				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
-				
+				if(result == JOptionPane.OK_OPTION)
+				{
+
+					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
+							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
+						{
+							if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							{
+								JOptionPane.showMessageDialog(frame, "Account has been successfully updated!");
+								frame.dispose();
+								StartView sv = new StartView();
+								frame = sv.frame;
+								frame.setVisible(true);
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
+							}
+						}
+					else
+					{
+						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						if(fname.getText().equals("")) emptyFieldMsg += "      First Name\n";
+						if(lname.getText().equals("")) emptyFieldMsg += "      Last Name\n";
+						if(email.getText().equals("")) emptyFieldMsg += "      Email\n";
+						if(password.getText().equals("")) emptyFieldMsg += "      Password\n";
+						if(passConfirm.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
+						if(!password.getText().equals(passConfirm.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+					}
+				}
 				
 			}
 		});

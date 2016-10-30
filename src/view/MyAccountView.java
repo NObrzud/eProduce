@@ -67,6 +67,7 @@ public class MyAccountView {
 		panel.add(passwordLabel);
 		
 		passwordPF.setBounds(0, 150, 160, 25);
+		passwordPF.setEchoChar('*');
 		panel.add(passwordPF);
 		
 		cancelButton.setBounds(0, 180, 75, 20);

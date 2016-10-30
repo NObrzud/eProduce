@@ -34,4 +34,8 @@ public class eProduceController {
 	{
 		return db.createAccount(firstNameTF.getText(), lastNameTF.getText(), emailTF.getText(), passwordPF.getText());
 	}
+	public boolean updateAccount(String first, String last, String email, String pass, String rePass) {
+		
+		return db.updateAccount(first, last, email, pass, rePass);
+	}
 }
