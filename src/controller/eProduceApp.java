@@ -2,7 +2,6 @@ package controller;
 
 import javax.swing.SwingUtilities;
 
-
 import view.StartView;
 
 public class eProduceApp {

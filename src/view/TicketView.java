@@ -16,7 +16,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import model.User;
@@ -112,9 +114,52 @@ public class TicketView {
 		
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				CreateTicketView main = new CreateTicketView();
-				main.frame.setVisible(true);
+				JPanel lstPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JLabel title = new JLabel();
+				JLabel name = new JLabel();
+				JLabel des = new JLabel();
+				JTextField titletxt = new JTextField();
+				JTextField nametxt = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				
+				lstPanel.setLayout(new BorderLayout());
+				top.setLayout(new GridLayout(0,1));
+				bottom.setLayout(new BorderLayout());
+				
+				name.setText("Name:");
+				title.setText("Ticket Subject: ");
+				des.setText("Description:");
+				destxt.setLineWrap(true);
+				
+				top.add(title);
+				top.add(titletxt);
+				top.add(name);
+				top.add(nametxt);
+				bottom.add(des,BorderLayout.NORTH);
+				bottom.add(destxt,BorderLayout.SOUTH);
+				lstPanel.add(top,BorderLayout.NORTH);
+				lstPanel.add(bottom,BorderLayout.SOUTH);
+			
+				
+				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Ticket Info", JOptionPane.OK_CANCEL_OPTION);
+				if(result == JOptionPane.OK_OPTION)
+				{
+					if(!(titletxt.getText().equals(""))&&!nametxt.getText().equals("") && !destxt.getText().equals("") )	
+					{
+						
+					}
+					else
+					{
+						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						if(titletxt.getText().equals("")) emptyFieldMsg += "      Title\n";
+						if(nametxt.getText().equals(""))emptyFieldMsg += "      Name\n";
+						if(destxt.getText().equals("")) emptyFieldMsg += "      Description\n";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+					}
+					
+				}
 				
 			}
 		});

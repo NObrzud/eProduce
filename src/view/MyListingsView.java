@@ -219,7 +219,7 @@ public class MyListingsView {
 		sidePanel.add(myTickets);
 		
 		/*
-		 * My Account action button listener
+		 * create ticket action button listener
 		 */
 		
 		createListing.addActionListener(new ActionListener(){
@@ -259,7 +259,18 @@ public class MyListingsView {
 				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Listing Info", JOptionPane.OK_CANCEL_OPTION);
 				if(result == JOptionPane.OK_OPTION)
 				{
-
+					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
+					{
+						
+					}
+					else
+					{
+						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						if(titletxt.getText().equals("")) emptyFieldMsg += "      Title\n";
+						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
+						if(des.getText().equals("")) emptyFieldMsg += "      Description\n";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+					}
 					
 				}
 				
