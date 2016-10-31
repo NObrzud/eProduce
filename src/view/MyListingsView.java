@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,12 +18,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import com.sun.prism.paint.Color;
 
 import controller.eProduceController;
 import model.User;
 
-public class MainPageView {
+public class MyListingsView {
 
 	public JFrame frame = new JFrame("eProduce");
 	public JPanel sidePanel = new JPanel();
@@ -30,11 +35,10 @@ public class MainPageView {
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
-
 	/**
-	 * Set the main page up in this method each method called is a panel.
+	 * Set the Listings up in this method each method called is a panel.
 	 */
-	public MainPageView() {
+	public MyListingsView() {
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -54,7 +58,7 @@ public class MainPageView {
 		frame.setVisible(true);
 
 	}
-	public MainPageView(User user) {		
+	public MyListingsView(User user) {		
 		this(); //default constructor
 		currentUser = user;
 	}
@@ -63,7 +67,7 @@ public class MainPageView {
 	 */
 	
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce - Home");
+		JLabel titleLabel = new JLabel("eProduce - MyListings");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
 		JPanel rightSide = new JPanel();
@@ -168,10 +172,11 @@ public class MainPageView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		JButton myLists = new JButton();
+		JButton home = new JButton();
 		JButton myMeetings = new JButton();
 		JButton myTickets = new JButton();
-	
+		JButton createListing = new JButton();
+		
 		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -180,16 +185,14 @@ public class MainPageView {
 				
 			}
 		});
-		
-		myLists.addActionListener(new ActionListener() {
+		home.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MyListingsView mlv = new MyListingsView(currentUser);
-				mlv.frame.setVisible(true);
+				MainPageView mpv = new MainPageView(currentUser);
+				mpv.frame.setVisible(true);
 				
 			}
 		});
-		
 		myMeetings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -199,17 +202,71 @@ public class MainPageView {
 			}
 		});
 		
-		myLists.setText("MyLists");
+	
+		home.setText("Home");
 		myMeetings.setText("MyMeetings");
 		myTickets.setText("MyTickets");
-		
+		createListing.setText("Create a Listing");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
 	
-		sidePanel.add(myLists);
+		sidePanel.add(home);
+		
+		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
+		sidePanel.add(createListing);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(myMeetings);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(myTickets);
+		
+		/*
+		 * My Account action button listener
+		 */
+		
+		createListing.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				/*frame.dispose();
+				MyAccountView start = new MyAccountView();
+				start.frame.setVisible(true);*/
+				JPanel lstPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JLabel title = new JLabel();
+				JLabel tags = new JLabel();
+				JLabel des = new JLabel();
+				JTextField titletxt = new JTextField();
+				JTextField tagstxt = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				
+				lstPanel.setLayout(new BorderLayout());
+				top.setLayout(new GridLayout(0,1));
+				bottom.setLayout(new BorderLayout());
+				
+				title.setText("Title: ");
+				tags.setText("Tags: ");
+				des.setText("Description:");
+				destxt.setLineWrap(true);
+				
+				top.add(title);
+				top.add(titletxt);
+				top.add(tags);
+				top.add(tagstxt);
+				bottom.add(des,BorderLayout.NORTH);
+				bottom.add(destxt,BorderLayout.SOUTH);
+				lstPanel.add(top,BorderLayout.NORTH);
+				lstPanel.add(bottom,BorderLayout.SOUTH);
+			
+				
+				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Listing Info", JOptionPane.OK_CANCEL_OPTION);
+				if(result == JOptionPane.OK_OPTION)
+				{
+
+					
+				}
+				
+			}
+		});
+		
+		
 	}
 	/*
 	 * This a method to hold all of the middle panel information

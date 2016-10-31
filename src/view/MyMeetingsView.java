@@ -10,27 +10,27 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import controller.eProduceController;
 import model.User;
 
-
-
-public class TicketView {
+public class MyMeetingsView {
 	public JFrame frame = new JFrame("eProduce");
 	public JPanel sidePanel = new JPanel();
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
+	private eProduceController controller = new eProduceController();
 	
-	public TicketView(){
+	public MyMeetingsView() {
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -48,22 +48,26 @@ public class TicketView {
 		frame.add(sidePanel, BorderLayout.WEST);
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
+
 	}
-	public TicketView(User user)
-	{
-		this();//default constructor
+	public MyMeetingsView(User user) {		
+		this(); //default constructor
 		currentUser = user;
 	}
 	
+	/*
+	 * This a method to hold all of the top panel information
+	 */
+	
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce - MyTickets");
+		JLabel titleLabel = new JLabel("eProduce - MyMeetings");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
-		JPanel rigthSide = new JPanel();
+		JPanel rightSide = new JPanel();
 		JPanel leftSide = new JPanel();
 		
 		topPanel.setLayout(new BorderLayout());
-		rigthSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		myAccount.setText("MyAccount");
@@ -72,14 +76,15 @@ public class TicketView {
 		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
 		
 		leftSide.add(titleLabel);
-		rigthSide.add(myAccount);
-		rigthSide.add(logout);
+		rightSide.add(myAccount);
+		rightSide.add(logout);
 		
 		/*
 		 * Log outs action button listener logs the user out
 		 */
 		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				currentUser = null;
 				frame.dispose();
 				StartView start = new StartView();
 				start.frame.setVisible(true);
@@ -87,8 +92,72 @@ public class TicketView {
 			}
 		});
 		
+		/*
+		 * My Account action button listener
+		 */
+		
+		myAccount.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				/*frame.dispose();
+				MyAccountView start = new MyAccountView();
+				start.frame.setVisible(true);*/
+				JPanel accPanel = new JPanel();
+				accPanel.setLayout(new GridLayout(0,1));
+				JTextField fname = new JTextField(currentUser.getFirstName(),20);
+				JTextField lname = new JTextField(currentUser.getLastName(),20);
+				JTextField email = new JTextField(currentUser.getEmail(),20);
+				JPasswordField password = new JPasswordField(currentUser.getPassword(),20);
+				password.setEchoChar('*');
+				JPasswordField passConfirm = new JPasswordField(currentUser.getPassword(),20);
+				passConfirm.setEchoChar('*');
+				accPanel.add(new JLabel("First Name:"));
+				accPanel.add(fname);
+				accPanel.add(new JLabel("Last Name:"));
+				accPanel.add(lname);
+				accPanel.add(new JLabel("Email:"));
+				accPanel.add(email);
+				accPanel.add(new JLabel("Password:"));
+				accPanel.add(password);
+				accPanel.add(new JLabel("Confirm Password:"));
+				accPanel.add(passConfirm);
+				
+				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
+				if(result == JOptionPane.OK_OPTION)
+				{
+
+					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
+							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
+						{
+							if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							{
+								JOptionPane.showMessageDialog(frame, "Account has been successfully updated!");
+								frame.dispose();
+								StartView sv = new StartView();
+								frame = sv.frame;
+								frame.setVisible(true);
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
+							}
+						}
+					else
+					{
+						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						if(fname.getText().equals("")) emptyFieldMsg += "      First Name\n";
+						if(lname.getText().equals("")) emptyFieldMsg += "      Last Name\n";
+						if(email.getText().equals("")) emptyFieldMsg += "      Email\n";
+						if(password.getText().equals("")) emptyFieldMsg += "      Password\n";
+						if(passConfirm.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
+						if(!password.getText().equals(passConfirm.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+					}
+				}
+				
+			}
+		});
 		topPanel.add(leftSide,BorderLayout.WEST);
-		topPanel.add(rigthSide,BorderLayout.EAST);
+		topPanel.add(rightSide,BorderLayout.EAST);
 		
 	
 	}
@@ -96,37 +165,20 @@ public class TicketView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		JButton myLists = new JButton();
-		JButton myMeetings = new JButton();
-		JButton homeButton = new JButton();
-		JButton createButton= new JButton();
+		JButton home = new JButton();
+		JButton myListings = new JButton();
+		JButton myTickets = new JButton();
 	
-		homeButton.addActionListener(new ActionListener() {
+		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MainPageView main = new MainPageView();
-				main.frame.setVisible(true);
+				TicketView tix = new TicketView(currentUser);
+				tix.frame.setVisible(true);
 				
 			}
 		});
-		
-		createButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				CreateTicketView main = new CreateTicketView();
-				main.frame.setVisible(true);
-				
-			}
-		});
-		myMeetings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyMeetingsView mlv = new MyMeetingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
-			}
-		});
-		myLists.addActionListener(new ActionListener() {
+
+		myListings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				MyListingsView mlv = new MyListingsView(currentUser);
@@ -134,21 +186,26 @@ public class TicketView {
 				
 			}
 		});
+		home.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				MainPageView mpv = new MainPageView(currentUser);
+				mpv.frame.setVisible(true);
+				
+			}
+		});
 		
-		myLists.setText("MyLists");
-		myMeetings.setText("MyMeetings");
-		homeButton.setText("Home");
-		createButton.setText("Create Ticket");
+		home.setText("Home");
+		myListings.setText("MyListings");
+		myTickets.setText("MyTickets");
 		
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-		
-		sidePanel.add(homeButton);
+	
+		sidePanel.add(home);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(createButton);
+		sidePanel.add(myListings);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myLists);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myMeetings);
+		sidePanel.add(myTickets);
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -237,5 +294,4 @@ public class TicketView {
 		middlePanel.add(rightSide,BorderLayout.EAST);
 		
 	}
-
 }

@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -30,6 +32,7 @@ public class AdminMainPageView {
 		frame.setSize(xSize, ySize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		frame.setLocationRelativeTo(null); 
 		frame.setLayout(new BorderLayout());
 		
 		topPanel();		
@@ -61,6 +64,19 @@ public class AdminMainPageView {
 		logout.setText("Log Out");
 		titleLabel.setBounds(150, 10, 150, 150);
 		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
+		
+		/*
+		 * Log outs action button listener logs the user out
+		 */
+		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentUser = null;
+				frame.dispose();
+				StartView start = new StartView();
+				start.frame.setVisible(true);
+				
+			}
+		});
 		
 		leftSide.add(titleLabel);
 		rigthSide.add(logout);

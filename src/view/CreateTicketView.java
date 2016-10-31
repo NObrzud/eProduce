@@ -34,6 +34,7 @@ public class CreateTicketView {
 		frame.setVisible(true);
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null); 
 		frame.setResizable(false);
 		
 		frame.add(panel);
@@ -77,8 +78,8 @@ public class CreateTicketView {
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MainPageView mainPageView = new MainPageView();
-				frame = mainPageView.frame;
+				TicketView ticketView = new TicketView();
+				frame = ticketView.frame;
 				frame.setVisible(true);
 				
 			}
