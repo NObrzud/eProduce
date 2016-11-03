@@ -9,8 +9,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class CreateTicketView {
+import model.User;
 
+public class CreateTicketView {
+	
+	public User currentUser = new User();
 	public JFrame frame= new JFrame("eProduce - Signup");
 	private JPanel panel = new JPanel();
 	
@@ -30,13 +33,13 @@ public class CreateTicketView {
 	private JButton backButton = new JButton("Back");
 	
 	
-	public CreateTicketView(){
+	public CreateTicketView(User user){
 		frame.setVisible(true);
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null); 
 		frame.setResizable(false);
-		
+		currentUser = user;
 		frame.add(panel);
 		
 		panel.setLayout(null);
@@ -85,5 +88,4 @@ public class CreateTicketView {
 			}
 		});
 	}
-
 }

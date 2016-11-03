@@ -22,7 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.sun.prism.paint.Color;
+import java.awt.color.*;
 
 import controller.eProduceController;
 import model.User;

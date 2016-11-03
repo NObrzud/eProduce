@@ -107,4 +107,9 @@ public class StartView {
 			}
 		});
 	}
+	public StartView(User user)
+	{
+		this();
+		currentUser = user;
+	}
 }
