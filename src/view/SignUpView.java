@@ -12,6 +12,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controller.eProduceController;
+import model.User;
 
 
 
@@ -20,7 +21,8 @@ public class SignUpView {
 	private JPanel panel = new JPanel();
 	
 	public eProduceController controller = new eProduceController();
-
+	private User currentUser = new User();
+	
 	private JTextField firstNameTF = new JTextField();
 	private JTextField lastNameTF = new JTextField();
 	private JTextField emailTF = new JTextField();	
@@ -129,5 +131,9 @@ public class SignUpView {
 					}
 				});
 	}
-
+	public SignUpView(User user)
+	{
+		this();
+		currentUser = user;
+	}
 }
