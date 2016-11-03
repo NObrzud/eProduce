@@ -1,13 +1,14 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import javax.swing.*;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -20,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+import java.awt.color.*;
 
 import model.User;
 
@@ -123,7 +127,7 @@ public class TicketView {
 				JTextField titletxt = new JTextField();
 				JTextField nametxt = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
-				
+				Border border = BorderFactory.createLineBorder(Color.BLACK);
 				lstPanel.setLayout(new BorderLayout());
 				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
@@ -132,6 +136,7 @@ public class TicketView {
 				title.setText("Ticket Subject: ");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
+				destxt.setBorder(border);
 				
 				top.add(title);
 				top.add(titletxt);
