@@ -274,7 +274,7 @@ public class MainPageView {
 				JTextArea destxt = new JTextArea(5,10);
 				 Object[] options1 = { "Schedule MeetUp", "Okay",
 	                "Cancel" };
-
+				 	
 				 	listPanel.setLayout(new BorderLayout());
 					top.setLayout(new GridLayout(0,1));
 					bottom.setLayout(new BorderLayout());

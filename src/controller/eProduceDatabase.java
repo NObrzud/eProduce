@@ -136,7 +136,7 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
-	public boolean createListing(String email, String text, String tags) {
+	public boolean createListing(String email, String title, String text, String tags) {
 		try 
 		{
 			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
@@ -145,7 +145,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			
-			insertString = "insert into eproduce.listings (owner, content, tags ) values (\'"+email+"\',\'"+text+"\',\'"+tags+", "+email+"\')";
+			insertString = "insert into eproduce.listings (owner, title, content, tags ) values (\'"+email+"\',\'"+title+"\',\'"+text+"\',\'"+tags+", "+email+"\')";
 			System.out.println(insertString);
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new account was created
@@ -174,7 +174,7 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("content"), returnValues.getString("tags")));
+				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), returnValues.getInt("listingnum")));
 			}
 		}
 		catch(SQLException e)
@@ -197,7 +197,7 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("content"), returnValues.getString("tags")));
+				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), returnValues.getInt("listingnum")));
 			}
 		}
 		catch(SQLException e)

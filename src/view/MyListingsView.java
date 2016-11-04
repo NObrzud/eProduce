@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -22,9 +23,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.table.TableColumn;
 
 import java.awt.color.*;
 
@@ -42,6 +45,7 @@ public class MyListingsView {
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
 	private eProduceDatabase db = new eProduceDatabase();
+	private int i = 0;
 	/**
 	 * Set the Listings up in this method each method called is a panel.
 	 */
@@ -272,7 +276,7 @@ public class MyListingsView {
 				{
 					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
 					{
-						if(db.createListing(currentUser.getEmail(),destxt.getText(), tagstxt.getText()))
+						if(db.createListing(currentUser.getEmail(), titletxt.getText(), destxt.getText(), tagstxt.getText()))
 						{
 							String msg = "Listing created!";
 							JOptionPane.showMessageDialog(frame, msg);
@@ -308,30 +312,47 @@ public class MyListingsView {
 	 * This a method to hold all of the middle panel information
 	 */
 	public void middlePanel(){
+		ArrayList<Listing> myListings = new ArrayList<Listing>();
+		db.getMyListings(currentUser.getEmail(),myListings);
+		
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField[] listings = new JTextField[10];
-		for(int i = 0; i < listings.length; i++){
-			listings[i] = new JTextField("Listing"+i);
+		JTextField[][] listings = new JTextField[myListings.size()][3];
+		String[][] listingData = new String[myListings.size()][3];
+		for(i = 0; i < listings.length; i++){
+			listings[i][0] = new JTextField("Listing Title "+i);
+			listings[i][1] = new JTextField("Listing Content " + i);
+			listings[i][2] = new JTextField("Listing Tags " + i);
 		}
-		JButton[] listbtn = new JButton[10];
-		for(int i = 0; i < listbtn.length; i++)
+		JButton[] listbtn = new JButton[myListings.size()];
+		for(i = 0; i < listbtn.length; i++)
 		{
 			listbtn[i] = new JButton("Edit");
+			listbtn[i].setSize(new Dimension(16,64));
 		}
 		
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
 		JPanel rightSide = new JPanel();
 		
-		ArrayList<Listing> myListings = new ArrayList<Listing>();
-		db.getMyListings(currentUser.getEmail(),myListings);
-		for(int i = 0; i < myListings.size(); i++)
+		for(i = 0; i < myListings.size(); i++)
 		{
 			Listing currListing = myListings.get(i);
-			listings[i].setText(currListing.getOwner() + "\t\t" + currListing.getContent() + "\t\t" + currListing.getTags());
+			if(currListing != null)
+			{
+				listings[i][0].setText(currListing.getOwner());
+				listings[i][1].setText(currListing.getContent());
+				listings[i][2].setText(currListing.getTags());
+			}
 		}
-		for(int i = 0; i < listbtn.length; i++)
+		for(int i = 0; i < listingData.length; i++)
+		{
+			for(int j = 0; j < listingData[i].length; j++)
+			{
+				listingData[i][j] = listings[i][j].getText();
+			}
+		}
+		for(i = 0; i < myListings.size(); i++)
 		{
 			listbtn[i].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -344,25 +365,27 @@ public class MyListingsView {
 				JTextField titletxt = new JTextField();
 				JTextField tagstxt = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
-				Object[] options1 = { "Save Changes","Delete Listing",
-				"Cancel" };
+				Object[] options1 = { "Save Changes","Delete Listing", "Cancel" };
 
-				listPanel.setLayout(new BorderLayout());
+				listPanel.setLayout(new GridLayout(0,myListings.size()));
 				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
 				//Add SQL statement after text below
 				title.setText("Title: ");
 				tags.setText("Tags: ");
-
 				des.setText("Description:");
 				destxt.setLineWrap(true);
+				tagstxt.setText(myListings.get(i-1).getTags());
+				titletxt.setText(myListings.get(i-1).getTitle());
+				destxt.setText(myListings.get(i-1).getContent());
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
 				top.add(tagstxt);
+				top.setSize(new Dimension(30, 30));
 				bottom.add(des,BorderLayout.NORTH);
 				bottom.add(destxt,BorderLayout.SOUTH);
-				listPanel.add(top,BorderLayout.NORTH);
+				listPanel.add(top);
 				listPanel.add(bottom,BorderLayout.SOUTH);
 
 
@@ -371,10 +394,10 @@ public class MyListingsView {
 						null, options1, null);
 
 				if(result == JOptionPane.YES_OPTION){
-					String message = listings[0].getText()+" has been Saved";
+					String message = "Saved";
 					JOptionPane.showMessageDialog(frame,message );
 				}else if(result == JOptionPane.NO_OPTION){
-					String message = listings[0].getText()+" has been Deleted";
+					String message = "Deleted";
 					JOptionPane.showMessageDialog(frame,message );
 				}
 			}
@@ -391,66 +414,45 @@ public class MyListingsView {
 		
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
-		for(int i = 0; i < listings.length; i++)
+		for(i = 0; i < listings.length; i++)
 		{
-			listings[i].setEditable(false);
+			for(int j = 0; j < listings.length; j++)
+				listings[i][j].setEditable(false);
 		}
-		/*listing1.setEditable(false);
-		listing2.setEditable(false);
-		listing3.setEditable(false);
-		listing4.setEditable(false);
-		listing5.setEditable(false);
-		listing6.setEditable(false);
-		listing7.setEditable(false);
-		listing8.setEditable(false);
-		listing9.setEditable(false);
-		listing10.setEditable(false);*/
 		
-		
-		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		for(int i = 0; i < listings.length; i++)
-		{
-			listing.add(listings[i]);
-		}
-		/*listing.add(listing1);
-		listing.add(listing2);
-		listing.add(listing3);
-		listing.add(listing4);
-		listing.add(listing5);
-		listing.add(listing6);
-		listing.add(listing7);
-		listing.add(listing8);
-		listing.add(listing9);
-		listing.add(listing10);*/
 
-		rightSide.setLayout(new GridLayout(10,1));
-		for(int i = 0; i < listbtn.length; i++)
+		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
+		JTable table = new JTable(listingData, new String[] {"Title","Content","Tags"});
+		table.setBackground(frame.getBackground());
+		table.setShowGrid(false);
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setFont(new Font("Serif", Font.PLAIN, 24));
+		table.setRowHeight(30);
+		for(i = 0; i < table.getColumnCount(); i++)
 		{
+			TableColumn column = table.getColumnModel().getColumn(i);
+			column.setPreferredWidth(410);
+		}
+		listing.add(table);
+
+		rightSide.setLayout(new GridLayout(myListings.size(),1));
+		for(i = 0; i < listbtn.length; i++)
+		{
+			listbtn[i].setSize(new Dimension(64, 10));
 			rightSide.add(listbtn[i]);
 		}
-		/*rightSide.add(listbtn1);
-		rightSide.add(listbtn2);
-		rightSide.add(listbtn3);
-		rightSide.add(listbtn4);
-		rightSide.add(listbtn5);
-		rightSide.add(listbtn6);
-		rightSide.add(listbtn7);
-		rightSide.add(listbtn8);
-		rightSide.add(listbtn9);
-		rightSide.add(listbtn10);*/
-		
-		
-		
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
-		
+		JPanel listingWithButtonPanel = new JPanel();
+		listingWithButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		listingWithButtonPanel.add(listing);
+		listingWithButtonPanel.add(rightSide);
 		
 		leftSide.add(search);
 		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
-		middlePanel.add(listing,BorderLayout.CENTER);
-		middlePanel.add(rightSide,BorderLayout.EAST);
+		middlePanel.add(listingWithButtonPanel,BorderLayout.CENTER);
 		
 	}
 }
