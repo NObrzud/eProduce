@@ -128,9 +128,17 @@ public class MyMeetingsView {
 					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
 							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
 						{
-							if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							// if no changes are made by user to account info, nothing happens
+							if(currentUser.getFirstName().equals(fname.getText()) &&
+									currentUser.getLastName().equals(lname.getText()) &&
+									currentUser.getEmail().equals(email.getText()) &&
+									currentUser.getPassword().equals(password.getText())){
+								JOptionPane.showMessageDialog(frame, "No changes were made.");
+								
+							}
+							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
 							{
-								JOptionPane.showMessageDialog(frame, "Account has been successfully updated!");
+								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
 								StartView sv = new StartView();
 								frame = sv.frame;

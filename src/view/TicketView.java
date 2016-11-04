@@ -8,20 +8,11 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.*;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
+
+import controller.eProduceController;
 
 import java.awt.color.*;
 
@@ -35,6 +26,7 @@ public class TicketView {
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
+	private eProduceController controller = new eProduceController();
 	
 	public TicketView(){
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -89,6 +81,75 @@ public class TicketView {
 				frame.dispose();
 				StartView start = new StartView();
 				start.frame.setVisible(true);
+				
+			}
+		});
+		
+		myAccount.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				/*frame.dispose();
+				MyAccountView start = new MyAccountView();
+				start.frame.setVisible(true);*/
+				JPanel accPanel = new JPanel();
+				accPanel.setLayout(new GridLayout(0,1));
+				JTextField fname = new JTextField(currentUser.getFirstName(),20);
+				JTextField lname = new JTextField(currentUser.getLastName(),20);
+				JTextField email = new JTextField(currentUser.getEmail(),20);
+				JPasswordField password = new JPasswordField(currentUser.getPassword(),20);
+				password.setEchoChar('*');
+				JPasswordField passConfirm = new JPasswordField(currentUser.getPassword(),20);
+				passConfirm.setEchoChar('*');
+				accPanel.add(new JLabel("First Name:"));
+				accPanel.add(fname);
+				accPanel.add(new JLabel("Last Name:"));
+				accPanel.add(lname);
+				accPanel.add(new JLabel("Email:"));
+				accPanel.add(email);
+				accPanel.add(new JLabel("Password:"));
+				accPanel.add(password);
+				accPanel.add(new JLabel("Confirm Password:"));
+				accPanel.add(passConfirm);
+				
+				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
+				if(result == JOptionPane.OK_OPTION)
+				{
+
+					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
+							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
+						{
+							// if no changes are made by user to account info, nothing happens
+							if(currentUser.getFirstName().equals(fname.getText()) &&
+									currentUser.getLastName().equals(lname.getText()) &&
+									currentUser.getEmail().equals(email.getText()) &&
+									currentUser.getPassword().equals(password.getText())){
+								JOptionPane.showMessageDialog(frame, "No changes were made.");
+								
+							}
+							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							{
+								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
+								frame.dispose();
+								StartView sv = new StartView();
+								frame = sv.frame;
+								frame.setVisible(true);
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
+							}
+						}
+					else
+					{
+						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						if(fname.getText().equals("")) emptyFieldMsg += "      First Name\n";
+						if(lname.getText().equals("")) emptyFieldMsg += "      Last Name\n";
+						if(email.getText().equals("")) emptyFieldMsg += "      Email\n";
+						if(password.getText().equals("")) emptyFieldMsg += "      Password\n";
+						if(passConfirm.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
+						if(!password.getText().equals(passConfirm.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+					}
+				}
 				
 			}
 		});

@@ -136,6 +136,7 @@ public class MainPageView {
 									currentUser.getLastName().equals(lname.getText()) &&
 									currentUser.getEmail().equals(email.getText()) &&
 									currentUser.getPassword().equals(password.getText())){
+								JOptionPane.showMessageDialog(frame, "No changes were made.");
 								
 							}
 							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
