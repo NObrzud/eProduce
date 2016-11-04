@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import model.Listing;
 import model.User;
 
 public class eProduceDatabase {
@@ -133,6 +135,54 @@ public class eProduceDatabase {
 			//System.exit(-1);
 			return false;
 		}
+	}
+	public boolean createListing(String email, String text, String tags) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String insertString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			insertString = "insert into eproduce.listings (owner, content, tags ) values (\'"+email+"\',\'"+text+"\',\'"+tags+"\')";
+			System.out.println(insertString);
+			returnVal = stmt.executeUpdate(insertString);
+			if(returnVal == 1) // 1 new account was created
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+			return false;
+		}	}
+	public void getMyListings(String email, ArrayList<Listing> myListings) {
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.listings where owner = \'" + email + "\'"; // single quotes protect against SQL injection
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("content"), returnValues.getString("tags")));
+			}
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+		}
+		
 	}
 	
 	

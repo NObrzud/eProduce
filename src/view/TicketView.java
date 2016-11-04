@@ -9,18 +9,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import java.awt.color.*;
@@ -34,9 +22,15 @@ public class TicketView {
 	public JPanel sidePanel = new JPanel();
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
+	Border border = BorderFactory.createLineBorder(Color.BLACK);
 	private User currentUser;
 	
 	public TicketView(){
+
+	}
+	public TicketView(User user)
+	{
+		currentUser = user;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -54,11 +48,6 @@ public class TicketView {
 		frame.add(sidePanel, BorderLayout.WEST);
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
-	}
-	public TicketView(User user)
-	{
-		this();//default constructor
-		currentUser = user;
 	}
 	
 	public void topPanel(){
@@ -87,7 +76,7 @@ public class TicketView {
 		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				StartView start = new StartView();
+				StartView start = new StartView(currentUser);
 				start.frame.setVisible(true);
 				
 			}
@@ -110,7 +99,7 @@ public class TicketView {
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MainPageView main = new MainPageView();
+				MainPageView main = new MainPageView(currentUser);
 				main.frame.setVisible(true);
 				
 			}

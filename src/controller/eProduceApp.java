@@ -10,7 +10,7 @@ public class eProduceApp {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run(){
-				MainPageView start = new MainPageView();
+				MainPageView start = new MainPageView(null);
 				start.frame.setVisible(true);
 			}
 		});

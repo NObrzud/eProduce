@@ -34,7 +34,9 @@ public class MyAccountView {
 	private JButton submitButton = new JButton("Save Changes");
 	private JButton cancelButton = new JButton("Cancel");
 	
-	public MyAccountView(){
+	public MyAccountView(User user)
+	{
+		currentUser = user;
 		frame.setVisible(true);
 		frame.setSize(300, 250);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,17 +84,12 @@ public class MyAccountView {
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MainPageView sv = new MainPageView();
+				MainPageView sv = new MainPageView(currentUser);
 				frame = sv.frame;
 				frame.setVisible(true);
 			}	
 		});
 	
-	}
-	public MyAccountView(User user)
-	{
-		this(); //default constructor
-		currentUser = user;
 	}
 }
 
