@@ -67,10 +67,10 @@ public class StartView {
 		passwordPF.setBounds(175, 240, 160, 25);
 		panel.add(passwordPF);
 
-		loginButton.setBounds(170, 300, 80, 25);
+		loginButton.setBounds(170, 270, 80, 25);
 		panel.add(loginButton);
 
-		signUpButton.setBounds(260, 300, 80, 25);
+		signUpButton.setBounds(260, 270, 80, 25);
 		panel.add(signUpButton);
 		
 		

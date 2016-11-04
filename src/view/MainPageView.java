@@ -96,6 +96,8 @@ public class MainPageView {
 		 */
 		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO send email to user
+				//controller.sendEmail("njobrzu@ilstu.edu", "nickobrzud@gmail.com", "subjectline", "Hey Antonio, I found your listing for carrots. I would love to meet up and purchase your product. Let me know!");
 				currentUser = null;
 				frame.dispose();
 				StartView start = new StartView(currentUser);

@@ -1,5 +1,11 @@
 package controller;
 
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+
+
 import javax.swing.JPasswordField;
 
 import javax.swing.JTextField;
@@ -80,5 +86,45 @@ public class eProduceController {
 		else
 			return false;
 		
+	}
+	
+	public void sendEmail(String recipient, String sender, String subject, String content){
+		String to = recipient;
+		String from = sender;
+		String host = "localhost";
+		String username = "eProduceSystem@gmail.com";
+		String password = "AndrewAntonioNickSean";
+		String emailMsg = "Hello eProduce User! According to our system, there is a user that would like to contact you in regards to your listing. "
+				+ "The following is a message from " + "**enter name here" +":\n"
+						+ "\n" + content +"\n"
+						+ "\n If you would like to contact **enter name here, you may contact him using the following email address: " + sender;
+		
+		//getting session object 
+		Properties properties = System.getProperties();
+		properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+		Session session = Session.getDefaultInstance(properties, 
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication(){
+						return new PasswordAuthentication(username, password);
+					}
+		});
+		
+		try{
+			MimeMessage msg = new MimeMessage(session);
+			msg.setFrom(new InternetAddress(from));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			msg.setSubject(subject);
+			msg.setText(emailMsg);
+			
+			//Send email
+			Transport.send(msg);
+			System.out.println("Email sent successfully!");
+		}
+		catch (MessagingException e){
+			e.printStackTrace();
+		}
 	}
 }
