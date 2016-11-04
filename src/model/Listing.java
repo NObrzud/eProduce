@@ -4,13 +4,24 @@ import java.util.regex.Pattern;
 
 public class Listing {
 	private String owner;
-	private int listingNumb;
+	private int listingNum;
 	private String content;
 	private String[] tags;
-	public Listing(String owner, String content, String tags) {
+	private String title;
+
+	public Listing(String owner, String title, String content, String tags, int listNum) {
 		this.owner = owner;
+		this.title = title;
 		this.content = content;
 		this.tags = tags.split(",");
+		this.listingNum = listNum;
+	}
+	public Listing() {
+		owner = "";
+		listingNum = 0;
+		content = "";
+		tags = new String[0];
+		title = "";
 	}
 	public String getOwner() {
 		return owner;
@@ -18,11 +29,11 @@ public class Listing {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public int getListingNumb() {
-		return listingNumb;
+	public int getListingNum() {
+		return listingNum;
 	}
-	public void setListingNumb(int listingNumb) {
-		this.listingNumb = listingNumb;
+	public void setListingNum(int listingNumb) {
+		this.listingNum = listingNumb;
 	}
 	public String getContent() {
 		return content;
@@ -38,5 +49,11 @@ public class Listing {
 	}
 	public void setTags(String[] tags) {
 		this.tags = tags;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }
