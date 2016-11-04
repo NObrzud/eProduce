@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -344,6 +346,12 @@ public class MyListingsView {
 		
 		search.setText("Search.....");
 		search.setColumns(50);
+		search.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				search.setText("");
+			}
+		});
 		
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
