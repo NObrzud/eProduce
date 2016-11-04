@@ -38,8 +38,10 @@ public class SignUpView {
 	private JButton submitButton = new JButton("Submit");
 	private JButton cancelButton = new JButton("Cancel");
 	
-	
-	public SignUpView(){
+
+	public SignUpView(User user)
+	{
+		currentUser = user;
 		frame.setVisible(true);
 		frame.setSize(500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,7 +93,7 @@ public class SignUpView {
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				StartView sv = new StartView();
+				StartView sv = new StartView(currentUser);
 				frame = sv.frame;
 				frame.setVisible(true);
 			}	
@@ -108,7 +110,7 @@ public class SignUpView {
 								{
 									JOptionPane.showMessageDialog(frame, "Account has been successfully created!");
 									frame.dispose();
-									StartView sv = new StartView();
+									StartView sv = new StartView(currentUser);
 									frame = sv.frame;
 									frame.setVisible(true);
 								}
@@ -130,10 +132,5 @@ public class SignUpView {
 						}
 					}
 				});
-	}
-	public SignUpView(User user)
-	{
-		this();
-		currentUser = user;
 	}
 }

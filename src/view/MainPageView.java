@@ -34,7 +34,8 @@ public class MainPageView {
 	/**
 	 * Set the main page up in this method each method called is a panel.
 	 */
-	public MainPageView() {
+	public MainPageView(User user) {		
+		currentUser = user;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -52,11 +53,6 @@ public class MainPageView {
 		frame.add(sidePanel, BorderLayout.WEST);
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
-
-	}
-	public MainPageView(User user) {		
-		this(); //default constructor
-		currentUser = user;
 	}
 	/*
 	 * This a method to hold all of the top panel information
@@ -89,7 +85,7 @@ public class MainPageView {
 			public void actionPerformed(ActionEvent e) {
 				currentUser = null;
 				frame.dispose();
-				StartView start = new StartView();
+				StartView start = new StartView(currentUser);
 				start.frame.setVisible(true);
 				
 			}
@@ -143,7 +139,7 @@ public class MainPageView {
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
-								StartView sv = new StartView();
+								StartView sv = new StartView(currentUser);
 								frame = sv.frame;
 								frame.setVisible(true);
 							}
@@ -304,6 +300,5 @@ public class MainPageView {
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		middlePanel.add(listing,BorderLayout.CENTER);
 		middlePanel.add(rightSide,BorderLayout.EAST);
-		
 	}
 }

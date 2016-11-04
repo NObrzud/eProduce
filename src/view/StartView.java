@@ -28,15 +28,16 @@ public class StartView {
 	private JButton loginButton = new JButton("Login");
 	private JButton signUpButton = new JButton("Sign Up");
 	private User currentUser;
-
-	public StartView() {
-		currentUser = new User();
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		int xSize = 480;
-		int ySize = 378;
-		frame.setSize(xSize, ySize);
+	
+	public StartView(User user)
+	{
+		if(user == null)
+			currentUser = new User();
+		else
+			currentUser = user;
+		frame.setSize(500, 375);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		//frame.setResizable(false);
 		frame.setLocationRelativeTo(null); 
 		JPanel panel = new JPanel();
 		frame.add(panel);		
@@ -79,7 +80,7 @@ public class StartView {
 		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				SignUpView signupview = new SignUpView();
+				SignUpView signupview = new SignUpView(currentUser);
 				frame = signupview.frame;
 				
 			}
@@ -112,10 +113,5 @@ public class StartView {
 				
 			}
 		});
-	}
-	public StartView(User user)
-	{
-		this();
-		currentUser = user;
 	}
 }

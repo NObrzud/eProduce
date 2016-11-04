@@ -29,8 +29,9 @@ public class MyMeetingsView {
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
-	
-	public MyMeetingsView() {
+
+	public MyMeetingsView(User user) {		
+		currentUser = user;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -49,10 +50,6 @@ public class MyMeetingsView {
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
 
-	}
-	public MyMeetingsView(User user) {		
-		this(); //default constructor
-		currentUser = user;
 	}
 	
 	/*
@@ -86,7 +83,7 @@ public class MyMeetingsView {
 			public void actionPerformed(ActionEvent e) {
 				currentUser = null;
 				frame.dispose();
-				StartView start = new StartView();
+				StartView start = new StartView(currentUser);
 				start.frame.setVisible(true);
 				
 			}
@@ -140,7 +137,7 @@ public class MyMeetingsView {
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
-								StartView sv = new StartView();
+								StartView sv = new StartView(currentUser);
 								frame = sv.frame;
 								frame.setVisible(true);
 							}

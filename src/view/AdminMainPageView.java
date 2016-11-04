@@ -25,7 +25,9 @@ public class AdminMainPageView {
 	/*
 	 * The Main frame that holds everything
 	 */
-	public AdminMainPageView(){
+	public AdminMainPageView(User user)
+	{
+		currentUser = user;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -41,12 +43,6 @@ public class AdminMainPageView {
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
-
-	}
-	public AdminMainPageView(User user)
-	{
-		this(); //default constructor
-		currentUser = user;
 	}
 	/*
 	 * The top panel that holds the title and the log out button
@@ -72,7 +68,7 @@ public class AdminMainPageView {
 			public void actionPerformed(ActionEvent e) {
 				currentUser = null;
 				frame.dispose();
-				StartView start = new StartView();
+				StartView start = new StartView(currentUser);
 				start.frame.setVisible(true);
 				
 			}

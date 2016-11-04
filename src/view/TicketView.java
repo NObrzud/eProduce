@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -25,10 +24,13 @@ public class TicketView {
 	public JPanel sidePanel = new JPanel();
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
+	Border border = BorderFactory.createLineBorder(Color.BLACK);
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
-	
-	public TicketView(){
+
+	public TicketView(User user)
+	{
+		currentUser = user;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -47,21 +49,16 @@ public class TicketView {
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
 	}
-	public TicketView(User user)
-	{
-		this();//default constructor
-		currentUser = user;
-	}
 	
 	public void topPanel(){
 		JLabel titleLabel = new JLabel("eProduce - MyTickets");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
-		JPanel rigthSide = new JPanel();
+		JPanel rightSide = new JPanel();
 		JPanel leftSide = new JPanel();
 		
 		topPanel.setLayout(new BorderLayout());
-		rigthSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		myAccount.setText("MyAccount");
@@ -70,8 +67,8 @@ public class TicketView {
 		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
 		
 		leftSide.add(titleLabel);
-		rigthSide.add(myAccount);
-		rigthSide.add(logout);
+		rightSide.add(myAccount);
+		rightSide.add(logout);
 		
 		/*
 		 * Log outs action button listener logs the user out
@@ -79,12 +76,11 @@ public class TicketView {
 		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				StartView start = new StartView();
+				StartView start = new StartView(currentUser);
 				start.frame.setVisible(true);
 				
 			}
 		});
-		
 		myAccount.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				/*frame.dispose();
@@ -129,7 +125,7 @@ public class TicketView {
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
-								StartView sv = new StartView();
+								StartView sv = new StartView(currentUser);
 								frame = sv.frame;
 								frame.setVisible(true);
 							}
@@ -155,7 +151,7 @@ public class TicketView {
 		});
 		
 		topPanel.add(leftSide,BorderLayout.WEST);
-		topPanel.add(rigthSide,BorderLayout.EAST);
+		topPanel.add(rightSide,BorderLayout.EAST);
 		
 	
 	}
@@ -171,7 +167,7 @@ public class TicketView {
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MainPageView main = new MainPageView();
+				MainPageView main = new MainPageView(currentUser);
 				main.frame.setVisible(true);
 				
 			}
@@ -245,6 +241,7 @@ public class TicketView {
 				
 			}
 		});
+		
 		
 		myLists.setText("MyLists");
 		myMeetings.setText("MyMeetings");

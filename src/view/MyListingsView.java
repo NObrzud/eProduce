@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,6 +27,8 @@ import javax.swing.border.Border;
 import java.awt.color.*;
 
 import controller.eProduceController;
+import controller.eProduceDatabase;
+import model.Listing;
 import model.User;
 
 public class MyListingsView {
@@ -36,10 +39,12 @@ public class MyListingsView {
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
+	private eProduceDatabase db = new eProduceDatabase();
 	/**
 	 * Set the Listings up in this method each method called is a panel.
 	 */
-	public MyListingsView() {
+	public MyListingsView(User user) {		
+		currentUser = user;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = (int)(((int) tk.getScreenSize().getWidth())*.75);
 		int ySize = (int)(((int) tk.getScreenSize().getHeight())*.75);
@@ -57,11 +62,6 @@ public class MyListingsView {
 		frame.add(sidePanel, BorderLayout.WEST);
 		frame.add(middlePanel, BorderLayout.CENTER);
 		frame.setVisible(true);
-
-	}
-	public MyListingsView(User user) {		
-		this(); //default constructor
-		currentUser = user;
 	}
 	/*
 	 * This a method to hold all of the top panel information
@@ -94,7 +94,7 @@ public class MyListingsView {
 			public void actionPerformed(ActionEvent e) {
 				currentUser = null;
 				frame.dispose();
-				StartView start = new StartView();
+				StartView start = new StartView(currentUser);
 				start.frame.setVisible(true);
 				
 			}
@@ -148,7 +148,7 @@ public class MyListingsView {
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
-								StartView sv = new StartView();
+								StartView sv = new StartView(currentUser);
 								frame = sv.frame;
 								frame.setVisible(true);
 							}
@@ -251,7 +251,7 @@ public class MyListingsView {
 				bottom.setLayout(new BorderLayout());
 				
 				title.setText("Title: ");
-				tags.setText("Tags: ");
+				tags.setText("Tags: (Separate each tag with a comma \',\')");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
 				destxt.setBorder(border);
@@ -270,11 +270,20 @@ public class MyListingsView {
 				{
 					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
 					{
-						
+						if(db.createListing(currentUser.getEmail(),destxt.getText(), tagstxt.getText()))
+						{
+							String msg = "Listing created!";
+							JOptionPane.showMessageDialog(frame, msg);
+						}
+						else
+						{
+							String msg = "Unable to create listing. Database error.";
+							JOptionPane.showMessageDialog(frame, msg);
+						}
 					}
 					else
 					{
-						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						String emptyFieldMsg = "Unable to create listing. The following fields are empty: \n";
 						if(titletxt.getText().equals("")) emptyFieldMsg += "      Title\n";
 						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
 						if(des.getText().equals("")) emptyFieldMsg += "      Description\n";
@@ -295,7 +304,16 @@ public class MyListingsView {
 	public void middlePanel(){
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField listing1 = new JTextField("Listings1");
+		JTextField[] listings = new JTextField[10];
+		for(int i = 0; i < listings.length; i++){
+			listings[i] = new JTextField("Listing"+i);
+		}
+		JButton[] listbtn = new JButton[10];
+		for(int i = 0; i < listbtn.length; i++)
+		{
+			listbtn[i] = new JButton("View");
+		}
+		/*JTextField listing1 = new JTextField("Listings1");
 		JTextField listing2 = new JTextField("Listings2");
 		JTextField listing3 = new JTextField("Listings3");
 		JTextField listing4 = new JTextField("Listings4");
@@ -314,19 +332,26 @@ public class MyListingsView {
 		JButton listbtn7 = new JButton("View");
 		JButton listbtn8 = new JButton("View");
 		JButton listbtn9 = new JButton("View");
-		JButton listbtn10 = new JButton("View");
+		JButton listbtn10 = new JButton("View");*/
 		
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
 		JPanel rightSide = new JPanel();
+		
+		ArrayList<Listing> myListings = new ArrayList<Listing>();
+		db.getMyListings(currentUser.getEmail(),myListings);
+		
 		
 		search.setText("Search.....");
 		search.setColumns(50);
 		
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
-		
-		listing1.setEditable(false);
+		for(int i = 0; i < listings.length; i++)
+		{
+			listings[i].setEditable(false);
+		}
+		/*listing1.setEditable(false);
 		listing2.setEditable(false);
 		listing3.setEditable(false);
 		listing4.setEditable(false);
@@ -335,11 +360,15 @@ public class MyListingsView {
 		listing7.setEditable(false);
 		listing8.setEditable(false);
 		listing9.setEditable(false);
-		listing10.setEditable(false);
+		listing10.setEditable(false);*/
 		
 		
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		listing.add(listing1);
+		for(int i = 0; i < listings.length; i++)
+		{
+			listing.add(listings[i]);
+		}
+		/*listing.add(listing1);
 		listing.add(listing2);
 		listing.add(listing3);
 		listing.add(listing4);
@@ -348,10 +377,14 @@ public class MyListingsView {
 		listing.add(listing7);
 		listing.add(listing8);
 		listing.add(listing9);
-		listing.add(listing10);
+		listing.add(listing10);*/
 
 		rightSide.setLayout(new GridLayout(10,1));
-		rightSide.add(listbtn1);
+		for(int i = 0; i < listbtn.length; i++)
+		{
+			rightSide.add(listbtn[i]);
+		}
+		/*rightSide.add(listbtn1);
 		rightSide.add(listbtn2);
 		rightSide.add(listbtn3);
 		rightSide.add(listbtn4);
@@ -360,7 +393,7 @@ public class MyListingsView {
 		rightSide.add(listbtn7);
 		rightSide.add(listbtn8);
 		rightSide.add(listbtn9);
-		rightSide.add(listbtn10);
+		rightSide.add(listbtn10);*/
 		
 		
 		
