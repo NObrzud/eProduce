@@ -145,7 +145,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			
-			insertString = "insert into eproduce.listings (owner, content, tags ) values (\'"+email+"\',\'"+text+"\',\'"+tags+"\')";
+			insertString = "insert into eproduce.listings (owner, content, tags ) values (\'"+email+"\',\'"+text+"\',\'"+tags+", "+email+"\')";
 			System.out.println(insertString);
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new account was created
@@ -182,6 +182,30 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 			System.exit(-1);
 		}
+		
+	}
+	public void getAllListings(ArrayList<Listing> myListings) {
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.listings"; // single quotes protect against SQL injection
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("content"), returnValues.getString("tags")));
+			}
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+		}
+		
 		
 	}
 	

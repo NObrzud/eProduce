@@ -276,6 +276,10 @@ public class MyListingsView {
 						{
 							String msg = "Listing created!";
 							JOptionPane.showMessageDialog(frame, msg);
+							frame.dispose();
+							MyListingsView mlv = new MyListingsView(currentUser);
+							frame = mlv.frame;
+							frame.setVisible(true);
 						}
 						else
 						{

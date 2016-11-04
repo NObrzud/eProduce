@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.Box;
@@ -26,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
 import controller.eProduceController;
+import controller.eProduceDatabase;
+import model.Listing;
 import model.User;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
@@ -39,6 +42,7 @@ public class MainPageView {
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
+	private eProduceDatabase db = new eProduceDatabase();
 
 	/**
 	 * Set the main page up in this method each method called is a panel.
@@ -230,32 +234,29 @@ public class MainPageView {
 	public void middlePanel(){
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField listing1 = new JTextField("Listings1");
-		JTextField listing2 = new JTextField("Listings2");
-		JTextField listing3 = new JTextField("Listings3");
-		JTextField listing4 = new JTextField("Listings4");
-		JTextField listing5 = new JTextField("Listings5");
-		JTextField listing6 = new JTextField("Listings6");
-		JTextField listing7 = new JTextField("Listings7");
-		JTextField listing8 = new JTextField("Listings8");
-		JTextField listing9 = new JTextField("Listings9");
-		JTextField listing10 = new JTextField("Listings10");
-		JButton listbtn1 = new JButton("View");
-		JButton listbtn2 = new JButton("View");
-		JButton listbtn3 = new JButton("View");
-		JButton listbtn4 = new JButton("View");
-		JButton listbtn5 = new JButton("View");
-		JButton listbtn6 = new JButton("View");
-		JButton listbtn7 = new JButton("View");
-		JButton listbtn8 = new JButton("View");
-		JButton listbtn9 = new JButton("View");
-		JButton listbtn10 = new JButton("View");
-		
+		JTextField[] listings = new JTextField[10];
+		for(int i = 0; i < listings.length; i++){
+			listings[i] = new JTextField("Listing"+i);
+		}
+		JButton[] listbtn = new JButton[10];
+		for(int i = 0; i < listbtn.length; i++)
+		{
+			listbtn[i] = new JButton("View");
+		}
+		ArrayList<Listing> list = new ArrayList<Listing>();
+		db.getAllListings(list);
+		for(int i = 0; i < list.size(); i++)
+		{
+			Listing currListing = list.get(i);
+			listings[i].setText(currListing.getOwner() + "\t\t" + currListing.getContent() + "\t\t" + currListing.getTags());
+		}
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
 		JPanel rightSide = new JPanel();
 		
-		listbtn1.addActionListener(new ActionListener(){
+		for(int i = 0; i < listbtn.length; i++)
+		{
+			listbtn[i].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				/*frame.dispose();
 				MyAccountView start = new MyAccountView();
@@ -358,6 +359,7 @@ public class MainPageView {
 				
 			}
 		});
+		}
 		
 		search.setText("Search.....");
 		search.setColumns(50);
@@ -371,41 +373,23 @@ public class MainPageView {
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
 		
-		listing1.setEditable(false);
-		listing2.setEditable(false);
-		listing3.setEditable(false);
-		listing4.setEditable(false);
-		listing5.setEditable(false);
-		listing6.setEditable(false);
-		listing7.setEditable(false);
-		listing8.setEditable(false);
-		listing9.setEditable(false);
-		listing10.setEditable(false);
+		for(int i = 0; i < listings.length; i++)
+		{
+			listings[i].setEditable(false);
+		}
 		
 		
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		listing.add(listing1);
-		listing.add(listing2);
-		listing.add(listing3);
-		listing.add(listing4);
-		listing.add(listing5);
-		listing.add(listing6);
-		listing.add(listing7);
-		listing.add(listing8);
-		listing.add(listing9);
-		listing.add(listing10);
+		for(int i = 0; i < listings.length; i++)
+		{
+			listing.add(listings[i]);
+		}
 
 		rightSide.setLayout(new GridLayout(10,1));
-		rightSide.add(listbtn1);
-		rightSide.add(listbtn2);
-		rightSide.add(listbtn3);
-		rightSide.add(listbtn4);
-		rightSide.add(listbtn5);
-		rightSide.add(listbtn6);
-		rightSide.add(listbtn7);
-		rightSide.add(listbtn8);
-		rightSide.add(listbtn9);
-		rightSide.add(listbtn10);
+		for(int i = 0; i < listings.length; i++)
+		{
+			rightSide.add(listbtn[i]);
+		}
 		
 		
 		
