@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -236,7 +237,7 @@ public class MyListingsView {
 				JTextField titletxt = new JTextField();
 				JTextField tagstxt = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
-				
+				Border border = BorderFactory.createLineBorder(Color.BLACK);
 				lstPanel.setLayout(new BorderLayout());
 				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
@@ -245,7 +246,7 @@ public class MyListingsView {
 				tags.setText("Tags: ");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
-				
+				destxt.setBorder(border);
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
@@ -270,6 +271,7 @@ public class MyListingsView {
 						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
 						if(des.getText().equals("")) emptyFieldMsg += "      Description\n";
 						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+						
 					}
 					
 				}
