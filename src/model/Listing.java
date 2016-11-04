@@ -1,5 +1,7 @@
 package model;
 
+import java.util.regex.Pattern;
+
 public class Listing {
 	private String owner;
 	private int listingNumb;
@@ -7,7 +9,8 @@ public class Listing {
 	private String[] tags;
 	public Listing(String owner, String content, String tags) {
 		this.owner = owner;
-		
+		this.content = content;
+		this.tags = tags.split(",");
 	}
 	public String getOwner() {
 		return owner;
@@ -27,8 +30,11 @@ public class Listing {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String[] getTags() {
-		return tags;
+	public String getTags() {
+		String returnString = "";
+		for(int i = 0; i < tags.length; i++)
+			returnString += tags[i] + " ";
+		return returnString;
 	}
 	public void setTags(String[] tags) {
 		this.tags = tags;

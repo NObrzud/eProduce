@@ -315,26 +315,6 @@ public class MyListingsView {
 		{
 			listbtn[i] = new JButton("Edit");
 		}
-		/*JTextField listing1 = new JTextField("Listings1");
-		JTextField listing2 = new JTextField("Listings2");
-		JTextField listing3 = new JTextField("Listings3");
-		JTextField listing4 = new JTextField("Listings4");
-		JTextField listing5 = new JTextField("Listings5");
-		JTextField listing6 = new JTextField("Listings6");
-		JTextField listing7 = new JTextField("Listings7");
-		JTextField listing8 = new JTextField("Listings8");
-		JTextField listing9 = new JTextField("Listings9");
-		JTextField listing10 = new JTextField("Listings10");
-		JButton listbtn1 = new JButton("View");
-		JButton listbtn2 = new JButton("View");
-		JButton listbtn3 = new JButton("View");
-		JButton listbtn4 = new JButton("View");
-		JButton listbtn5 = new JButton("View");
-		JButton listbtn6 = new JButton("View");
-		JButton listbtn7 = new JButton("View");
-		JButton listbtn8 = new JButton("View");
-		JButton listbtn9 = new JButton("View");
-		JButton listbtn10 = new JButton("View");*/
 		
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
@@ -342,8 +322,14 @@ public class MyListingsView {
 		
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
 		db.getMyListings(currentUser.getEmail(),myListings);
-		
-		listbtn[0].addActionListener(new ActionListener(){
+		for(int i = 0; i < myListings.size(); i++)
+		{
+			Listing currListing = myListings.get(i);
+			listings[i].setText(currListing.getOwner() + "\t\t" + currListing.getContent() + "\t\t" + currListing.getTags());
+		}
+		for(int i = 0; i < listbtn.length; i++)
+		{
+			listbtn[i].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JPanel listPanel = new JPanel();
 				JPanel top = new JPanel();
@@ -389,6 +375,7 @@ public class MyListingsView {
 				}
 			}
 		});
+		}
 		search.setText("Search.....");
 		search.setColumns(50);
 		search.addMouseListener(new MouseAdapter(){
