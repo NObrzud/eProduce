@@ -38,4 +38,47 @@ public class eProduceController {
 		
 		return db.updateAccount(first, last, email, pass, rePass);
 	}
+	public static boolean validateEmail(String emailAddress)
+	{
+		
+		//check to ensure . symbol is not the first or last character of emailAddress
+		int addressLength = emailAddress.length();
+		if((emailAddress.charAt(0) == '.') || (emailAddress.charAt(addressLength-1) == '.'))
+			return false;
+		
+		
+		//check for one and only one @ sign and ensure it is not at beginning or end of emailAddress
+		if((emailAddress.charAt(0) == '@') || (emailAddress.charAt(addressLength-1) == '@'))
+			return false;
+
+		int at_symbol_count_position=0;
+		int at_symbol_count=0;
+		for(int i=0; i<addressLength; i++)
+		{
+			if(emailAddress.charAt(i) == '@')
+			{
+				at_symbol_count_position=i;
+				if(emailAddress.charAt(i+1) == '.')// the . symbol can not be the next char after @ symbol
+					return false;
+				at_symbol_count++;
+			}
+				
+		}
+		if(at_symbol_count != 1)//there can only be one @ symbol
+			return false;
+		
+		
+		//check to make sure at least one . symbol occurs after the @ symbol
+		int periodCount=0;
+		for(int j=at_symbol_count_position; j<addressLength; j++)
+		{
+			if(emailAddress.charAt(j) == '.')
+				periodCount++;
+		}
+		if(periodCount!=0)
+			return true;
+		else
+			return false;
+		
+	}
 }

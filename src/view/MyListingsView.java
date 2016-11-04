@@ -313,7 +313,7 @@ public class MyListingsView {
 		JButton[] listbtn = new JButton[10];
 		for(int i = 0; i < listbtn.length; i++)
 		{
-			listbtn[i] = new JButton("View");
+			listbtn[i] = new JButton("Edit");
 		}
 		/*JTextField listing1 = new JTextField("Listings1");
 		JTextField listing2 = new JTextField("Listings2");
@@ -343,7 +343,52 @@ public class MyListingsView {
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
 		db.getMyListings(currentUser.getEmail(),myListings);
 		
-		
+		listbtn[0].addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				JPanel listPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JLabel title = new JLabel();
+				JLabel tags = new JLabel();
+				JLabel des = new JLabel();
+				JTextField titletxt = new JTextField();
+				JTextField tagstxt = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				Object[] options1 = { "Save Changes","Delete Listing",
+				"Cancel" };
+
+				listPanel.setLayout(new BorderLayout());
+				top.setLayout(new GridLayout(0,1));
+				bottom.setLayout(new BorderLayout());
+				//Add SQL statement after text below
+				title.setText("Title: ");
+				tags.setText("Tags: ");
+
+				des.setText("Description:");
+				destxt.setLineWrap(true);
+				top.add(title);
+				top.add(titletxt);
+				top.add(tags);
+				top.add(tagstxt);
+				bottom.add(des,BorderLayout.NORTH);
+				bottom.add(destxt,BorderLayout.SOUTH);
+				listPanel.add(top,BorderLayout.NORTH);
+				listPanel.add(bottom,BorderLayout.SOUTH);
+
+
+				int result = JOptionPane.showOptionDialog(null, listPanel, "Edit Listing",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+						null, options1, null);
+
+				if(result == JOptionPane.YES_OPTION){
+					String message = listings[0].getText()+" has been Saved";
+					JOptionPane.showMessageDialog(frame,message );
+				}else if(result == JOptionPane.NO_OPTION){
+					String message = listings[0].getText()+" has been Deleted";
+					JOptionPane.showMessageDialog(frame,message );
+				}
+			}
+		});
 		search.setText("Search.....");
 		search.setColumns(50);
 		search.addMouseListener(new MouseAdapter(){

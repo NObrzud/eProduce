@@ -105,6 +105,8 @@ public class SignUpView {
 					{
 						if(!(firstNameTF.getText().equals("")) && !(lastNameTF.getText().equals("")) && !emailTF.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
 								   && !(passwordPF.getText().equals("")) && passwordPF.getText().equals(rePasswordPF.getText()))			   //are not null, and password and confirm pass are equal...
+						{
+							if(eProduceController.validateEmail(emailTF.getText()))
 							{
 								if(controller.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
 								{
@@ -114,11 +116,16 @@ public class SignUpView {
 									frame = sv.frame;
 									frame.setVisible(true);
 								}
-								else
-								{
-									JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
-								}
 							}
+							else if(!eProduceController.validateEmail(emailTF.getText()))
+							{
+								JOptionPane.showMessageDialog(frame, "Error invalid email address"); 
+							}
+							else
+							{
+								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); 
+							}
+						}
 						else
 						{
 							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
