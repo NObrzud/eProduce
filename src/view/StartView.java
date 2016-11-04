@@ -35,9 +35,9 @@ public class StartView {
 			currentUser = new User();
 		else
 			currentUser = user;
-		frame.setSize(500, 375);
+		frame.setSize(430, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.setResizable(false);
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null); 
 		JPanel panel = new JPanel();
 		frame.add(panel);		
@@ -51,26 +51,26 @@ public class StartView {
 		// eProduce Logo code 
 		ImageIcon pic = new ImageIcon("res/eProduceLogo.png");
 		JLabel imgLabel = new JLabel(pic);
-		imgLabel.setBounds(73, 5, 334, 179);
+		imgLabel.setBounds(43, 5, 334, 179);
 		panel.add(imgLabel);
 		
 
-		emailLabel.setBounds(130, 210, 80, 25);
+		emailLabel.setBounds(100, 210, 80, 25);
 		panel.add(emailLabel);
 
-		emailTF.setBounds(175, 210, 160, 25);
+		emailTF.setBounds(145, 210, 160, 25);
 		panel.add(emailTF);
 
-		passwordLabel.setBounds(110, 240, 80, 25);
+		passwordLabel.setBounds(80, 240, 80, 25);
 		panel.add(passwordLabel);
 
-		passwordPF.setBounds(175, 240, 160, 25);
+		passwordPF.setBounds(145, 240, 160, 25);
 		panel.add(passwordPF);
 
-		loginButton.setBounds(170, 270, 80, 25);
+		loginButton.setBounds(140, 270, 80, 25);
 		panel.add(loginButton);
 
-		signUpButton.setBounds(260, 270, 80, 25);
+		signUpButton.setBounds(230, 270, 80, 25);
 		panel.add(signUpButton);
 		
 		

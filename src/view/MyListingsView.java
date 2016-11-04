@@ -72,7 +72,6 @@ public class MyListingsView {
 	/*
 	 * This a method to hold all of the top panel information
 	 */
-	
 	public void topPanel(){
 		JLabel titleLabel = new JLabel("eProduce - MyListings");
 		JButton myAccount = new JButton();
@@ -109,7 +108,6 @@ public class MyListingsView {
 		/*
 		 * My Account action button listener
 		 */
-		
 		myAccount.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				/*frame.dispose();
@@ -239,9 +237,6 @@ public class MyListingsView {
 		
 		createListing.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				/*frame.dispose();
-				MyAccountView start = new MyAccountView();
-				start.frame.setVisible(true);*/
 				JPanel lstPanel = new JPanel();
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
@@ -305,8 +300,6 @@ public class MyListingsView {
 				
 			}
 		});
-		
-		
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -317,12 +310,13 @@ public class MyListingsView {
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField[][] listings = new JTextField[myListings.size()][3];
-		String[][] listingData = new String[myListings.size()][3];
+		JTextField[][] listings = new JTextField[myListings.size()][4];
+		String[][] listingData = new String[myListings.size()][4];
 		for(i = 0; i < listings.length; i++){
 			listings[i][0] = new JTextField("Listing Title "+i);
 			listings[i][1] = new JTextField("Listing Content " + i);
 			listings[i][2] = new JTextField("Listing Tags " + i);
+			listings[i][3] = new JTextField("Listing Num " + i);
 		}
 		JButton[] listbtn = new JButton[myListings.size()];
 		for(i = 0; i < listbtn.length; i++)
@@ -343,6 +337,7 @@ public class MyListingsView {
 				listings[i][0].setText(currListing.getOwner());
 				listings[i][1].setText(currListing.getContent());
 				listings[i][2].setText(currListing.getTags());
+				listings[i][3].setText(Integer.toString(currListing.getListingNum()));
 			}
 		}
 		for(int i = 0; i < listingData.length; i++)
@@ -376,7 +371,7 @@ public class MyListingsView {
 				des.setText("Description:");
 				destxt.setLineWrap(true);
 				tagstxt.setText(myListings.get(i-1).getTags());
-				titletxt.setText(myListings.get(i-1).getTitle());
+				titletxt.setText("Listing " + myListings.get(i-1).getListingNum() + ": " + myListings.get(i-1).getTitle());
 				destxt.setText(myListings.get(i-1).getContent());
 				top.add(title);
 				top.add(titletxt);
