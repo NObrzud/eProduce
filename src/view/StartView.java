@@ -1,8 +1,10 @@
 package view;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +23,6 @@ public class StartView {
 
 	private JTextField emailTF = new JTextField();
 	private JPasswordField passwordPF = new JPasswordField();
-	private JLabel titleLabel = new JLabel("eProduce");
 	private JLabel emailLabel = new JLabel("Email");
 	private JLabel passwordLabel = new JLabel("Password");
 	private JButton loginButton = new JButton("Login");
@@ -30,40 +31,45 @@ public class StartView {
 
 	public StartView() {
 		currentUser = new User();
-		frame.setSize(500, 300);
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		int xSize = 480;
+		int ySize = 378;
+		frame.setSize(xSize, ySize);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		 frame.setLocationRelativeTo(null); 
+		frame.setLocationRelativeTo(null); 
 		JPanel panel = new JPanel();
-		frame.add(panel);
-
+		frame.add(panel);		
 		
 		panel.setLayout(null);
 
 		/**
 		 * Create Labels
 		 */
+		
+		// eProduce Logo code 
+		ImageIcon pic = new ImageIcon("res/eProduceLogo.png");
+		JLabel imgLabel = new JLabel(pic);
+		imgLabel.setBounds(73, 5, 334, 179);
+		panel.add(imgLabel);
+		
 
-		titleLabel.setBounds(150, 10, 150, 150);
-		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
-		panel.add(titleLabel);
-
-		emailLabel.setBounds(100, 110, 80, 25);
+		emailLabel.setBounds(130, 210, 80, 25);
 		panel.add(emailLabel);
 
-		emailTF.setBounds(145, 110, 160, 25);
+		emailTF.setBounds(175, 210, 160, 25);
 		panel.add(emailTF);
 
-		passwordLabel.setBounds(80, 140, 80, 25);
+		passwordLabel.setBounds(110, 240, 80, 25);
 		panel.add(passwordLabel);
 
-		passwordPF.setBounds(145, 140, 160, 25);
+		passwordPF.setBounds(175, 240, 160, 25);
 		panel.add(passwordPF);
 
-		loginButton.setBounds(140, 170, 80, 25);
+		loginButton.setBounds(170, 300, 80, 25);
 		panel.add(loginButton);
 
-		signUpButton.setBounds(230, 170, 80, 25);
+		signUpButton.setBounds(260, 300, 80, 25);
 		panel.add(signUpButton);
 		
 		
