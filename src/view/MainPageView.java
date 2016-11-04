@@ -1,13 +1,16 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -17,10 +20,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.border.Border;
 
 import controller.eProduceController;
 import model.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class MainPageView {
 
@@ -180,7 +190,14 @@ public class MainPageView {
 				
 			}
 		});
-		
+		myMeetings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				MyMeetingsView mlv = new MyMeetingsView(currentUser);
+				mlv.frame.setVisible(true);
+				
+			}
+		});
 		myLists.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -190,19 +207,10 @@ public class MainPageView {
 			}
 		});
 		
-		myMeetings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyMeetingsView mlv = new MyMeetingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
-			}
-		});
 		
 		myLists.setText("MyLists");
-		myMeetings.setText("MyMeetings");
 		myTickets.setText("MyTickets");
-		
+		myMeetings.setText("MyMeetings");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
 	
 		sidePanel.add(myLists);
@@ -242,6 +250,110 @@ public class MainPageView {
 		JPanel listing = new JPanel();
 		JPanel rightSide = new JPanel();
 		
+		
+		listbtn1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				/*frame.dispose();
+				MyAccountView start = new MyAccountView();
+				start.frame.setVisible(true);*/
+				JPanel listPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JLabel title = new JLabel();
+				JLabel owner = new JLabel();
+				JLabel des = new JLabel();
+				JTextField titletxt = new JTextField();
+				JTextField ownertxt = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				 Object[] options1 = { "Schedule MeetUp", "Okay",
+	                "Cancel" };
+
+				 	listPanel.setLayout(new BorderLayout());
+					top.setLayout(new GridLayout(0,1));
+					bottom.setLayout(new BorderLayout());
+					//Add SQL statement after text below
+					title.setText("Title: ");
+					titletxt.setEnabled(false);
+					owner.setText("Owner: ");
+					ownertxt.setEnabled(false);
+					des.setText("Description:");
+					destxt.setEnabled(false);
+					destxt.setLineWrap(true);
+					top.add(title);
+					top.add(titletxt);
+					top.add(owner);
+					top.add(ownertxt);
+					bottom.add(des,BorderLayout.NORTH);
+					bottom.add(destxt,BorderLayout.SOUTH);
+					listPanel.add(top,BorderLayout.NORTH);
+					listPanel.add(bottom,BorderLayout.SOUTH);
+				
+				
+				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing " + currentUser.getFirstName()+ "'s" +" Listing",
+			                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+			                null, options1, null);
+				
+				if(result == JOptionPane.YES_OPTION){
+					JPanel metPanel = new JPanel();
+					JLabel participantslbl = new JLabel();
+					JLabel whenlbl = new JLabel();
+					JLabel timelbl = new JLabel();
+					JLabel loclbl = new JLabel();
+					JTextField participantstxt = new JTextField(10);
+					JTextField whentxt = new JTextField(10);;
+					JTextField loctxt = new JTextField(10);
+					SpinnerDateModel model2 = new SpinnerDateModel();
+					model2.setCalendarField(Calendar.MINUTE);
+					JSpinner spinner= new JSpinner();
+					spinner.setModel(model2);
+					spinner.setEditor(new JSpinner.DateEditor(spinner, "h:mm a"));
+					spinner.setSize(10,10);
+					metPanel.setLayout(new GridLayout(0,1));
+					
+					
+					participantslbl.setText("Participants: ");
+					whenlbl.setText("When: ");
+					timelbl.setText("Time");
+					loclbl.setText("Location:");
+					UtilDateModel model = new UtilDateModel();
+					JDatePanelImpl datePanel = new JDatePanelImpl(model);
+					JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+					
+				
+					metPanel.add(participantslbl);
+					metPanel.add(participantstxt);
+					metPanel.add(whenlbl);
+					metPanel.add(datePicker);
+					metPanel.add(timelbl);
+					metPanel.add(spinner);
+					metPanel.add(loclbl);
+					metPanel.add(loctxt);
+					
+				
+					
+					int result2 = JOptionPane.showConfirmDialog(null, metPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
+					if(result2 == JOptionPane.OK_OPTION)
+					{
+						if(!(participantstxt.getText().equals("")) && !(whentxt.getText().equals("")) && !loctxt.getText().equals("") )	
+						{
+							
+						}
+						else
+						{
+							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+							if(whentxt.getText().equals("")) emptyFieldMsg += "      When\n";
+							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+							
+							
+						}
+						
+					}
+				}
+				
+			}
+		});
 		search.setText("Search.....");
 		search.setColumns(50);
 		

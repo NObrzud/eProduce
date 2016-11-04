@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -19,14 +20,19 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.border.Border;
 
 import java.awt.color.*;
 
 import controller.eProduceController;
 import model.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class MyListingsView {
 
@@ -48,7 +54,7 @@ public class MyListingsView {
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null); 
 		frame.setLayout(new BorderLayout());
-		
+
 		topPanel();
 		sidePanel();
 		middlePanel();
@@ -66,27 +72,27 @@ public class MyListingsView {
 	/*
 	 * This a method to hold all of the top panel information
 	 */
-	
+
 	public void topPanel(){
 		JLabel titleLabel = new JLabel("eProduce - MyListings");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
 		JPanel rightSide = new JPanel();
 		JPanel leftSide = new JPanel();
-		
+
 		topPanel.setLayout(new BorderLayout());
 		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
+
 		myAccount.setText("MyAccount");
 		logout.setText("Log Out");
 		titleLabel.setBounds(150, 10, 150, 150);
 		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
-		
+
 		leftSide.add(titleLabel);
 		rightSide.add(myAccount);
 		rightSide.add(logout);
-		
+
 		/*
 		 * Log outs action button listener logs the user out
 		 */
@@ -96,14 +102,14 @@ public class MyListingsView {
 				frame.dispose();
 				StartView start = new StartView();
 				start.frame.setVisible(true);
-				
+
 			}
 		});
-		
+
 		/*
 		 * My Account action button listener
 		 */
-		
+
 		myAccount.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				/*frame.dispose();
@@ -128,27 +134,27 @@ public class MyListingsView {
 				accPanel.add(password);
 				accPanel.add(new JLabel("Confirm Password:"));
 				accPanel.add(passConfirm);
-				
+
 				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
 				if(result == JOptionPane.OK_OPTION)
 				{
 
 					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
-							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
+							&& !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
+					{
+						if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
 						{
-							if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
-							{
-								JOptionPane.showMessageDialog(frame, "Account has been successfully updated!");
-								frame.dispose();
-								StartView sv = new StartView();
-								frame = sv.frame;
-								frame.setVisible(true);
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
-							}
+							JOptionPane.showMessageDialog(frame, "Account has been successfully updated!");
+							frame.dispose();
+							StartView sv = new StartView();
+							frame = sv.frame;
+							frame.setVisible(true);
 						}
+						else
+						{
+							JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
+						}
+					}
 					else
 					{
 						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
@@ -161,13 +167,13 @@ public class MyListingsView {
 						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
 					}
 				}
-				
+
 			}
 		});
 		topPanel.add(leftSide,BorderLayout.WEST);
 		topPanel.add(rightSide,BorderLayout.EAST);
-		
-	
+
+
 	}
 	/*
 	 * This a method to hold all of the side panel information
@@ -177,13 +183,13 @@ public class MyListingsView {
 		JButton myMeetings = new JButton();
 		JButton myTickets = new JButton();
 		JButton createListing = new JButton();
-		
+
 		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				TicketView tix = new TicketView(currentUser);
 				tix.frame.setVisible(true);
-				
+
 			}
 		});
 		home.addActionListener(new ActionListener() {
@@ -191,7 +197,7 @@ public class MyListingsView {
 				frame.dispose();
 				MainPageView mpv = new MainPageView(currentUser);
 				mpv.frame.setVisible(true);
-				
+
 			}
 		});
 		myMeetings.addActionListener(new ActionListener() {
@@ -199,30 +205,30 @@ public class MyListingsView {
 				frame.dispose();
 				MyMeetingsView mlv = new MyMeetingsView(currentUser);
 				mlv.frame.setVisible(true);
-				
+
 			}
 		});
-		
-	
+
+
 		home.setText("Home");
 		myMeetings.setText("MyMeetings");
 		myTickets.setText("MyTickets");
 		createListing.setText("Create a Listing");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-	
+
 		sidePanel.add(home);
-		
+
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(createListing);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(myMeetings);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(myTickets);
-		
+
 		/*
 		 * create ticket action button listener
 		 */
-		
+
 		createListing.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				/*frame.dispose();
@@ -241,7 +247,7 @@ public class MyListingsView {
 				lstPanel.setLayout(new BorderLayout());
 				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
-				
+
 				title.setText("Title: ");
 				tags.setText("Tags: ");
 				des.setText("Description:");
@@ -255,14 +261,14 @@ public class MyListingsView {
 				bottom.add(destxt,BorderLayout.SOUTH);
 				lstPanel.add(top,BorderLayout.NORTH);
 				lstPanel.add(bottom,BorderLayout.SOUTH);
-			
-				
+
+
 				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Listing Info", JOptionPane.OK_CANCEL_OPTION);
 				if(result == JOptionPane.OK_OPTION)
 				{
 					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
 					{
-						
+
 					}
 					else
 					{
@@ -271,16 +277,16 @@ public class MyListingsView {
 						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
 						if(des.getText().equals("")) emptyFieldMsg += "      Description\n";
 						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-						
-						
+
+
 					}
-					
+
 				}
-				
+
 			}
 		});
-		
-		
+
+
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -298,27 +304,73 @@ public class MyListingsView {
 		JTextField listing8 = new JTextField("Listings8");
 		JTextField listing9 = new JTextField("Listings9");
 		JTextField listing10 = new JTextField("Listings10");
-		JButton listbtn1 = new JButton("View");
-		JButton listbtn2 = new JButton("View");
-		JButton listbtn3 = new JButton("View");
-		JButton listbtn4 = new JButton("View");
-		JButton listbtn5 = new JButton("View");
-		JButton listbtn6 = new JButton("View");
-		JButton listbtn7 = new JButton("View");
-		JButton listbtn8 = new JButton("View");
-		JButton listbtn9 = new JButton("View");
-		JButton listbtn10 = new JButton("View");
-		
+		JButton listbtn1 = new JButton("Edit");
+		JButton listbtn2 = new JButton("Edit");
+		JButton listbtn3 = new JButton("Edit");
+		JButton listbtn4 = new JButton("Edit");
+		JButton listbtn5 = new JButton("Edit");
+		JButton listbtn6 = new JButton("Edit");
+		JButton listbtn7 = new JButton("Edit");
+		JButton listbtn8 = new JButton("Edit");
+		JButton listbtn9 = new JButton("Edit");
+		JButton listbtn10 = new JButton("Edit");
+
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
 		JPanel rightSide = new JPanel();
-		
+
+		listbtn1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				JPanel listPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JLabel title = new JLabel();
+				JLabel tags = new JLabel();
+				JLabel des = new JLabel();
+				JTextField titletxt = new JTextField();
+				JTextField tagstxt = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				Object[] options1 = { "Save Changes","Delete Listing",
+				"Cancel" };
+
+				listPanel.setLayout(new BorderLayout());
+				top.setLayout(new GridLayout(0,1));
+				bottom.setLayout(new BorderLayout());
+				//Add SQL statement after text below
+				title.setText("Title: ");
+				tags.setText("Tags: ");
+
+				des.setText("Description:");
+				destxt.setLineWrap(true);
+				top.add(title);
+				top.add(titletxt);
+				top.add(tags);
+				top.add(tagstxt);
+				bottom.add(des,BorderLayout.NORTH);
+				bottom.add(destxt,BorderLayout.SOUTH);
+				listPanel.add(top,BorderLayout.NORTH);
+				listPanel.add(bottom,BorderLayout.SOUTH);
+
+
+				int result = JOptionPane.showOptionDialog(null, listPanel, "Edit Listing",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+						null, options1, null);
+
+				if(result == JOptionPane.YES_OPTION){
+					String message = listing1.getText()+" has been Saved";
+					JOptionPane.showMessageDialog(frame,message );
+				}else if(result == JOptionPane.NO_OPTION){
+					String message = listing1.getText()+" has been Deleted";
+					JOptionPane.showMessageDialog(frame,message );
+				}
+			}
+		});
 		search.setText("Search.....");
 		search.setColumns(50);
-		
+
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
-		
+
 		listing1.setEditable(false);
 		listing2.setEditable(false);
 		listing3.setEditable(false);
@@ -329,8 +381,8 @@ public class MyListingsView {
 		listing8.setEditable(false);
 		listing9.setEditable(false);
 		listing10.setEditable(false);
-		
-		
+
+
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
 		listing.add(listing1);
 		listing.add(listing2);
@@ -354,19 +406,19 @@ public class MyListingsView {
 		rightSide.add(listbtn8);
 		rightSide.add(listbtn9);
 		rightSide.add(listbtn10);
-		
-		
-		
-		
+
+
+
+
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
-		
-		
+
+
 		leftSide.add(search);
 		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		middlePanel.add(listing,BorderLayout.CENTER);
 		middlePanel.add(rightSide,BorderLayout.EAST);
-		
+
 	}
 }
