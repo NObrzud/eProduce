@@ -151,7 +151,7 @@ public class MyListingsView {
 						}
 					else
 					{
-						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						String emptyFieldMsg = "Unable to save changes. The following fields are empty: \n";
 						if(fname.getText().equals("")) emptyFieldMsg += "      First Name\n";
 						if(lname.getText().equals("")) emptyFieldMsg += "      Last Name\n";
 						if(email.getText().equals("")) emptyFieldMsg += "      Email\n";
