@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,10 +18,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 
 import controller.eProduceController;
 import model.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class MyMeetingsView {
 	public JFrame frame = new JFrame("eProduce");
@@ -166,6 +172,7 @@ public class MyMeetingsView {
 	 */
 	public void sidePanel(){
 		JButton home = new JButton();
+		JButton createMeeting = new JButton();
 		JButton myListings = new JButton();
 		JButton myTickets = new JButton();
 	
@@ -194,14 +201,79 @@ public class MyMeetingsView {
 				
 			}
 		});
-		
+		createMeeting.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				/*frame.dispose();
+				MyAccountView start = new MyAccountView();
+				start.frame.setVisible(true);*/
+				JPanel metPanel = new JPanel();
+				JLabel participantslbl = new JLabel();
+				JLabel whenlbl = new JLabel();
+				JLabel timelbl = new JLabel();
+				JLabel loclbl = new JLabel();
+				JTextField participantstxt = new JTextField(10);
+				JTextField whentxt = new JTextField(10);;
+				JTextField loctxt = new JTextField(10);
+				SpinnerDateModel model2 = new SpinnerDateModel();
+				model2.setCalendarField(Calendar.MINUTE);
+				JSpinner spinner= new JSpinner();
+				spinner.setModel(model2);
+				spinner.setEditor(new JSpinner.DateEditor(spinner, "h:mm a"));
+				spinner.setSize(10,10);
+				metPanel.setLayout(new GridLayout(0,1));
+				
+				
+				participantslbl.setText("Participants: ");
+				whenlbl.setText("When: ");
+				timelbl.setText("Time");
+				loclbl.setText("Location:");
+				UtilDateModel model = new UtilDateModel();
+				JDatePanelImpl datePanel = new JDatePanelImpl(model);
+				JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+				
+			
+				metPanel.add(participantslbl);
+				metPanel.add(participantstxt);
+				metPanel.add(whenlbl);
+				metPanel.add(datePicker);
+				metPanel.add(timelbl);
+				metPanel.add(spinner);
+				metPanel.add(loclbl);
+				metPanel.add(loctxt);
+				
+			
+				
+				int result = JOptionPane.showConfirmDialog(null, metPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
+				if(result == JOptionPane.OK_OPTION)
+				{
+					if(!(participantstxt.getText().equals("")) && !(whentxt.getText().equals("")) && !loctxt.getText().equals("") )	
+					{
+						
+					}
+					else
+					{
+						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+						if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+						if(whentxt.getText().equals("")) emptyFieldMsg += "      When\n";
+						if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+						
+						
+					}
+					
+				}
+				
+			}
+		});
 		home.setText("Home");
 		myListings.setText("MyListings");
 		myTickets.setText("MyTickets");
-		
+		createMeeting.setText("Create Meeting");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
 	
 		sidePanel.add(home);
+		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
+		sidePanel.add(createMeeting);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(myListings);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));

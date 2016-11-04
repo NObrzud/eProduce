@@ -147,13 +147,14 @@ public class TicketView {
 				lstPanel.add(top,BorderLayout.NORTH);
 				lstPanel.add(bottom,BorderLayout.SOUTH);
 			
+			
 				
 				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Ticket Info", JOptionPane.OK_CANCEL_OPTION);
 				if(result == JOptionPane.OK_OPTION)
 				{
 					if(!(titletxt.getText().equals(""))&&!nametxt.getText().equals("") && !destxt.getText().equals("") )	
 					{
-						
+					
 					}
 					else
 					{
@@ -162,10 +163,11 @@ public class TicketView {
 						if(nametxt.getText().equals(""))emptyFieldMsg += "      Name\n";
 						if(destxt.getText().equals("")) emptyFieldMsg += "      Description\n";
 						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+						
 					}
 					
-				}
 				
+				}
 			}
 		});
 		myMeetings.addActionListener(new ActionListener() {
