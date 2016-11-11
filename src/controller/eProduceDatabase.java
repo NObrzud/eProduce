@@ -204,7 +204,8 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				myUsers.add(new User(returnValues.getString("firstname"), returnValues.getString("lastname"), returnValues.getString("username"), returnValues.getString("password"), returnValues.getInt("isblocked"), returnValues.getInt("isadmin")));
+				myUsers.add(new User(returnValues.getString("firstname"), returnValues.getString("lastname"), returnValues.getString("username"), 
+						returnValues.getString("password"), returnValues.getInt("isblocked"), returnValues.getInt("isadmin"), returnValues.getInt("numReports")));
 			}
 		}
 		catch(SQLException e)
@@ -320,6 +321,26 @@ public class eProduceDatabase {
 		{
 			System.err.println(e.getMessage());
 			System.exit(-1);
+		}
+		
+	}
+	public void editAdminAccess(String email, boolean isSelected) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			int isAdmin = isSelected ? 1 : 0;
+			updateString = "update eProduce.listings set isAdmin=\'"+isAdmin+"\' where username = \'" +email+ "\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
 		}
 		
 	}

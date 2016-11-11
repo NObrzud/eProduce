@@ -48,6 +48,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import controller.eProduceDatabase;
 import model.Listing;
 import model.User;
 
@@ -77,11 +78,12 @@ class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
 	}
 
 	public Object getCellEditorValue() {
-		button.removeItemListener(this);
-		return button;
+		return button.isSelected();
 	}
 
 	public void itemStateChanged(ItemEvent e) {
+		System.out.println(e.getItem() + " selected");
+		System.out.println("Press Press");
 		super.fireEditingStopped();
 	}
 }
@@ -307,6 +309,7 @@ public class AdminMainPageView {
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
 	private String mpView = "";
+	private eProduceDatabase db = new eProduceDatabase();
 
 	/*
 	 * The Main frame that holds everything
@@ -338,11 +341,11 @@ public class AdminMainPageView {
 	public void topPanel() {
 		JLabel titleLabel = new JLabel("eProduce-Admin");
 		JButton logout = new JButton();
-		JPanel rigthSide = new JPanel();
+		JPanel rightSide = new JPanel();
 		JPanel leftSide = new JPanel();
 
 		topPanel.setLayout(new BorderLayout());
-		rigthSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		logout.setText("Log Out");
@@ -363,10 +366,10 @@ public class AdminMainPageView {
 		});
 
 		leftSide.add(titleLabel);
-		rigthSide.add(logout);
+		rightSide.add(logout);
 
 		topPanel.add(leftSide, BorderLayout.WEST);
-		topPanel.add(rigthSide, BorderLayout.EAST);
+		topPanel.add(rightSide, BorderLayout.EAST);
 	}
 
 	/*
@@ -377,15 +380,23 @@ public class AdminMainPageView {
 		middlePanel.removeAll();
 		UIDefaults ui = UIManager.getLookAndFeel().getDefaults();
 		UIManager.put("RadioButton.focus", ui.getColor("control"));
-		ArrayList<Listing> getUser = new ArrayList<Listing>();
-		ArrayList<String> fname = new ArrayList<String>();
-		ArrayList<String> lname = new ArrayList<String>();
-		ArrayList<String> email = new ArrayList<String>();
-		ArrayList<String> password = new ArrayList<String>();
+		ArrayList<User> users = new ArrayList<User>();
+		db.getAllUsers(users);
 		
 		if (a.equals("user")) {
 			DefaultTableModel dm = new DefaultTableModel();
-			Object[][] datavector = new Object[3][5];
+			Object[][] datavector = new Object[users.size()][8];
+			for(int i = 0; i < datavector.length; i++)
+			{
+				datavector[i][0] = users.get(i).getEmail();
+				datavector[i][1] = users.get(i).getPassword();
+				datavector[i][2] = users.get(i).getFirstName();
+				datavector[i][3] = users.get(i).getLastName();
+				datavector[i][4] = users.get(i).getAdmin() == 0 ? new JRadioButton("", false) : new JRadioButton("", true);
+				datavector[i][5] = users.get(i).getBlocked() == 0 ? new JRadioButton("", false) : new JRadioButton("", true);
+				datavector[i][6] = users.get(i).getCurrentRating();
+				datavector[i][7] = users.get(i).getNumReports();
+			}
 			JRadioButton[] listbtnB = new JRadioButton[4];
 			JRadioButton[] listbtnA = new JRadioButton[4];
 			for (int b = 0; b <= 3; b++) {
@@ -393,12 +404,8 @@ public class AdminMainPageView {
 				listbtnA[b] = new JRadioButton();
 			}
 
-			dm.setDataVector(
-					new Object[][] { { "Homer", "Simpson", "homer@gmail.com", "XXXX", listbtnB[0], listbtnA[0] },
-							{ "Madge", "Simpson", "madge@gmail.com", "XXXX", listbtnB[1], listbtnA[1] },
-							{ "Bart", "Simpson", "bart@gmail.com", "XXX", listbtnB[2], listbtnA[2] },
-							{ "Lisa", "Simpson", "lisa@gmail.com", "XXXX", listbtnB[3], listbtnA[3] } },
-					new Object[] { "First Name", "Last Name", "email", "Password", "Blocked", "Admin" });
+			dm.setDataVector( datavector,
+					new Object[] { "Username", "Password", "First Name", "Last Name", "Admin", "Blocked", "Current Rating", "# Reports"});
 
 			listbtnB[0].setSelected(true);
 			JTable table = new JTable(dm){
