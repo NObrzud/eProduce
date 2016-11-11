@@ -9,9 +9,12 @@ import java.util.ArrayList;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 
 import model.Listing;
+import model.Meetup;
 import model.User;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class eProduceDatabase {
 	String myDB;
@@ -163,7 +166,8 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 			//System.exit(-1);
 			return false;
-		}	}
+		}	
+	}
 	public void getMyListings(String email, ArrayList<Listing> myListings) {
 		try {
 			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
@@ -178,6 +182,29 @@ public class eProduceDatabase {
 			while(returnValues.next())
 			{
 				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), returnValues.getInt("listingnum")));
+			}
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+		}
+		
+	}
+	public void getAllUsers(ArrayList<User> myUsers) {
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.users"; // single quotes protect against SQL injection
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				myUsers.add(new User(returnValues.getString("firstname"), returnValues.getString("lastname"), returnValues.getString("username"), returnValues.getString("password"), returnValues.getInt("isblocked"), returnValues.getInt("isadmin")));
 			}
 		}
 		catch(SQLException e)
@@ -237,6 +264,64 @@ public class eProduceDatabase {
 			//System.exit(-1);
 			return false;
 		}
+	}
+	public boolean createMeetup(String owner, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
+		//model = correct year, model2 = correct time
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String insertString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+			String time = sdf.format(model2.getValue());
+			sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+			String date = sdf.format(model.getValue());
+			
+			
+			insertString = "insert into eproduce.meetups (owner, participants, meettime, meetdate, meetlocation) values (\'"+owner+"\',\'"+participants+"\',\'"+time+"\',\'"+date+"\',\'"+location+"\')";
+			System.out.println(insertString);
+			returnVal = stmt.executeUpdate(insertString);
+			if(returnVal == 1) // 1 new meetup was created
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+			return false;
+		}	
+		
+	}
+	public void getMyMeetups(String email, ArrayList<Meetup> myMeetups) {
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.meetups where owner = \'" + email + "\'"; // single quotes protect against SQL injection
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				
+				myMeetups.add(new Meetup(returnValues.getDate("meetDate"), returnValues.getTime("meetTime"), returnValues.getString("owner"), returnValues.getString("participants"), returnValues.getString("meetLocation"), returnValues.getInt("meetupNum")));
+			}
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+		}
+		
 	}
 	
 	
