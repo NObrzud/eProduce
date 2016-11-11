@@ -393,7 +393,7 @@ public class MainPageView {
 		
 		for(int i = 0; i < listings.length; i++)
 		{
-			for(int j = 0; j < listings.length; j++)
+			for(int j = 0; j < listings[i].length; j++)
 				listings[i][j].setEditable(false);
 		}
 		
