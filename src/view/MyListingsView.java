@@ -219,7 +219,7 @@ public class MyListingsView {
 		home.setText("Home");
 		myMeetings.setText("MyMeetings");
 		myTickets.setText("MyTickets");
-		createListing.setText("Create a Listing");
+		createListing.setText("Create Listing");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
 	
 		sidePanel.add(home);

@@ -246,7 +246,7 @@ public class TicketView {
 		});
 		
 		
-		myLists.setText("MyLists");
+		myLists.setText("MyListings");
 		myMeetings.setText("MyMeetings");
 		homeButton.setText("Home");
 		createButton.setText("Create Ticket");

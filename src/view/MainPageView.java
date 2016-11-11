@@ -221,7 +221,7 @@ public class MainPageView {
 			}
 		});
 		
-		myLists.setText("MyLists");
+		myLists.setText("MyListings");
 		myMeetings.setText("MyMeetings");
 		myTickets.setText("MyTickets");
 		
