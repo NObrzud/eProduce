@@ -167,6 +167,14 @@ public class TicketView {
 		JButton homeButton = new JButton();
 		JButton createButton= new JButton();
 	
+		myLists.setMinimumSize(new Dimension(110, 26));
+		myLists.setMaximumSize(new Dimension(110, 26));
+		myMeetings.setMaximumSize(new Dimension(110,26));
+		homeButton.setMinimumSize(new Dimension(110, 26));
+		homeButton.setMaximumSize(new Dimension(110,26));
+		createButton.setMinimumSize(new Dimension(110, 26));
+		createButton.setMaximumSize(new Dimension(110,26));
+		
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();

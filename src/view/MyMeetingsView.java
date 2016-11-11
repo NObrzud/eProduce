@@ -1,15 +1,19 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,9 +23,19 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
+import controller.eProduceDatabase;
+import model.Meetup;
 import model.User;
 
 public class MyMeetingsView {
@@ -31,6 +45,7 @@ public class MyMeetingsView {
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
 	private eProduceController controller = new eProduceController();
+	private eProduceDatabase db = new eProduceDatabase();
 
 	public MyMeetingsView(User user) {		
 		currentUser = user;
@@ -175,6 +190,12 @@ public class MyMeetingsView {
 		JButton home = new JButton();
 		JButton myListings = new JButton();
 		JButton myTickets = new JButton();
+		home.setMinimumSize(new Dimension(110, 26));
+		home.setMaximumSize(new Dimension(110,26));
+		myListings.setMinimumSize(new Dimension(110, 26));
+		myListings.setMaximumSize(new Dimension(110,26));
+		myTickets.setMinimumSize(new Dimension(110, 26));
+		myTickets.setMaximumSize(new Dimension(110,26));
 	
 		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -218,32 +239,46 @@ public class MyMeetingsView {
 	 * This a method to hold all of the middle panel information
 	 */
 	public void middlePanel(){
+		ArrayList<Meetup> myMeetups = new ArrayList<Meetup>();
+		db.getMyMeetups(currentUser.getEmail(),myMeetups);
+		
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField listing1 = new JTextField("Listings1");
-		JTextField listing2 = new JTextField("Listings2");
-		JTextField listing3 = new JTextField("Listings3");
-		JTextField listing4 = new JTextField("Listings4");
-		JTextField listing5 = new JTextField("Listings5");
-		JTextField listing6 = new JTextField("Listings6");
-		JTextField listing7 = new JTextField("Listings7");
-		JTextField listing8 = new JTextField("Listings8");
-		JTextField listing9 = new JTextField("Listings9");
-		JTextField listing10 = new JTextField("Listings10");
-		JButton listbtn1 = new JButton("View");
-		JButton listbtn2 = new JButton("View");
-		JButton listbtn3 = new JButton("View");
-		JButton listbtn4 = new JButton("View");
-		JButton listbtn5 = new JButton("View");
-		JButton listbtn6 = new JButton("View");
-		JButton listbtn7 = new JButton("View");
-		JButton listbtn8 = new JButton("View");
-		JButton listbtn9 = new JButton("View");
-		JButton listbtn10 = new JButton("View");
+		JTextField[][] meetups = new JTextField[myMeetups.size()][6];
+		String[][] meetupData = new String[myMeetups.size()][6];
+		for(int i = 0; i < meetups.length; i++){
+			meetups[i][0] = new JTextField("Meetup Number "+i);
+			meetups[i][1] = new JTextField("Meetup Date " + i);
+			meetups[i][2] = new JTextField("Meetup Time " + i);
+			meetups[i][3] = new JTextField("Meetup Location " + i);
+			meetups[i][4] = new JTextField("Meetup Participants " + i);
+			meetups[i][5] = new JTextField("Meetup Owner " + i);
+		}
 		
 		JPanel leftSide = new JPanel();
-		JPanel listing = new JPanel();
-		JPanel rightSide = new JPanel();
+		JPanel meetup = new JPanel();
+		
+		for(int i = 0; i < myMeetups.size(); i++)
+		{
+			Meetup currMeetup = myMeetups.get(i);
+			if(currMeetup != null)
+			{
+				meetups[i][0].setText(Integer.toString(currMeetup.getMeetupNum()));
+				meetups[i][1].setText(currMeetup.getDate().toString());
+				meetups[i][2].setText(currMeetup.getTime().toString());
+				meetups[i][3].setText(currMeetup.getLocation().toString());
+				meetups[i][4].setText(currMeetup.getParticipants().toString());
+				meetups[i][5].setText(currMeetup.getOwner().toString());
+			}
+		}
+		
+		for(int i = 0; i < meetupData.length; i++)
+		{
+			for(int j = 0; j < meetupData[i].length; j++)
+			{
+				meetupData[i][j] = meetups[i][j].getText();
+			}
+		}
 		
 		search.setText("Search.....");
 		search.setColumns(50);
@@ -256,55 +291,60 @@ public class MyMeetingsView {
 		
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
+		meetup.setLayout(new BoxLayout(meetup, BoxLayout.Y_AXIS));
+		JTable table = new JTable(meetupData, new String[] {"Meetup #", "Date", "Time", "Location","Participants"});
 		
-		listing1.setEditable(false);
-		listing2.setEditable(false);
-		listing3.setEditable(false);
-		listing4.setEditable(false);
-		listing5.setEditable(false);
-		listing6.setEditable(false);
-		listing7.setEditable(false);
-		listing8.setEditable(false);
-		listing9.setEditable(false);
-		listing10.setEditable(false);
+		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
+		table.setShowVerticalLines(false); //doesn't show vertical gridlines
+		table.setGridColor(Color.black); //changes the gridline's colors to black
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setFont(new Font("Serif", Font.PLAIN, 24)); //changes font to be larger
+		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black)); //Gives a black border around the table
+		table.setRowHeight(30); //number of rows to have in the table.
+		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				
+			}
+			
+		});
 		
-		
-		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		listing.add(listing1);
-		listing.add(listing2);
-		listing.add(listing3);
-		listing.add(listing4);
-		listing.add(listing5);
-		listing.add(listing6);
-		listing.add(listing7);
-		listing.add(listing8);
-		listing.add(listing9);
-		listing.add(listing10);
-
-		rightSide.setLayout(new GridLayout(10,1));
-		rightSide.add(listbtn1);
-		rightSide.add(listbtn2);
-		rightSide.add(listbtn3);
-		rightSide.add(listbtn4);
-		rightSide.add(listbtn5);
-		rightSide.add(listbtn6);
-		rightSide.add(listbtn7);
-		rightSide.add(listbtn8);
-		rightSide.add(listbtn9);
-		rightSide.add(listbtn10);
-		
-		
+		for(int i = 0; i < table.getColumnCount(); i++){
+			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+			center.setHorizontalAlignment(SwingConstants.CENTER);
+			TableColumn column = table.getColumnModel().getColumn(i);
+			column.setCellRenderer(center);
+			
+			if(i == 0)
+			{
+				column.setMinWidth(75);
+				column.setPreferredWidth(75);
+				column.setMaxWidth(100);
+			}
+			if(i == 1)
+			{
+				column.setMinWidth(75);
+				column.setPreferredWidth(150);
+				column.setMaxWidth(200);
+			}
+			else if(i == 2)
+			{
+				column.setMinWidth(100);
+				column.setPreferredWidth(150);
+				column.setMaxWidth(250);
+			}
+		}
+		meetup.add(new JScrollPane(table));
 		
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
-		
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		middlePanel.add(meetup);
 		
 		leftSide.add(search);
 		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
-		middlePanel.add(listing,BorderLayout.CENTER);
-		middlePanel.add(rightSide,BorderLayout.EAST);
-		
 	}
 }

@@ -27,10 +27,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
@@ -192,6 +194,15 @@ public class MyListingsView {
 		JButton myTickets = new JButton();
 		JButton createListing = new JButton();
 		
+		home.setMinimumSize(new Dimension(110, 26));
+		home.setMaximumSize(new Dimension(110,26));
+		myMeetings.setMinimumSize(new Dimension(110, 26));
+		myMeetings.setMaximumSize(new Dimension(110,26));
+		myTickets.setMinimumSize(new Dimension(110, 26));
+		myTickets.setMaximumSize(new Dimension(110,26));
+		createListing.setMinimumSize(new Dimension(110, 26));
+		createListing.setMaximumSize(new Dimension(110,26));
+		
 		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -221,7 +232,7 @@ public class MyListingsView {
 		home.setText("Home");
 		myMeetings.setText("MyMeetings");
 		myTickets.setText("MyTickets");
-		createListing.setText("Create Listing");
+		createListing.setText("New Listing");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
 	
 		sidePanel.add(home);
@@ -294,7 +305,7 @@ public class MyListingsView {
 						String emptyFieldMsg = "Unable to create listing. The following fields are empty: \n";
 						if(titletxt.getText().equals("")) emptyFieldMsg += "      Title\n";
 						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
-						if(des.getText().equals("")) emptyFieldMsg += "      Description\n";
+						if(destxt.getText().equals("")) emptyFieldMsg += "      Description\n";
 						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
 						
 					}
@@ -310,10 +321,6 @@ public class MyListingsView {
 	public void middlePanel(){
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
 		db.getMyListings(currentUser.getEmail(),myListings);
-		for(int i = 0; i < myListings.size(); i++)
-		{
-			System.out.println("Title: " + myListings.get(i).getTitle() + "| Content: " + myListings.get(i).getContent() + " | Tags: " + myListings.get(i).getTags());
-		}
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
@@ -334,10 +341,10 @@ public class MyListingsView {
 			Listing currListing = myListings.get(i);
 			if(currListing != null)
 			{
-				listings[i][0].setText(currListing.getTitle());
-				listings[i][1].setText(currListing.getContent());
-				listings[i][2].setText(currListing.getTags());
-				listings[i][3].setText(Integer.toString(currListing.getListingNum()));
+				listings[i][0].setText(Integer.toString(currListing.getListingNum()));
+				listings[i][1].setText(currListing.getTitle());
+				listings[i][2].setText(currListing.getContent());
+				listings[i][3].setText(currListing.getTags());
 			}
 		}
 		for(int i = 0; i < listingData.length; i++)
@@ -366,7 +373,7 @@ public class MyListingsView {
 		
 
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = new JTable(listingData, new String[] {"Title","Content","Tags"});
+		JTable table = new JTable(listingData, new String[] {"Listing #","Title","Content","Tags"});
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
 		table.setGridColor(Color.black); //changes the gridline's colors to black
@@ -396,9 +403,9 @@ public class MyListingsView {
 				tags.setText("Tags: ");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
-				tagstxt.setText((table.getValueAt(table.getSelectedRow(),0)).toString());
-				titletxt.setText((table.getValueAt(table.getSelectedRow(),1)).toString());
-				destxt.setText((table.getValueAt(table.getSelectedRow(),2)).toString());
+				tagstxt.setText(myListings.get(table.getSelectedRow()).getTags());
+				titletxt.setText((table.getValueAt(table.getSelectedRow(),0)).toString());
+				destxt.setText((table.getValueAt(table.getSelectedRow(),1)).toString());
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
@@ -428,21 +435,25 @@ public class MyListingsView {
 
 		for(i = 0; i < table.getColumnCount(); i++)
 		{
+			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+			center.setHorizontalAlignment(SwingConstants.CENTER);
 			TableColumn column = table.getColumnModel().getColumn(i);
+			column.setCellRenderer(center);
 			if(i == 0)
-				column.setMinWidth(510);
-			column.setPreferredWidth(348);
+			{
+				column.setMinWidth(75);
+				column.setPreferredWidth(75);
+				column.setMaxWidth(100);
+			}
 		}
-		listing.add(table);
+		listing.add(new JScrollPane(table));
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
 		
-		JScrollPane scroll = new JScrollPane(listing);
-		scroll.getVerticalScrollBar().setUnitIncrement(16);
-		scroll.setHorizontalScrollBar(null);
-		
-		middlePanel.add(scroll);
+		middlePanel.add(listing);
 		
 		leftSide.add(search);
 		leftSide.add(sort);

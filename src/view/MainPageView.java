@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -31,9 +32,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.border.Border;
+import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
@@ -196,8 +199,14 @@ public class MainPageView {
 	 */
 	public void sidePanel(){
 		JButton myLists = new JButton();
+		myLists.setMinimumSize(new Dimension(110, 26));
+		myLists.setMaximumSize(new Dimension(110 ,26));
 		JButton myMeetings = new JButton();
+		myMeetings.setMinimumSize(new Dimension(110, 26));
+		myMeetings.setMaximumSize(new Dimension(110,26));
 		JButton myTickets = new JButton();
+		myTickets.setMinimumSize(new Dimension(110, 26));
+		myTickets.setMaximumSize(new Dimension(110,26));
 	
 		myTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -258,10 +267,9 @@ public class MainPageView {
 		for(int i = 0; i < listingData.length; i++)
 		{
 			Listing currListing = list.get(i);
-			listings[i][0].setText(currListing.getOwner());
-			listings[i][1].setText(currListing.getContent());
-			listings[i][2].setText(currListing.getTags());
-			listings[i][3].setText(Integer.toString(currListing.getListingNum()));
+			listings[i][0].setText(Integer.toString(currListing.getListingNum()));
+			listings[i][1].setText(currListing.getOwner());
+			listings[i][2].setText(currListing.getTitle());
 		}
 		
 		for(int i = 0; i < listingData.length; i++)
@@ -294,8 +302,9 @@ public class MainPageView {
 		
 		
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = new JTable(listingData, new String[] {"Title","Content","Owner"});
+		JTable table = new JTable(listingData, new String[] {"Listing #","Creator","Title"});
 		table.setBackground(frame.getBackground());
+		
 		table.setShowVerticalLines(false);
 		table.setGridColor(Color.black);
 		table.setIntercellSpacing(new Dimension(0, 0));
@@ -326,7 +335,7 @@ public class MainPageView {
 					titletxt.setText(table.getValueAt(table.getSelectedRow(),1).toString());
 					owner.setText("Owner: ");
 					ownertxt.setEditable(false);
-					ownertxt.setText(table.getValueAt(table.getSelectedRow(),0).toString());
+					ownertxt.setText(table.getValueAt(table.getSelectedRow(),2).toString());
 					des.setText("Description:");
 					destxt.setEditable(false);
 					destxt.setText(list.get(table.getSelectedRow()).getContent());
@@ -354,11 +363,19 @@ public class MainPageView {
 					JTextField participantsTF = new JTextField(10);
 					JTextField whenTF = new JTextField(10);
 					JTextField locationTF = new JTextField(10);
+					JPanel metPanel = new JPanel();
+					JLabel participantslbl = new JLabel();
+					JLabel whenlbl = new JLabel();
+					JLabel timelbl = new JLabel();
+					JLabel loclbl = new JLabel();
+					JTextField participantstxt = new JTextField(10);
+					JTextField loctxt = new JTextField(10);
 					SpinnerDateModel model2 = new SpinnerDateModel();
 					model2.setCalendarField(Calendar.MINUTE);
 					JSpinner spinner= new JSpinner();
 					spinner.setModel(model2);
-					spinner.setEditor(new JSpinner.DateEditor(spinner, "h:mm a"));
+					spinner.setEditor(new JSpinner.DateEditor(spinner, "hh:mm a"));
+					
 					spinner.setSize(10,10);
 					meetingPanel.setLayout(new GridLayout(0,1));
 					
@@ -367,6 +384,11 @@ public class MainPageView {
 					whenLabel.setText("When: ");
 					timeLabel.setText("Time");
 					locationLabel.setText("Location:");
+					participantslbl.setText("Participants: ");
+					whenlbl.setText("When: ");
+					timelbl.setText("Time");
+					loclbl.setText("Location:");
+					participantstxt.setText(currentUser.getEmail() + ", " + list.get(table.getSelectedRow()).getOwner());
 					UtilDateModel model = new UtilDateModel();
 					JDatePanelImpl datePanel = new JDatePanelImpl(model);
 					JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
@@ -387,8 +409,20 @@ public class MainPageView {
 					if(result2 == JOptionPane.OK_OPTION)
 					{
 						if(!(participantsTF.getText().equals("")) && !(whenTF.getText().equals("")) && !locationTF.getText().equals("") )	
+						if(!(participantstxt.getText().equals("")) && !(datePicker.getModel().getValue().toString().equals("")) && !loctxt.getText().equals("") )	
 						{
-							
+							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							String foo = sdf.format(new Date(model.getYear()-1900, model.getMonth(), model.getDay(), model2.getDate().getHours(), model2.getDate().getMinutes()));
+							System.out.println(foo);
+							boolean ret = db.createMeetup(currentUser.getEmail(),participantstxt.getText(),loctxt.getText(),  model, model2);
+							if(ret)
+							{
+								JOptionPane.showMessageDialog(frame, "Meetup has been successfully created!");
+								frame.dispose();
+								MainPageView mpv = new MainPageView(currentUser);
+								frame = mpv.frame;
+								frame.setVisible(true);
+							}
 						}
 						else
 						{
@@ -396,6 +430,9 @@ public class MainPageView {
 							if(participantsTF.getText().equals("")) emptyFieldMsg += "      Participants\n";
 							if(whenTF.getText().equals("")) emptyFieldMsg += "      When\n";
 							if(locationTF.getText().equals("")) emptyFieldMsg += "      Location\n";
+							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
+							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
 							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
 							
 							
@@ -465,21 +502,30 @@ public class MainPageView {
 		});
 		for(int i = 0; i < table.getColumnCount(); i++)
 		{
+			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+			center.setHorizontalAlignment(SwingConstants.CENTER);
 			TableColumn column = table.getColumnModel().getColumn(i);
+			column.setCellRenderer(center);
 			if(i == 0)
-				column.setMinWidth(510);
+			{
+				column.setMinWidth(75);
+				column.setPreferredWidth(75);
+				column.setMaxWidth(100);
+			}
+			if(i == 1)
+			{
+				column.setMaxWidth(300);
+			}
 			column.setPreferredWidth(348);
 		}
-		listing.add(table);
+		listing.add(new JScrollPane(table));
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		JScrollPane scroll = new JScrollPane(listing);
-		scroll.getVerticalScrollBar().setUnitIncrement(16);
-		scroll.setHorizontalScrollBar(null);	
 		leftSide.add(search);
-		middlePanel.add(scroll);
+		middlePanel.add(listing);
 		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 	}
