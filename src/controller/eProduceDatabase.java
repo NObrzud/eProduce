@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
 import model.Listing;
 import model.User;
 
@@ -207,6 +210,33 @@ public class eProduceDatabase {
 		}
 		
 		
+	}
+	public boolean updateListing(String title, String des, String tags) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			updateString = "update eProduce.listings set title=\'"+title+"\',content=\'"+des+"\',tags=\'"+tags+"\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+			//return true;
+			if(returnVal == 0) // 1 new account was created
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+			return false;
+		}
 	}
 	
 	
