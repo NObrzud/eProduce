@@ -9,10 +9,10 @@ public class User {
 	private String password;
 	private int blocked;
 	private int admin;
-	private double currentRating;
-	private ArrayList<Double> allRatings;
+	private int currentRating;
+	private int numReports;
 	
-	public User(String firstName, String lastName, String email, String password, int blocked, int admin){
+	public User(String firstName, String lastName, String email, String password, int blocked, int admin, int numReports){
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -62,22 +62,23 @@ public class User {
 		this.admin = admin;
 	}
 
-	public double getCurrentRating() {
+	public int getCurrentRating() {
 		return currentRating;
 	}
 
-	public void setCurrentRating(double currentRating) {
+	public void setCurrentRating(int currentRating) {
 		this.currentRating = currentRating;
 	}
 	
-	public void addRating(double value){
-		allRatings.add(value);
-		double temp = 0;
-		for(int i = 0; i<allRatings.size(); i++){
-			temp += allRatings.get(i);
-		}
-		temp = temp / allRatings.size();
-		currentRating = temp;
+	public void addRating()
+	{
+		currentRating++;
+	}
+	public int getNumReports() {
+		return numReports;
+	}
+	public void setNumReports(int numReports) {
+		this.numReports = numReports;
 	}
 		
 }

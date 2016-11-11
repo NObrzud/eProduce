@@ -1,0 +1,9 @@
+Listing Feedback, create tables and add the table when viewing individual listing
+user ratings, create +/-/# buttons, create table to store if you've already rated
+report user, create report button, add +1 to numReports in db
+edit user permissions, remake admin view to look like rest, isAdmin and isBlocked as 1/0
+searching listings, search by tags
+sort listings, sort by creation date
+edit meetup, add view to edit meetup details, prepopulate meetup details, and update db
+cancel meetup, delete entry from db
+tickets, same stuff as accounts/listings
