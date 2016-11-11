@@ -426,9 +426,18 @@ public class MyListingsView {
 					boolean created = db.updateListing(titletxt.getText(), destxt.getText(),myListings.get(table.getSelectedRow()).getListingNum(), tagstxt.getText());
 					
 					JOptionPane.showMessageDialog(frame,message );
+					frame.dispose();
+					MyListingsView mlv = new MyListingsView(currentUser);
+					frame = mlv.frame;
+					frame.setVisible(true);
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
 					String message = "Deleted";
+					db.deleteListing(myListings.get(table.getSelectedRow()).getListingNum());
 					JOptionPane.showMessageDialog(frame,message );
+					frame.dispose();
+					MyListingsView mlv = new MyListingsView(currentUser);
+					frame = mlv.frame;
+					frame.setVisible(true);
 				}
 			}
 		});

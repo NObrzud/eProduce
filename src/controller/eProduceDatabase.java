@@ -323,6 +323,23 @@ public class eProduceDatabase {
 		}
 		
 	}
-	
-	
+	public void deleteListing(int listingNum) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			updateString = "delete from eproduce.listings where listingnum = " + listingNum;
+			System.out.println(updateString);
+			stmt.executeUpdate(updateString);
+
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+		}
+	}
 }

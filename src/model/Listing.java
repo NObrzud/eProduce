@@ -48,7 +48,7 @@ public class Listing {
 			returnString += tags[i];
 			if(i != tags.length-1)
 			{
-				returnString += " , ";
+				returnString += ",";
 			}
 		}
 		return returnString;
