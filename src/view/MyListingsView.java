@@ -258,12 +258,13 @@ public class MyListingsView {
 				des.setText("Description:");
 				destxt.setLineWrap(true);
 				destxt.setBorder(border);
+				JScrollPane sp = new JScrollPane(destxt);
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
 				top.add(tagstxt);
 				bottom.add(des,BorderLayout.NORTH);
-				bottom.add(destxt,BorderLayout.SOUTH);
+				bottom.add(sp,BorderLayout.SOUTH);
 				lstPanel.add(top,BorderLayout.NORTH);
 				lstPanel.add(bottom,BorderLayout.SOUTH);
 			
@@ -382,8 +383,8 @@ public class MyListingsView {
 				JLabel title = new JLabel();
 				JLabel tags = new JLabel();
 				JLabel des = new JLabel();
-				JTextField titletxt = new JTextField();
-				JTextField tagstxt = new JTextField();
+				JTextField titletxt = new JTextField(10);
+				JTextField tagstxt = new JTextField(10);
 				JTextArea destxt = new JTextArea(5,10);
 				Object[] options1 = { "Save Changes","Delete Listing", "Cancel" };
 
