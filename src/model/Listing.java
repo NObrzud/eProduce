@@ -44,7 +44,13 @@ public class Listing {
 	public String getTags() {
 		String returnString = "";
 		for(int i = 0; i < tags.length; i++)
-			returnString += tags[i] + ", ";
+		{
+			returnString += tags[i];
+			if(i != tags.length-1)
+			{
+				returnString += " , ";
+			}
+		}
 		return returnString;
 	}
 	public void setTags(String[] tags) {

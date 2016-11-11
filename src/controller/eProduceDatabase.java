@@ -238,7 +238,7 @@ public class eProduceDatabase {
 		
 		
 	}
-	public boolean updateListing(String title, String des, String tags) {
+	public boolean updateListing(String title, String des, int listingNum, String tags) {
 		try 
 		{
 			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
@@ -247,7 +247,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			
-			updateString = "update eProduce.listings set title=\'"+title+"\',content=\'"+des+"\',tags=\'"+tags+"\'";
+			updateString = "update eProduce.listings set title=\'"+title+"\',content=\'"+des+"\',tags=\'"+tags+"\' where listingnum = "+listingNum;
 			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 			//return true;

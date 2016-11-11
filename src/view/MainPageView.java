@@ -255,13 +255,12 @@ public class MainPageView {
 		db.getAllListings(list);
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField[][] listings = new JTextField[list.size()][4];
-		String[][] listingData = new String[list.size()][4];
+		JTextField[][] listings = new JTextField[list.size()][3];
+		String[][] listingData = new String[list.size()][3];
 		for(int i = 0; i < listings.length; i++){
-			listings[i][0] = new JTextField("Listing Owner " + i);
-			listings[i][1] = new JTextField("Listing Content " + i);
-			listings[i][2] = new JTextField("Listing Tags " + i);
-			listings[i][3] = new JTextField("Listing Num " + i);
+			listings[i][0] = new JTextField("Listing Num " + i);
+			listings[i][1] = new JTextField("Listing Owner " + i);
+			listings[i][2] = new JTextField("Listing Title " + i);
 		}
 
 		for(int i = 0; i < listingData.length; i++)
@@ -332,10 +331,10 @@ public class MainPageView {
 					//Add SQL statement after text below
 					title.setText("Title: ");
 					titletxt.setEditable(false);
-					titletxt.setText(table.getValueAt(table.getSelectedRow(),1).toString());
+					titletxt.setText(list.get(table.getSelectedRow()).getTitle());
 					owner.setText("Owner: ");
 					ownertxt.setEditable(false);
-					ownertxt.setText(table.getValueAt(table.getSelectedRow(),2).toString());
+					ownertxt.setText(list.get(table.getSelectedRow()).getOwner());
 					des.setText("Description:");
 					destxt.setEditable(false);
 					destxt.setText(list.get(table.getSelectedRow()).getContent());
@@ -360,9 +359,7 @@ public class MainPageView {
 					JLabel whenLabel = new JLabel();
 					JLabel timeLabel = new JLabel();
 					JLabel locationLabel = new JLabel();
-					JTextField participantsTF = new JTextField(10);
 					JTextField whenTF = new JTextField(10);
-					JTextField locationTF = new JTextField(10);
 					JPanel metPanel = new JPanel();
 					JLabel participantslbl = new JLabel();
 					JLabel whenlbl = new JLabel();
@@ -395,20 +392,19 @@ public class MainPageView {
 					
 				
 					meetingPanel.add(participantsLabel);
-					meetingPanel.add(participantsTF);
+					meetingPanel.add(participantstxt);
 					meetingPanel.add(whenLabel);
 					meetingPanel.add(datePicker);
 					meetingPanel.add(timeLabel);
 					meetingPanel.add(spinner);
 					meetingPanel.add(locationLabel);
-					meetingPanel.add(locationTF);
+					meetingPanel.add(loctxt);
 					
 				
 					
 					int result2 = JOptionPane.showConfirmDialog(null, meetingPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
 					if(result2 == JOptionPane.OK_OPTION)
 					{
-						if(!(participantsTF.getText().equals("")) && !(whenTF.getText().equals("")) && !locationTF.getText().equals("") )	
 						if(!(participantstxt.getText().equals("")) && !(datePicker.getModel().getValue().toString().equals("")) && !loctxt.getText().equals("") )	
 						{
 							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -427,9 +423,9 @@ public class MainPageView {
 						else
 						{
 							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
-							if(participantsTF.getText().equals("")) emptyFieldMsg += "      Participants\n";
-							if(whenTF.getText().equals("")) emptyFieldMsg += "      When\n";
-							if(locationTF.getText().equals("")) emptyFieldMsg += "      Location\n";
+							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
+							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
 							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
 							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
 							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";

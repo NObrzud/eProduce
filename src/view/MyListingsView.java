@@ -404,8 +404,8 @@ public class MyListingsView {
 				des.setText("Description:");
 				destxt.setLineWrap(true);
 				tagstxt.setText(myListings.get(table.getSelectedRow()).getTags());
-				titletxt.setText((table.getValueAt(table.getSelectedRow(),0)).toString());
-				destxt.setText((table.getValueAt(table.getSelectedRow(),1)).toString());
+				titletxt.setText(myListings.get(table.getSelectedRow()).getTitle());
+				destxt.setText(myListings.get(table.getSelectedRow()).getContent());
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
@@ -423,7 +423,7 @@ public class MyListingsView {
 
 				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
-					boolean created = db.updateListing(titletxt.getText(), destxt.getText(), tagstxt.getText());
+					boolean created = db.updateListing(titletxt.getText(), destxt.getText(),myListings.get(table.getSelectedRow()).getListingNum(), tagstxt.getText());
 					
 					JOptionPane.showMessageDialog(frame,message );
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
