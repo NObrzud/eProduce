@@ -23,13 +23,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
-
-import java.awt.color.*;
 
 import controller.eProduceController;
 import controller.eProduceDatabase;
@@ -307,34 +309,31 @@ public class MyListingsView {
 	public void middlePanel(){
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
 		db.getMyListings(currentUser.getEmail(),myListings);
+		for(int i = 0; i < myListings.size(); i++)
+		{
+			System.out.println("Title: " + myListings.get(i).getTitle() + "| Content: " + myListings.get(i).getContent() + " | Tags: " + myListings.get(i).getTags());
+		}
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
 		JTextField[][] listings = new JTextField[myListings.size()][4];
 		String[][] listingData = new String[myListings.size()][4];
-		for(i = 0; i < listings.length; i++){
+		for(int i = 0; i < listings.length; i++){
 			listings[i][0] = new JTextField("Listing Title "+i);
 			listings[i][1] = new JTextField("Listing Content " + i);
 			listings[i][2] = new JTextField("Listing Tags " + i);
 			listings[i][3] = new JTextField("Listing Num " + i);
 		}
-		JButton[] listbtn = new JButton[myListings.size()];
-		for(i = 0; i < listbtn.length; i++)
-		{
-			listbtn[i] = new JButton("Edit");
-			listbtn[i].setSize(new Dimension(16,64));
-		}
 		
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
-		JPanel rightSide = new JPanel();
 		
-		for(i = 0; i < myListings.size(); i++)
+		for(int i = 0; i < myListings.size(); i++)
 		{
 			Listing currListing = myListings.get(i);
 			if(currListing != null)
 			{
-				listings[i][0].setText(currListing.getOwner());
+				listings[i][0].setText(currListing.getTitle());
 				listings[i][1].setText(currListing.getContent());
 				listings[i][2].setText(currListing.getTags());
 				listings[i][3].setText(Integer.toString(currListing.getListingNum()));
@@ -347,10 +346,36 @@ public class MyListingsView {
 				listingData[i][j] = listings[i][j].getText();
 			}
 		}
-		for(i = 0; i < myListings.size(); i++)
+		search.setText("Search.....");
+		search.setColumns(50);
+		search.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				search.setText("");
+			}
+		});
+		
+		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
+		sort = new JComboBox(comboBoxInputs);
+		for(i = 0; i < listings.length; i++)
 		{
-			listbtn[i].addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
+			for(int j = 0; j < listings[i].length; j++)
+				listings[i][j].setEditable(false);
+		}
+		
+
+		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
+		JTable table = new JTable(listingData, new String[] {"Title","Content","Tags"});
+		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
+		table.setShowVerticalLines(false); //doesn't show vertical gridlines
+		table.setGridColor(Color.black); //changes the gridline's colors to black
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setFont(new Font("Serif", Font.PLAIN, 24)); //changes font to be larger
+		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black)); //Gives a black border around the table
+		table.setRowHeight(30); //number of rows to have in the table.
+		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
 				JPanel listPanel = new JPanel();
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
@@ -370,9 +395,9 @@ public class MyListingsView {
 				tags.setText("Tags: ");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
-				tagstxt.setText(myListings.get(i-1).getTags());
-				titletxt.setText("Listing " + myListings.get(i-1).getListingNum() + ": " + myListings.get(i-1).getTitle());
-				destxt.setText(myListings.get(i-1).getContent());
+				tagstxt.setText((table.getValueAt(table.getSelectedRow(),0)).toString());
+				titletxt.setText((table.getValueAt(table.getSelectedRow(),1)).toString());
+				destxt.setText((table.getValueAt(table.getSelectedRow(),2)).toString());
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
@@ -388,66 +413,39 @@ public class MyListingsView {
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 						null, options1, null);
 
-				if(result == JOptionPane.YES_OPTION){
+				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
+					boolean created = db.updateListing(titletxt.getText(), destxt.getText(), tagstxt.getText());
+					
 					JOptionPane.showMessageDialog(frame,message );
-				}else if(result == JOptionPane.NO_OPTION){
+				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
 					String message = "Deleted";
 					JOptionPane.showMessageDialog(frame,message );
 				}
 			}
 		});
-		}
-		search.setText("Search.....");
-		search.setColumns(50);
-		search.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e){
-				search.setText("");
-			}
-		});
-		
-		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox(comboBoxInputs);
-		for(i = 0; i < listings.length; i++)
-		{
-			for(int j = 0; j < listings.length; j++)
-				listings[i][j].setEditable(false);
-		}
-		
 
-		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = new JTable(listingData, new String[] {"Title","Content","Tags"});
-		table.setBackground(frame.getBackground());
-		table.setShowGrid(false);
-		table.setIntercellSpacing(new Dimension(0, 0));
-		table.setFont(new Font("Serif", Font.PLAIN, 24));
-		table.setRowHeight(30);
 		for(i = 0; i < table.getColumnCount(); i++)
 		{
 			TableColumn column = table.getColumnModel().getColumn(i);
-			column.setPreferredWidth(410);
+			if(i == 0)
+				column.setMinWidth(510);
+			column.setPreferredWidth(348);
 		}
 		listing.add(table);
-
-		rightSide.setLayout(new GridLayout(myListings.size(),1));
-		for(i = 0; i < listbtn.length; i++)
-		{
-			listbtn[i].setSize(new Dimension(64, 10));
-			rightSide.add(listbtn[i]);
-		}
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
-		JPanel listingWithButtonPanel = new JPanel();
-		listingWithButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		listingWithButtonPanel.add(listing);
-		listingWithButtonPanel.add(rightSide);
+		
+		JScrollPane scroll = new JScrollPane(listing);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
+		scroll.setHorizontalScrollBar(null);
+		
+		middlePanel.add(scroll);
 		
 		leftSide.add(search);
 		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
-		middlePanel.add(listingWithButtonPanel,BorderLayout.CENTER);
 		
 	}
 }
