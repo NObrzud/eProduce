@@ -414,16 +414,17 @@ public class MainPageView {
 					JTextField toTF = new JTextField(20);
 					JTextField fromTF = new JTextField(20);
 					JTextField subjectTF = new JTextField(20);
-					JTextArea contentArea = new JTextArea(10,40);
+					JTextArea contentArea = new JTextArea(8,30);
 					
 					
 					Border border = BorderFactory.createLineBorder(Color.BLACK);
 					contentArea.setLineWrap(true);
 					contentArea.setBorder(border);
+					JScrollPane sp = new JScrollPane(contentArea);
 					
 					contactPanel.setLayout(new BorderLayout());
 					north.setLayout(new GridLayout(0,1));
-					south.setLayout(new GridLayout(0,1));
+					south.setLayout(new BorderLayout());
 					toTF.setText(list.get(table.getSelectedRow()).getOwner());
 					fromTF.setText(currentUser.getEmail());
 					subjectTF.setText("Another eProduce user would like to contact you!");
@@ -437,8 +438,8 @@ public class MainPageView {
 					north.add(fromTF);
 					north.add(subjectLabel);
 					north.add(subjectTF);
-					north.add(contentLabel);
-					south.add(contentArea);
+					south.add(contentLabel, BorderLayout.NORTH);
+					south.add(sp, BorderLayout.SOUTH);
 					
 					
 					contactPanel.add(north, BorderLayout.NORTH);
