@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -22,11 +23,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
@@ -249,13 +254,7 @@ public class MainPageView {
 			listings[i][2] = new JTextField("Listing Tags " + i);
 			listings[i][3] = new JTextField("Listing Num " + i);
 		}
-		JButton[] listbtn = new JButton[list.size()];
-		for(int i = 0; i < listbtn.length; i++)
-		{
-			listbtn[i] = new JButton("View");
-			listbtn[i].setSize(new Dimension(16, 64));
-		}
-		
+
 		for(int i = 0; i < listingData.length; i++)
 		{
 			Listing currListing = list.get(i);
@@ -274,33 +273,63 @@ public class MainPageView {
 		}
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
-		JPanel rightSide = new JPanel();
 		
-		for(int i = 0; i < listbtn.length; i++)
+		search.setText("Search.....");
+		search.setColumns(50);
+		search.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e){
+				search.setText("");
+			}
+		});
+		
+		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
+		sort = new JComboBox(comboBoxInputs);
+		
+		for(int i = 0; i < listings.length; i++)
 		{
-			listbtn[i].addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
+			for(int j = 0; j < listings[i].length; j++)
+				listings[i][j].setEditable(false);
+		}
+		
+		
+		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
+		JTable table = new JTable(listingData, new String[] {"Title","Content","Owner"});
+		table.setBackground(frame.getBackground());
+		table.setShowVerticalLines(false);
+		table.setGridColor(Color.black);
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setFont(new Font("Serif", Font.PLAIN, 24));
+		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+		table.setRowHeight(30);
+		table.setDefaultEditor(Object.class, null);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
 				JPanel listPanel = new JPanel();
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
 				JLabel title = new JLabel();
 				JLabel owner = new JLabel();
 				JLabel des = new JLabel();
+								
 				JTextField titletxt = new JTextField();
 				JTextField ownertxt = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
-				Object[] options1 = { "Schedule MeetUp", "Okay",   "Cancel" };
+				Object[] options1 = { "Schedule Meetup", "Exit" };
 				 	
-				 	listPanel.setLayout(new GridLayout(0,list.size()));
+				 	listPanel.setLayout(new GridLayout(0,1));
 					top.setLayout(new GridLayout(0,1));
 					bottom.setLayout(new BorderLayout());
 					//Add SQL statement after text below
 					title.setText("Title: ");
-					titletxt.setEnabled(false);
+					titletxt.setEditable(false);
+					titletxt.setText(table.getValueAt(table.getSelectedRow(),1).toString());
 					owner.setText("Owner: ");
-					ownertxt.setEnabled(false);
+					ownertxt.setEditable(false);
+					ownertxt.setText(table.getValueAt(table.getSelectedRow(),0).toString());
 					des.setText("Description:");
-					destxt.setEnabled(false);
+					destxt.setEditable(false);
+					destxt.setText(list.get(table.getSelectedRow()).getContent());
 					destxt.setLineWrap(true);
 					top.add(title);
 					top.add(titletxt);
@@ -312,7 +341,7 @@ public class MainPageView {
 					listPanel.add(bottom,BorderLayout.SOUTH);
 				
 				
-				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing " + currentUser.getFirstName()+ "'s" +" Listing",
+				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
 			                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 			                null, options1, null);
 				
@@ -377,61 +406,24 @@ public class MainPageView {
 				
 			}
 		});
-		}
-		
-		search.setText("Search.....");
-		search.setColumns(50);
-		search.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e){
-				search.setText("");
-			}
-		});
-		
-		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox(comboBoxInputs);
-		
-		for(int i = 0; i < listings.length; i++)
-		{
-			for(int j = 0; j < listings[i].length; j++)
-				listings[i][j].setEditable(false);
-		}
-		
-		
-		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = new JTable(listingData, new String[] {"Title","Content","Onwer"});
-		table.setBackground(frame.getBackground());
-		table.setShowGrid(false);
-		table.setIntercellSpacing(new Dimension(0, 0));
-		table.setFont(new Font("Serif", Font.PLAIN, 24));
-		table.setRowHeight(30);
 		for(int i = 0; i < table.getColumnCount(); i++)
 		{
 			TableColumn column = table.getColumnModel().getColumn(i);
-			column.setPreferredWidth(410);
+			if(i == 0)
+				column.setMinWidth(510);
+			column.setPreferredWidth(348);
 		}
 		listing.add(table);
-		rightSide.setLayout(new GridLayout(list.size(),1));
-		for(int i = 0; i < listings.length; i++)
-		{
-			listbtn[i].setSize(new Dimension(64, 10));
-			rightSide.add(listbtn[i]);
-		}
-		
-		
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
 		
-		JPanel listingWithButtonsPanel = new JPanel();
-		listingWithButtonsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		listingWithButtonsPanel.add(listing);
-		listingWithButtonsPanel.add(rightSide);
-		
-		
+		JScrollPane scroll = new JScrollPane(listing);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
+		scroll.setHorizontalScrollBar(null);	
 		leftSide.add(search);
+		middlePanel.add(scroll);
 		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
-		middlePanel.add(listingWithButtonsPanel,BorderLayout.CENTER);
 	}
 }

@@ -327,7 +327,6 @@ public class MyListingsView {
 		
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
-		JPanel rightSide = new JPanel();
 		
 		for(int i = 0; i < myListings.size(); i++)
 		{
@@ -396,9 +395,9 @@ public class MyListingsView {
 				tags.setText("Tags: ");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
-				tagstxt.setText(/*myListings.get*/(table.getValueAt(table.getSelectedRow(),0)).toString());// System.out.println("I-1 = " + (innerJ) + ": Tags = " + myListings.get(innerJ).getTags());
-				titletxt.setText(/*myListings.get*/(table.getValueAt(table.getSelectedRow(),1)).toString());// System.out.println("I-1 = " + (innerJ) + ": Title = " + myListings.get(innerJ).getTitle());
-				destxt.setText(/*myListings.get*/(table.getValueAt(table.getSelectedRow(),2)).toString());// System.out.println("I-1 = " + (innerJ) + ": Content = " + myListings.get(innerJ).getContent());
+				tagstxt.setText((table.getValueAt(table.getSelectedRow(),0)).toString());
+				titletxt.setText((table.getValueAt(table.getSelectedRow(),1)).toString());
+				destxt.setText((table.getValueAt(table.getSelectedRow(),2)).toString());
 				top.add(title);
 				top.add(titletxt);
 				top.add(tags);
@@ -434,16 +433,12 @@ public class MyListingsView {
 			column.setPreferredWidth(348);
 		}
 		listing.add(table);
-
-		rightSide.setLayout(new GridLayout(myListings.size(),1));
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
-		JPanel listingWithButtonPanel = new JPanel();
-		listingWithButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		listingWithButtonPanel.add(listing);
-		listingWithButtonPanel.add(rightSide);
+		
 		JScrollPane scroll = new JScrollPane(listing);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		scroll.setHorizontalScrollBar(null);
 		
 		middlePanel.add(scroll);
