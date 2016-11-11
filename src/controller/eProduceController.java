@@ -4,8 +4,7 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
-
-
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
 import javax.swing.JTextField;
@@ -91,19 +90,18 @@ public class eProduceController {
 	public void sendEmail(String recipient, String sender, String subject, String content){
 		String to = recipient;
 		String from = sender;
-		String host = "localhost";
+		String host = "smtp.gmail.com";
+		//username and password of gmail acc created for this application
 		String username = "eProduceSystem@gmail.com";
 		String password = "AndrewAntonioNickSean";
-		String emailMsg = "Hello eProduce User! According to our system, there is a user that would like to contact you in regards to your listing. "
-				+ "The following is a message from " + "**enter name here" +":\n"
-						+ "\n" + content +"\n"
-						+ "\n If you would like to contact **enter name here, you may contact him using the following email address: " + sender;
 		
-		//getting session object 
+		//Set up Gmail services (with authentication) to work with java mail
 		Properties properties = System.getProperties();
 		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.user", username);
+		properties.put("mail.smtp.password", password);
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", "587");
 		Session session = Session.getDefaultInstance(properties, 
 				new javax.mail.Authenticator() {
@@ -112,19 +110,25 @@ public class eProduceController {
 					}
 		});
 		
+		//If authentication works
 		try{
 			MimeMessage msg = new MimeMessage(session);
+			//adds who is sending this email
 			msg.setFrom(new InternetAddress(from));
+			//adds the who this email is going to
 			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			//adds the subject to email
 			msg.setSubject(subject);
-			msg.setText(emailMsg);
+			//adds body to email
+			msg.setText(content);
 			
 			//Send email
 			Transport.send(msg);
 			System.out.println("Email sent successfully!");
 		}
+		//authentication did not work
 		catch (MessagingException e){
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Invalid email. Email not sent.");
 		}
 	}
 }

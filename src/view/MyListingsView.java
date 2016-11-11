@@ -387,7 +387,7 @@ public class MyListingsView {
 				JTextArea destxt = new JTextArea(5,10);
 				Object[] options1 = { "Save Changes","Delete Listing", "Cancel" };
 
-				listPanel.setLayout(new GridLayout(0,myListings.size()));
+				listPanel.setLayout(new GridLayout(0,1));
 				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
 				//Add SQL statement after text below

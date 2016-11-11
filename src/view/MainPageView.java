@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -104,8 +106,6 @@ public class MainPageView {
 		 */
 		logout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO send email to user
-				//controller.sendEmail("njobrzu@ilstu.edu", "nickobrzud@gmail.com", "subjectline", "Hey Antonio, I found your listing for carrots. I would love to meet up and purchase your product. Let me know!");
 				currentUser = null;
 				frame.dispose();
 				StartView start = new StartView(currentUser);
@@ -315,7 +315,7 @@ public class MainPageView {
 				JTextField titletxt = new JTextField();
 				JTextField ownertxt = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
-				Object[] options1 = { "Schedule Meetup", "Exit" };
+				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Exit" };
 				 	
 				 	listPanel.setLayout(new GridLayout(0,1));
 					top.setLayout(new GridLayout(0,1));
@@ -346,61 +346,117 @@ public class MainPageView {
 			                null, options1, null);
 				
 				if(result == JOptionPane.YES_OPTION){
-					JPanel metPanel = new JPanel();
-					JLabel participantslbl = new JLabel();
-					JLabel whenlbl = new JLabel();
-					JLabel timelbl = new JLabel();
-					JLabel loclbl = new JLabel();
-					JTextField participantstxt = new JTextField(10);
-					JTextField whentxt = new JTextField(10);;
-					JTextField loctxt = new JTextField(10);
+					JPanel meetingPanel = new JPanel();
+					JLabel participantsLabel = new JLabel();
+					JLabel whenLabel = new JLabel();
+					JLabel timeLabel = new JLabel();
+					JLabel locationLabel = new JLabel();
+					JTextField participantsTF = new JTextField(10);
+					JTextField whenTF = new JTextField(10);
+					JTextField locationTF = new JTextField(10);
 					SpinnerDateModel model2 = new SpinnerDateModel();
 					model2.setCalendarField(Calendar.MINUTE);
 					JSpinner spinner= new JSpinner();
 					spinner.setModel(model2);
 					spinner.setEditor(new JSpinner.DateEditor(spinner, "h:mm a"));
 					spinner.setSize(10,10);
-					metPanel.setLayout(new GridLayout(0,1));
+					meetingPanel.setLayout(new GridLayout(0,1));
 					
 					
-					participantslbl.setText("Participants: ");
-					whenlbl.setText("When: ");
-					timelbl.setText("Time");
-					loclbl.setText("Location:");
+					participantsLabel.setText("Participants: ");
+					whenLabel.setText("When: ");
+					timeLabel.setText("Time");
+					locationLabel.setText("Location:");
 					UtilDateModel model = new UtilDateModel();
 					JDatePanelImpl datePanel = new JDatePanelImpl(model);
 					JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
 					
 				
-					metPanel.add(participantslbl);
-					metPanel.add(participantstxt);
-					metPanel.add(whenlbl);
-					metPanel.add(datePicker);
-					metPanel.add(timelbl);
-					metPanel.add(spinner);
-					metPanel.add(loclbl);
-					metPanel.add(loctxt);
+					meetingPanel.add(participantsLabel);
+					meetingPanel.add(participantsTF);
+					meetingPanel.add(whenLabel);
+					meetingPanel.add(datePicker);
+					meetingPanel.add(timeLabel);
+					meetingPanel.add(spinner);
+					meetingPanel.add(locationLabel);
+					meetingPanel.add(locationTF);
 					
 				
 					
-					int result2 = JOptionPane.showConfirmDialog(null, metPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
+					int result2 = JOptionPane.showConfirmDialog(null, meetingPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
 					if(result2 == JOptionPane.OK_OPTION)
 					{
-						if(!(participantstxt.getText().equals("")) && !(whentxt.getText().equals("")) && !loctxt.getText().equals("") )	
+						if(!(participantsTF.getText().equals("")) && !(whenTF.getText().equals("")) && !locationTF.getText().equals("") )	
 						{
 							
 						}
 						else
 						{
 							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
-							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
-							if(whentxt.getText().equals("")) emptyFieldMsg += "      When\n";
-							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+							if(participantsTF.getText().equals("")) emptyFieldMsg += "      Participants\n";
+							if(whenTF.getText().equals("")) emptyFieldMsg += "      When\n";
+							if(locationTF.getText().equals("")) emptyFieldMsg += "      Location\n";
 							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
 							
 							
 						}
 						
+					}
+				}
+				if(result == JOptionPane.NO_OPTION){
+					JPanel contactPanel = new JPanel();
+					JPanel north = new JPanel();
+					JPanel south = new JPanel();
+					JLabel toLabel = new JLabel("To:");
+					JLabel fromLabel = new JLabel("From:");
+					JLabel subjectLabel = new JLabel("Subject:");
+					JLabel contentLabel = new JLabel("Email Content:");
+					JTextField toTF = new JTextField(20);
+					JTextField fromTF = new JTextField(20);
+					JTextField subjectTF = new JTextField(20);
+					JTextArea contentArea = new JTextArea(10,40);
+					
+					
+					Border border = BorderFactory.createLineBorder(Color.BLACK);
+					contentArea.setLineWrap(true);
+					contentArea.setBorder(border);
+					
+					contactPanel.setLayout(new BorderLayout());
+					north.setLayout(new GridLayout(0,1));
+					south.setLayout(new GridLayout(0,1));
+					toTF.setText(list.get(table.getSelectedRow()).getOwner());
+					fromTF.setText(currentUser.getEmail());
+					subjectTF.setText("Another eProduce user would like to contact you!");
+					toTF.setEditable(false);
+					fromTF.setEditable(false);
+					subjectTF.setEditable(false);
+					
+					north.add(toLabel);
+					north.add(toTF);
+					north.add(fromLabel);
+					north.add(fromTF);
+					north.add(subjectLabel);
+					north.add(subjectTF);
+					north.add(contentLabel);
+					south.add(contentArea);
+					
+					
+					contactPanel.add(north, BorderLayout.NORTH);
+					contactPanel.add(south, BorderLayout.SOUTH);
+					
+					int result2 = JOptionPane.showConfirmDialog(null, contactPanel, "Contact Owner", JOptionPane.OK_CANCEL_OPTION);
+					if(result2 == JOptionPane.OK_OPTION)
+					{
+						if(!contentArea.getText().isEmpty()){
+							String emailMsg = "Hello eProduce User!\nAccording to our system, there is a user that would like to contact you in regards to your listing. "
+									+ "The following is a message from " + fromTF.getText() +":\n"
+											+ "\n" + contentArea.getText() +"\n"
+											+ "\n If you would like to contact this user, you may contact him using the following email address: " + fromTF.getText();
+							controller.sendEmail(toTF.getText(), fromTF.getText(), subjectTF.getText(), emailMsg);
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Email failed to send. Cannot have an empty body.");
+						}
 					}
 				}
 				
