@@ -39,6 +39,7 @@ public class StartView {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null); 
+		frame.getRootPane().setDefaultButton(loginButton);
 		JPanel panel = new JPanel();
 		frame.add(panel);		
 		
@@ -94,14 +95,19 @@ public class StartView {
 			public void actionPerformed(ActionEvent e) {
 				   if(!(passwordPF.getText().equals("")) && controller.validateLogin(currentUser, emailTF, passwordPF))
 		            {
-		            	frame.dispose();
-					   if(currentUser.getAdmin() == 1)
+		               if(currentUser.getBlocked() == 1)
+		               {
+		            	   JOptionPane.showMessageDialog(frame, "Sorry you're blocked from eProduce :(");
+		               }
+		               else if(currentUser.getAdmin() == 1)
 					   {
+		            	   frame.dispose();
 						   AdminMainPageView amp = new AdminMainPageView(currentUser);
 						   frame = amp.frame;
 					   }
 					   else
 		               {
+						   frame.dispose();
 						   MainPageView mp = new MainPageView(currentUser);
 						   frame = mp.frame;
 		               }

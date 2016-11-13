@@ -324,25 +324,6 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void editAdminAccess(String email, boolean isSelected) {
-		try 
-		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
-			String updateString;
-			int returnVal;
-			Statement stmt = DBConn.createStatement();
-			stmt = DBConn.createStatement();
-			int isAdmin = isSelected ? 1 : 0;
-			updateString = "update eProduce.listings set isAdmin=\'"+isAdmin+"\' where username = \'" +email+ "\'";
-			System.out.println(updateString);
-			returnVal = stmt.executeUpdate(updateString);
-		}
-		catch(SQLException e)
-		{
-			System.err.println(e.getMessage());
-			//System.exit(-1);
-		}
-	}
 	public void deleteListing(int listingNum) {
 		try 
 		{
@@ -427,5 +408,41 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 		}
 		
+	}
+	public void setUserBanStatus(String username, int isBanned) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "update eProduce.users set isBlocked = "+isBanned+" where username = \'" +username+ "\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+				
+	}
+	public void setUserAdminStatus(String username, int isAdmin) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "update eProduce.users set isadmin = "+isAdmin + " where username = \'" +username+ "\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+				
 	}
 }
