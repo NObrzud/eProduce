@@ -272,7 +272,7 @@ public class MainPageView {
 		{
 			Listing currListing = list.get(i);
 			listings[i][0].setText(Integer.toString(currListing.getListingNum()));
-			listings[i][1].setText(currListing.getOwner());
+			listings[i][1].setText(currListing.getOwner().getEmail());
 			listings[i][2].setText(currListing.getTitle());
 		}
 		
@@ -344,11 +344,11 @@ public class MainPageView {
 					titletxt.setText(list.get(table.getSelectedRow()).getTitle());
 					owner.setText("Owner: ");
 					ownertxt.setEditable(false);
-					ownertxt.setText(list.get(table.getSelectedRow()).getOwner());
+					ownertxt.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
 					ownerRating.setText("Owner Rating: ");
 					rating.setEditable(false);
 					//TODO get rating
-					rating.setText("10");
+					rating.setText(Integer.toString(list.get(table.getSelectedRow()).getOwner().getCurrentRating()));
 					rating.setHorizontalAlignment(JTextField.CENTER);
 					des.setText("Description:");
 					destxt.setEditable(false);
@@ -373,9 +373,9 @@ public class MainPageView {
 					
 					
 					ratingPanel.add(ownerRating);
-					ratingPanel.add(plus);
-					ratingPanel.add(rating);
 					ratingPanel.add(minus);
+					ratingPanel.add(rating);
+					ratingPanel.add(plus);
 					top.add(title);
 					top.add(titletxt);
 					top.add(owner);
@@ -501,7 +501,7 @@ public class MainPageView {
 					contactPanel.setLayout(new BorderLayout());
 					north.setLayout(new GridLayout(0,1));
 					south.setLayout(new BorderLayout());
-					toTF.setText(list.get(table.getSelectedRow()).getOwner());
+					toTF.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
 					fromTF.setText(currentUser.getEmail());
 					subjectTF.setText("Another eProduce user would like to contact you!");
 					toTF.setEditable(false);

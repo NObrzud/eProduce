@@ -363,6 +363,35 @@ public class eProduceDatabase {
 		}
 		
 	}
-	
-	
+	public User getOwnerDetails(String username) {
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.users where username = \'" + username + "\'"; // single quotes protect against SQL injection
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			
+			User result = new User();
+			while(returnValues.next())
+			{
+				result.setFirstName(returnValues.getString("firstname"));
+				result.setLastName(returnValues.getString("lastname"));
+				result.setEmail(returnValues.getString("username"));
+				result.setAdmin(returnValues.getInt("isadmin"));
+				result.setBlocked(returnValues.getInt("isblocked"));
+				result.setCurrentRating(returnValues.getInt("currentrating"));
+				result.setNumReports(returnValues.getInt("numReports"));
+			}
+			return result;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
 }
