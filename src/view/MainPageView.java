@@ -387,7 +387,7 @@ public class MainPageView {
 									}
 									rating.setText(Integer.toString(newRating));
 									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									db.decreaseUserRating(ownertxt.getText());
+									db.increaseUserRating(ownertxt.getText());
 									plus.setIcon(plusImg);
 								}
 							}
@@ -402,7 +402,7 @@ public class MainPageView {
 									int newRating = Integer.parseInt(rating.getText())+1;
 									rating.setText(Integer.toString(newRating));
 									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									db.decreaseUserRating(ownertxt.getText());
+									db.increaseUserRating(ownertxt.getText());
 									minus.setIcon(minusImgGrey);
 								}
 								else //pressing minus
