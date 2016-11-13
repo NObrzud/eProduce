@@ -321,17 +321,21 @@ public class MainPageView {
 				JPanel listPanel = new JPanel();
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
+				JPanel ratingPanel = new JPanel();
 				JLabel title = new JLabel();
 				JLabel owner = new JLabel();
+				JLabel ownerRating = new JLabel();
 				JLabel des = new JLabel();
 								
 				JTextField titletxt = new JTextField();
 				JTextField ownertxt = new JTextField();
+				JTextField rating = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
 				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Exit" };
 				 	
 				
 				 	listPanel.setLayout(new GridLayout(0,1));
+				 	ratingPanel.setLayout(new GridLayout(0,4));
 					top.setLayout(new GridLayout(0,1));
 					bottom.setLayout(new BorderLayout());
 					//Add SQL statement after text below
@@ -341,6 +345,11 @@ public class MainPageView {
 					owner.setText("Owner: ");
 					ownertxt.setEditable(false);
 					ownertxt.setText(list.get(table.getSelectedRow()).getOwner());
+					ownerRating.setText("Owner Rating: ");
+					rating.setEditable(false);
+					//TODO get rating
+					rating.setText("10");
+					rating.setHorizontalAlignment(JTextField.CENTER);
 					des.setText("Description:");
 					destxt.setEditable(false);
 					destxt.setText(list.get(table.getSelectedRow()).getContent());
@@ -355,23 +364,23 @@ public class MainPageView {
 						BufferedImage minusImg = ImageIO.read(new File("res/minus.png"));
 						plus = new JButton(new ImageIcon(plusImg));
 						minus = new JButton(new ImageIcon(minusImg));
-						plus.setBorder(BorderFactory.createEmptyBorder());
-						plus.setContentAreaFilled(false);
-						minus.setBorder(BorderFactory.createEmptyBorder());
-						minus.setContentAreaFilled(false);
-						top.add(plus);
-						top.add(minus);
 						
 					} catch (IOException e) {
 						System.out.println("Image file not found!");
 					}
+
 					
 					
 					
+					ratingPanel.add(ownerRating);
+					ratingPanel.add(plus);
+					ratingPanel.add(rating);
+					ratingPanel.add(minus);
 					top.add(title);
 					top.add(titletxt);
 					top.add(owner);
 					top.add(ownertxt);
+					top.add(ratingPanel);
 					bottom.add(des,BorderLayout.NORTH);
 					bottom.add(destxt,BorderLayout.SOUTH);
 					listPanel.add(top,BorderLayout.NORTH);
