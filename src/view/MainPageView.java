@@ -19,12 +19,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -355,22 +357,65 @@ public class MainPageView {
 					destxt.setText(list.get(table.getSelectedRow()).getContent());
 					destxt.setLineWrap(true);
 					
-					
-					JButton plus = new JButton();
-					JButton minus= new JButton();
-					
 					try {
-						BufferedImage plusImg = ImageIO.read(new File("res/plus.png"));
-						BufferedImage minusImg = ImageIO.read(new File("res/minus.png"));
-						plus = new JButton(new ImageIcon(plusImg));
-						minus = new JButton(new ImageIcon(minusImg));
+						ImageIcon plusImg = new ImageIcon(ImageIO.read(new File("res/plus.png")));
+						ImageIcon minusImg = new ImageIcon(ImageIO.read(new File("res/minus.png")));
+						ImageIcon plusImgGrey = new ImageIcon(ImageIO.read(new File("res/plus-grey.png")));
+						ImageIcon minusImgGrey = new ImageIcon(ImageIO.read(new File("res/minus-grey.png")));
+						final JButton plus = new JButton(plusImgGrey);
+						final JButton minus = new JButton(minusImgGrey);
 						
-					} catch (IOException e) {
-						System.out.println("Image file not found!");
-					}
-
-					
-					
+						plus.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(plus.getIcon().equals(plusImg)) //de-pressing plus
+								{	
+									int newRating = Integer.parseInt(rating.getText())-1;
+									rating.setText(Integer.toString(newRating));
+									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+									db.decreaseUserRating(ownertxt.getText());									
+									plus.setIcon(plusImgGrey);
+								}
+								else // pressing plus
+								{
+									int newRating = Integer.parseInt(rating.getText())+1;
+									if(minus.getIcon().equals(minusImg)) //if minus is already pressed.
+									{
+										minus.setIcon(minusImgGrey);
+										newRating++;
+									}
+									rating.setText(Integer.toString(newRating));
+									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+									db.decreaseUserRating(ownertxt.getText());
+									plus.setIcon(plusImg);
+								}
+							}
+						});
+						
+						minus.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(minus.getIcon().equals(minusImg)) //they're de-pressing minus
+								{
+									int newRating = Integer.parseInt(rating.getText())+1;
+									rating.setText(Integer.toString(newRating));
+									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+									db.decreaseUserRating(ownertxt.getText());
+									minus.setIcon(minusImgGrey);
+								}
+								else //pressing minus
+								{	
+									int newRating = Integer.parseInt(rating.getText())-1;
+									if(plus.getIcon().equals(plusImg)) //if plus is already pressed.
+									{
+										plus.setIcon(plusImgGrey);
+										newRating--;
+									}
+									rating.setText(Integer.toString(newRating));
+									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+									db.decreaseUserRating(ownertxt.getText());									
+									minus.setIcon(minusImg);
+								}
+							}
+						});
 					
 					ratingPanel.add(ownerRating);
 					ratingPanel.add(minus);
@@ -386,6 +431,9 @@ public class MainPageView {
 					listPanel.add(top,BorderLayout.NORTH);
 					listPanel.add(bottom,BorderLayout.SOUTH);
 					
+					} catch (IOException e) {
+						System.out.println("Image file not found!");
+					}
 				
 					
 					

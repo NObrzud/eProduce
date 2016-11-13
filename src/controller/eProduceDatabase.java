@@ -342,7 +342,6 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 			//System.exit(-1);
 		}
-		
 	}
 	public void deleteListing(int listingNum) {
 		try 
@@ -393,5 +392,40 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 			return null;
 		}
+	}
+	public void increaseUserRating(String username) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "update eProduce.users set currentrating=currentrating + 1 where username = \'" +username+ "\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+	}
+	public void decreaseUserRating(String username) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "update eProduce.users set currentrating=currentrating - 1 where username = \'" +username+ "\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+		
 	}
 }
