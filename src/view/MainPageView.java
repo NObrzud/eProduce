@@ -11,13 +11,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -325,6 +330,7 @@ public class MainPageView {
 				JTextArea destxt = new JTextArea(5,10);
 				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Exit" };
 				 	
+				
 				 	listPanel.setLayout(new GridLayout(0,1));
 					top.setLayout(new GridLayout(0,1));
 					bottom.setLayout(new BorderLayout());
@@ -339,6 +345,29 @@ public class MainPageView {
 					destxt.setEditable(false);
 					destxt.setText(list.get(table.getSelectedRow()).getContent());
 					destxt.setLineWrap(true);
+					
+					
+					JButton plus = new JButton();
+					JButton minus= new JButton();
+					
+					try {
+						BufferedImage plusImg = ImageIO.read(new File("res/plus.png"));
+						BufferedImage minusImg = ImageIO.read(new File("res/minus.png"));
+						plus = new JButton(new ImageIcon(plusImg));
+						minus = new JButton(new ImageIcon(minusImg));
+						plus.setBorder(BorderFactory.createEmptyBorder());
+						plus.setContentAreaFilled(false);
+						minus.setBorder(BorderFactory.createEmptyBorder());
+						minus.setContentAreaFilled(false);
+						top.add(plus);
+						top.add(minus);
+						
+					} catch (IOException e) {
+						System.out.println("Image file not found!");
+					}
+					
+					
+					
 					top.add(title);
 					top.add(titletxt);
 					top.add(owner);
@@ -347,7 +376,12 @@ public class MainPageView {
 					bottom.add(destxt,BorderLayout.SOUTH);
 					listPanel.add(top,BorderLayout.NORTH);
 					listPanel.add(bottom,BorderLayout.SOUTH);
+					
 				
+					
+					
+					
+					
 				
 				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
 			                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
