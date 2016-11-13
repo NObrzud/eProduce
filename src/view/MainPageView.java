@@ -367,7 +367,9 @@ public class MainPageView {
 						
 						plus.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-								if(plus.getIcon().equals(plusImg)) //de-pressing plus
+								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
+									; //don't do anything if you're viewing your own listing, that's cheating.
+								else if(plus.getIcon().equals(plusImg)) //de-pressing plus
 								{	
 									int newRating = Integer.parseInt(rating.getText())-1;
 									rating.setText(Integer.toString(newRating));
@@ -393,7 +395,9 @@ public class MainPageView {
 						
 						minus.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
-								if(minus.getIcon().equals(minusImg)) //they're de-pressing minus
+								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
+									; //don't do anything if you're viewing your own listing, that's cheating.
+								else if(minus.getIcon().equals(minusImg)) //they're de-pressing minus
 								{
 									int newRating = Integer.parseInt(rating.getText())+1;
 									rating.setText(Integer.toString(newRating));
