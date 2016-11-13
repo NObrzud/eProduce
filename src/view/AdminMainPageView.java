@@ -9,26 +9,20 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -37,7 +31,6 @@ import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
 import controller.eProduceDatabase;
-import model.Listing;
 import model.User;
 
 public class AdminMainPageView{
@@ -257,12 +250,12 @@ public class AdminMainPageView{
 				listPanel.add(top);
 
 
-				int result = JOptionPane.showOptionDialog(null, listPanel, "Edit Listing",
+				int result = JOptionPane.showOptionDialog(null, listPanel, "Manage User Permissions",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 						null, options1, null);
 
 				if(result == JOptionPane.YES_OPTION){ //ban user button is clicked
-					String message = "Done!";
+					String message = "Change user's block status!";
 					db.setUserBanStatus(emailtxt.getText(), Integer.parseInt(bannedtxt.getText()) == 1 ? 0 : 1);
 					
 					JOptionPane.showMessageDialog(frame,message );
@@ -271,7 +264,7 @@ public class AdminMainPageView{
 					frame = ampv.frame;
 					frame.setVisible(true);
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
-					String message = "Done!";
+					String message = "Changed user's admin status!";
 					db.setUserAdminStatus(emailtxt.getText(), Integer.parseInt(admintxt.getText()) == 1 ? 0 : 1);
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();

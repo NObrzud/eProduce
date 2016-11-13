@@ -5,6 +5,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 import javax.swing.JTextField;

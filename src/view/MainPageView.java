@@ -324,6 +324,7 @@ public class MainPageView {
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
 				JPanel ratingPanel = new JPanel();
+				JPanel userPanel = new JPanel();
 				JLabel title = new JLabel();
 				JLabel owner = new JLabel();
 				JLabel ownerRating = new JLabel();
@@ -331,6 +332,7 @@ public class MainPageView {
 								
 				JTextField titletxt = new JTextField();
 				JTextField ownertxt = new JTextField();
+				JButton reportButton = new JButton("Report");
 				JTextField rating = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
 				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Exit" };
@@ -338,6 +340,7 @@ public class MainPageView {
 				
 				 	listPanel.setLayout(new GridLayout(0,1));
 				 	ratingPanel.setLayout(new GridLayout(0,4));
+				 	userPanel.setLayout(new GridLayout(0,3));
 					top.setLayout(new GridLayout(0,1));
 					bottom.setLayout(new BorderLayout());
 					//Add SQL statement after text below
@@ -349,7 +352,6 @@ public class MainPageView {
 					ownertxt.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
 					ownerRating.setText("Owner Rating: ");
 					rating.setEditable(false);
-					//TODO get rating
 					rating.setText(Integer.toString(list.get(table.getSelectedRow()).getOwner().getCurrentRating()));
 					rating.setHorizontalAlignment(JTextField.CENTER);
 					des.setText("Description:");
@@ -425,10 +427,12 @@ public class MainPageView {
 					ratingPanel.add(minus);
 					ratingPanel.add(rating);
 					ratingPanel.add(plus);
+					userPanel.add(owner);
+					userPanel.add(ownertxt);
+					userPanel.add(reportButton);
 					top.add(title);
 					top.add(titletxt);
-					top.add(owner);
-					top.add(ownertxt);
+					top.add(userPanel);
 					top.add(ratingPanel);
 					bottom.add(des,BorderLayout.NORTH);
 					bottom.add(destxt,BorderLayout.SOUTH);
