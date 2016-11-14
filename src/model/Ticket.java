@@ -6,10 +6,10 @@ public class Ticket {
 	private User owner;
 	private String description;
 	private String ticketNum;
-	private String followup;
+	private String response;
 	
 	private eProduceDatabase db = new eProduceDatabase();
-	public Ticket(String ownerEmail, String description, String ticketNum)
+	public Ticket(String ownerEmail, String description, String response, String ticketNum)
 	{
 		owner = db.getOwnerDetails(ownerEmail);
 		this.description = description;
@@ -26,9 +26,9 @@ public class Ticket {
 	{
 		return ticketNum;
 	}
-	public String getFollowup()
+	public String getResponse()
 	{
-		return followup;
+		return response;
 	}
 	public void setDescription(String description)
 	{
@@ -46,8 +46,8 @@ public class Ticket {
 	{
 		this.ticketNum = ticketNum;
 	}
-	public void setFollowup(String followup)
+	public void setResponse(String response)
 	{
-		this.followup = followup;
+		this.response = response;
 	}
 }

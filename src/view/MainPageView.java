@@ -422,7 +422,15 @@ public class MainPageView {
 								}
 							}
 						});
-					
+						
+						reportButton.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
+									; //don't do anything if you're viewing your own listing, that's cheating.
+								db.reportUser(list.get(table.getSelectedRow()).getOwner().getEmail());
+								JOptionPane.showMessageDialog(frame, "User has been reported. Thanks!");
+							}
+						});
 					ratingPanel.add(ownerRating);
 					ratingPanel.add(minus);
 					ratingPanel.add(rating);
@@ -442,7 +450,7 @@ public class MainPageView {
 					} catch (IOException e) {
 						System.out.println("Image file not found!");
 					}
-				
+					
 					
 					
 					
