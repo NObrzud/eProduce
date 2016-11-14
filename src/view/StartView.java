@@ -1,17 +1,16 @@
 package view;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import controller.eProduceActionListeners;
 import controller.eProduceController;
 import model.User;
 
@@ -47,7 +46,7 @@ public class StartView {
 		 * Create Labels
 		 */
 		
-		// eProduce Logo code 
+		// eProduce icon code 
 		ImageIcon pic = new ImageIcon("res/eProduceLogo.png");
 		JLabel imgLabel = new JLabel(pic);
 		imgLabel.setBounds(43, 5, 334, 179);
@@ -73,49 +72,12 @@ public class StartView {
 		panel.add(signUpButton);
 		
 		
-		/**
-		 * Sends you to Signup Page
-		 */
-		signUpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				SignUpView signupview = new SignUpView(currentUser);
-				frame = signupview.frame;
-				
-			}
-		});
+		//Redirect to sign-up page
+		ActionListener signupButtonActionListener = eProduceActionListeners.createSignupActionListener(frame, currentUser);
+		signUpButton.addActionListener(signupButtonActionListener);
 		
-		/**
-		 * Sends you to Main Page
-		 */
-		loginButton.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
-			public void actionPerformed(ActionEvent e) {
-				   if(!(passwordPF.getText().equals("")) && eProduceController.validateLogin(currentUser, emailTF, passwordPF))
-		            {
-		               if(currentUser.getBlocked() == 1)
-		               {
-		            	   JOptionPane.showMessageDialog(frame, "Sorry you're blocked from eProduce :(");
-		               }
-		               else if(currentUser.getAdmin() == 1)
-					   {
-		            	   frame.dispose();
-						   AdminMainPageView amp = new AdminMainPageView(currentUser);
-						   frame = amp.frame;
-					   }
-					   else
-		               {
-						   frame.dispose();
-						   MainPageView mp = new MainPageView(currentUser);
-						   frame = mp.frame;
-		               }
-		            }
-		            else
-		            {
-		            	  JOptionPane.showMessageDialog(frame, "Incorrect login. Please try again."); //temporary handling, TODO: discuss how to handle and implement
-		            }
-				
-			}
-		});
+		//redirect to login page
+		ActionListener loginButtonActionListener = eProduceActionListeners.createLoginActionListener(frame, passwordPF, emailTF, user);
+		loginButton.addActionListener(loginButtonActionListener);
 	}
 }

@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -11,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import controller.eProduceController;
+import controller.eProduceActionListeners;
 import model.User;
 
 
@@ -86,57 +85,13 @@ public class SignUpView {
 		submitButton.setBounds(220, 230, 75, 20);
 		panel.add(submitButton);
 		
-		/**
-		 * Cancels sign up and moves back to login screen
-		 */
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				StartView sv = new StartView(currentUser);
-				frame = sv.frame;
-				frame.setVisible(true);
-			}	
-		});
-		submitButton.addActionListener(new ActionListener()
-				{
-					@SuppressWarnings("deprecation")
-					public void actionPerformed(ActionEvent e)
-					{
-						if(!(firstNameTF.getText().equals("")) && !(lastNameTF.getText().equals("")) && !emailTF.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
-								   && !(passwordPF.getText().equals("")) && passwordPF.getText().equals(rePasswordPF.getText()))			   //are not null, and password and confirm pass are equal...
-						{
-							if(eProduceController.validateEmail(emailTF.getText()))
-							{
-								if(eProduceController.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
-								{
-									JOptionPane.showMessageDialog(frame, "Account has been successfully created!");
-									frame.dispose();
-									StartView sv = new StartView(currentUser);
-									frame = sv.frame;
-									frame.setVisible(true);
-								}
-							}
-							else if(!eProduceController.validateEmail(emailTF.getText()))
-							{
-								JOptionPane.showMessageDialog(frame, "Error invalid email address"); 
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); 
-							}
-						}
-						else
-						{
-							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
-							if(firstNameTF.getText().equals("")) emptyFieldMsg += "      First Name\n";
-							if(lastNameTF.getText().equals("")) emptyFieldMsg += "      Last Name\n";
-							if(emailTF.getText().equals("")) emptyFieldMsg += "      Email\n";
-							if(passwordPF.getText().equals("")) emptyFieldMsg += "      Password\n";
-							if(rePasswordPF.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
-							if(!passwordPF.getText().equals(rePasswordPF.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
-							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-						}
-					}
-				});
+		
+		ActionListener cancelButtonActionListener = eProduceActionListeners.createCancelActionListener(frame, currentUser);
+		ActionListener submitButtonActionListener = eProduceActionListeners.createSubmitActionListener(frame, firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF, currentUser);
+		
+		//Cancels current account creation and redirects to sign-in page
+		cancelButton.addActionListener(cancelButtonActionListener);
+		//Redirect to sign-in page after validating input and creating account.
+		submitButton.addActionListener(submitButtonActionListener);
 	}
 }
