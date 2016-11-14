@@ -5,8 +5,8 @@ import controller.eProduceDatabase;
 public class Ticket {
 	private User owner;
 	private String description;
-	private String ticketNum;
 	private String response;
+	private String ticketNum;
 	
 	private eProduceDatabase db = new eProduceDatabase();
 	public Ticket(String ownerEmail, String description, String response, String ticketNum)
@@ -14,6 +14,7 @@ public class Ticket {
 		owner = db.getOwnerDetails(ownerEmail);
 		this.description = description;
 		this.ticketNum = ticketNum;
+		this.response = response;
 	}
 	public User getOwner() {
 		return owner;

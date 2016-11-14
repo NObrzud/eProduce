@@ -9,9 +9,9 @@ public class Meetup {
 	private String owner;
 	private String participants;
 	private String location;
-	private int meetupNum;
+	private String meetupNum;
 	
-	public Meetup(Date d, Time t, String o, String p, String l, int n)
+	public Meetup(Date d, Time t, String o, String p, String l, String n)
 	{
 		date = d;
 		time = t;
@@ -50,10 +50,10 @@ public class Meetup {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public int getMeetupNum() {
+	public String getMeetupNum() {
 		return meetupNum;
 	}
-	public void setMeetupNum(int meetupNum) {
+	public void setMeetupNum(String meetupNum) {
 		this.meetupNum = meetupNum;
 	}
 	

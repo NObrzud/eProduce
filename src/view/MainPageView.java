@@ -529,7 +529,7 @@ public class MainPageView {
 						}
 						else
 						{
-							String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
+							String emptyFieldMsg = "Unable to create meetup. The following fields are empty: \n";
 							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
 							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
 							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";

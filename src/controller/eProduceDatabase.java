@@ -315,7 +315,7 @@ public class eProduceDatabase {
 			while(returnValues.next())
 			{
 				
-				myMeetups.add(new Meetup(returnValues.getDate("meetDate"), returnValues.getTime("meetTime"), returnValues.getString("owner"), returnValues.getString("participants"), returnValues.getString("meetLocation"), returnValues.getInt("meetupNum")));
+				myMeetups.add(new Meetup(returnValues.getDate("meetDate"), returnValues.getTime("meetTime"), returnValues.getString("owner"), returnValues.getString("participants"), returnValues.getString("meetLocation"), Integer.toString(returnValues.getInt("meetupNum"))));
 			}
 		}
 		catch(SQLException e)
@@ -513,7 +513,7 @@ public class eProduceDatabase {
 			//System.exit(-1);
 		}		
 	}
-	public boolean updateTicket(String description, String ticketNum) {
+	public boolean updateTicket(String description, String response, String ticketNum) {
 		try 
 		{
 			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
@@ -522,7 +522,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			
-			updateString = "update eProduce.tickets set description=\'"+description+"\' where ticketnum = "+ticketNum;
+			updateString = "update eProduce.tickets set description=\'"+description+"\', response=\'"+response+"\' where ticketnum = "+ticketNum;
 			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 			//return true;
@@ -557,5 +557,79 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 		}
 		
+	}
+	public void getAllTickets(ArrayList<Ticket> myTickets) {
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.tickets";
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				myTickets.add(new Ticket(returnValues.getString("owner"), returnValues.getString("description"), returnValues.getString("response"), Integer.toString(returnValues.getInt("ticketnum"))));
+			}
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+		}
+	}
+	public boolean editMeetup(String meetupNum, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
+		//model = correct year, model2 = correct time
+				try 
+				{
+					DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+					String insertString;
+					int returnVal;
+					Statement stmt = DBConn.createStatement();
+					stmt = DBConn.createStatement();
+					
+					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+					String time = sdf.format(model2.getValue());
+					sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+					String date = sdf.format(model.getValue());
+					
+					
+					insertString = "update eproduce.meetups set participants = \'"+participants+"\', meettime = \'"+time+"\', meetdate = \'"+date+"\', meetlocation = \'"+location+"\'"
+								   + "where meetupNum = " + meetupNum;
+					System.out.println(insertString);
+					returnVal = stmt.executeUpdate(insertString);
+					if(returnVal == 1) // 1 new meetup was created
+					{
+						return true;
+					}
+					else
+						return false;
+				}
+				catch(SQLException e)
+				{
+					System.err.println(e.getMessage());
+					//System.exit(-1);
+					return false;
+				}	
+	}
+	public void deleteMeetup(String meetupNum) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "delete from eProduce.meetups where meetupNum = " + meetupNum;
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+		}				
 	}
 }

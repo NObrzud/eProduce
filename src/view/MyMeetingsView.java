@@ -11,7 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -24,8 +27,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -37,6 +43,9 @@ import controller.eProduceController;
 import controller.eProduceDatabase;
 import model.Meetup;
 import model.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class MyMeetingsView {
 	public JFrame frame = new JFrame("eProduce");
@@ -177,7 +186,7 @@ public class MyMeetingsView {
 				}
 				
 			}
-		});
+		}); 
 		topPanel.add(leftSide,BorderLayout.WEST);
 		topPanel.add(rightSide,BorderLayout.EAST);
 		
@@ -263,9 +272,11 @@ public class MyMeetingsView {
 			Meetup currMeetup = myMeetups.get(i);
 			if(currMeetup != null)
 			{
-				meetups[i][0].setText(Integer.toString(currMeetup.getMeetupNum()));
+				Date date = currMeetup.getTime();
+				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+				meetups[i][0].setText(currMeetup.getMeetupNum());
 				meetups[i][1].setText(currMeetup.getDate().toString());
-				meetups[i][2].setText(currMeetup.getTime().toString());
+				meetups[i][2].setText(sdf.format(currMeetup.getTime()));
 				meetups[i][3].setText(currMeetup.getLocation().toString());
 				meetups[i][4].setText(currMeetup.getParticipants().toString());
 				meetups[i][5].setText(currMeetup.getOwner().toString());
@@ -302,11 +313,108 @@ public class MyMeetingsView {
 		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black)); //Gives a black border around the table
 		table.setRowHeight(30); //number of rows to have in the table.
 		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
+		
+		
+		
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
+				JPanel meetingPanel = new JPanel();
+				JLabel participantsLabel = new JLabel();
+				JLabel whenLabel = new JLabel();
+				JLabel timeLabel = new JLabel();
+				JLabel locationLabel = new JLabel();
+				JLabel meetupNumLabel = new JLabel();
+				JLabel meetupNumLabel2 = new JLabel();
+				JTextField whenTF = new JTextField(10);
+				JPanel metPanel = new JPanel();
+				JLabel participantslbl = new JLabel();
+				JLabel whenlbl = new JLabel();
+				JLabel timelbl = new JLabel();
+				JLabel loclbl = new JLabel();
+				JTextField participantstxt = new JTextField(10);
+				JTextField loctxt = new JTextField(10);
+				SpinnerDateModel model2 = new SpinnerDateModel();
+				model2.setCalendarField(Calendar.MINUTE);
+				JSpinner spinner= new JSpinner();
+				spinner.setModel(model2);
+				spinner.setEditor(new JSpinner.DateEditor(spinner, "hh:mm a"));
+				Date date = myMeetups.get(table.getSelectedRow()).getTime();
+				spinner.setValue(date);
 				
-			}
+				spinner.setSize(10,10);
+				meetingPanel.setLayout(new GridLayout(0,1));
+				
+				
+				participantsLabel.setText("Participants: ");
+				whenLabel.setText("When: ");
+				timeLabel.setText("Time");
+				locationLabel.setText("Location:");
+				participantslbl.setText("Participants: ");
+				whenlbl.setText("When: ");
+				timelbl.setText("Time");
+				loclbl.setText("Location:");
+				meetupNumLabel.setText("Meetup #: ");
+				meetupNumLabel2.setText(myMeetups.get(table.getSelectedRow()).getMeetupNum());
+				participantstxt.setText(myMeetups.get(table.getSelectedRow()).getParticipants());
+				loctxt.setText(myMeetups.get(table.getSelectedRow()).getLocation());
+				UtilDateModel model = new UtilDateModel(myMeetups.get(table.getSelectedRow()).getDate());
+				JDatePanelImpl datePanel = new JDatePanelImpl(model);
+				JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+				
+				meetingPanel.add(meetupNumLabel);
+				meetingPanel.add(meetupNumLabel2);
+				meetingPanel.add(participantsLabel);
+				meetingPanel.add(participantstxt);
+				meetingPanel.add(whenLabel);
+				meetingPanel.add(datePicker);
+				meetingPanel.add(timeLabel);
+				meetingPanel.add(spinner);
+				meetingPanel.add(locationLabel);
+				meetingPanel.add(loctxt);
+				
 			
+				String[] options = new String[] {"Save Changes", "Delete Meeting", "Cancel"};
+				int result = JOptionPane.showOptionDialog(null, meetingPanel, "Edit Meeting Info", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+				if(result == JOptionPane.YES_OPTION)
+				{
+					if(!(participantstxt.getText().equals("")) && !(datePicker.getModel().getValue().toString().equals("")) && !loctxt.getText().equals("") )	
+					{
+						java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String foo = sdf.format(new Date(model.getYear()-1900, model.getMonth(), model.getDay(), model2.getDate().getHours(), model2.getDate().getMinutes()));
+						System.out.println(foo);
+						boolean ret = db.editMeetup(meetupNumLabel2.getText(),participantstxt.getText(),loctxt.getText(),  model, model2);
+						if(ret)
+						{
+							JOptionPane.showMessageDialog(frame, "Meetup has been successfully edited!");
+							frame.dispose();
+							MyMeetingsView mmv = new MyMeetingsView(currentUser);
+							frame = mmv.frame;
+							frame.setVisible(true);
+						}
+					}
+					else
+					{
+						String emptyFieldMsg = "Unable to edit meeting. The following fields are empty: \n";
+						if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+						if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
+						if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+						if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+						if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
+						if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+					}
+					
+				}
+				if(result == JOptionPane.NO_OPTION)
+				{
+					db.deleteMeetup(myMeetups.get(table.getSelectedRow()).getMeetupNum());
+					JOptionPane.showMessageDialog(frame, "Meetup has been successfully deleted!");
+					frame.dispose();
+					MyMeetingsView mmv = new MyMeetingsView(currentUser);
+					frame = mmv.frame;
+					frame.setVisible(true);
+				}
+			}
 		});
 		
 		for(int i = 0; i < table.getColumnCount(); i++){

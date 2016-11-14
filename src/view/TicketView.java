@@ -309,7 +309,10 @@ public class TicketView {
 	 */
 	public void middlePanel(){
 		ArrayList<Ticket> myTickets = new ArrayList<Ticket>();
-		db.getMyTickets(currentUser.getEmail(),myTickets);
+		if(currentUser.getAdmin() == 1)
+			db.getAllTickets(myTickets);
+		else
+			db.getMyTickets(currentUser.getEmail(),myTickets);
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
@@ -317,8 +320,8 @@ public class TicketView {
 		String[][] ticketData = new String[myTickets.size()][4];
 		for(int i = 0; i < tickets.length; i++){
 			tickets[i][0] = new JTextField("Ticket Number"+i);
-			tickets[i][1] = new JTextField("Ticket Owner" + i);
-			tickets[i][2] = new JTextField("Ticket Description"+ i);
+			tickets[i][1] = new JTextField("Ticket Description" + i);
+			tickets[i][2] = new JTextField("Ticket Owner"+ i);
 			tickets[i][3] = new JTextField("Ticket Followup"+ i);
 
 		}
@@ -333,8 +336,8 @@ public class TicketView {
 			{
 				tickets[i][0].setText(currTicket.getTicketNum());
 				tickets[i][1].setText(currTicket.getDescription());
-				tickets[i][2].setText(currTicket.getOwner().getEmail());
-				tickets[i][3].setText(currTicket.getResponse());
+				tickets[i][2].setText(currTicket.getResponse());
+				tickets[i][3].setText(currTicket.getOwner().getEmail());
 
 			}
 		}
@@ -364,8 +367,12 @@ public class TicketView {
 		
 
 		ticketPanel.setLayout(new BoxLayout(ticketPanel,BoxLayout.Y_AXIS));
-		String[] columnNames = new String[] {"Ticket #", "Ticket Description"};
+		String[] columnNames = new String[] {"Ticket #", "Ticket Description", "Ticket Response", "Ticket Owner"};
 		DefaultTableModel model = new DefaultTableModel(ticketData, columnNames);
+		if(currentUser.getAdmin() == 1)
+			model.setColumnCount(4);
+		else
+			model.setColumnCount(2);
 		JTable table = new JTable(model);
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
@@ -377,29 +384,49 @@ public class TicketView {
 		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				JPanel listPanel = new JPanel();				JPanel bottom = new JPanel();
+				JPanel main = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
 				JLabel des = new JLabel();
-				JTextArea destxt = new JTextArea(5,10);
+				JTextArea destxt = new JTextArea(5,30);
+				JLabel res = new JLabel();
+				JTextArea restxt = new JTextArea(5,30);
 				Object[] options1 = { "Save Changes","Delete Ticket", "Cancel" };
-
-				listPanel.setLayout(new GridLayout(0,1));
-				bottom.setLayout(new BorderLayout());
+				if(currentUser.getAdmin() == 1)
+					options1[1] = "Close ticket";
+				destxt.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+				
+				restxt.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+				main.setLayout(new GridLayout(2,1));
 				//Add SQL statement after text below
 				des.setText("Description:");
+				res.setText("   Response:");
+				res.setSize(des.getSize());
 				destxt.setLineWrap(true);
+				restxt.setLineWrap(true);
+				if(currentUser.getAdmin() == 1)
+					destxt.setEditable(false);
+				else
+					restxt.setEditable(false);
+					
 				destxt.setText(myTickets.get(table.getSelectedRow()).getDescription());
-				bottom.add(des,BorderLayout.NORTH);
-				bottom.add(destxt,BorderLayout.SOUTH);
-				listPanel.add(bottom,BorderLayout.SOUTH);
+				restxt.setText(myTickets.get(table.getSelectedRow()).getResponse());
+				top.add(des);
+				top.add(destxt);
+				bottom.add(res);
+				bottom.add(restxt);
+				
+				main.add(top);
+				main.add(bottom);
 
-
-				int result = JOptionPane.showOptionDialog(null, listPanel, "Edit Ticket",
+				int result = JOptionPane.showOptionDialog(null, main, "Edit Ticket",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 						null, options1, null);
 
 				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
-					boolean created = db.updateTicket(destxt.getText(), myTickets.get(table.getSelectedRow()).getTicketNum());
+					
+					boolean created = db.updateTicket(destxt.getText(), restxt.getText(), myTickets.get(table.getSelectedRow()).getTicketNum());
 					
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
@@ -408,8 +435,10 @@ public class TicketView {
 					frame.setVisible(true);
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
 					String message = "Deleted";
+					if(currentUser.getAdmin() == 1)
+						message = "Closed";
 					db.deleteTicket(myTickets.get(table.getSelectedRow()).getTicketNum());
-					JOptionPane.showMessageDialog(frame,message );
+					JOptionPane.showMessageDialog(frame,message);
 					frame.dispose();
 					TicketView tv = new TicketView(currentUser);
 					frame = tv.frame;

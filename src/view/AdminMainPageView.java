@@ -129,8 +129,8 @@ public class AdminMainPageView{
 		allTickets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				MyMeetingsView mlv = new MyMeetingsView(currentUser);
-				mlv.frame.setVisible(true);
+				TicketView atv = new TicketView(currentUser);
+				atv.frame.setVisible(true);
 				
 			}
 		});
