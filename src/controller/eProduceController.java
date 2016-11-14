@@ -10,6 +10,7 @@ import javax.swing.JPasswordField;
 
 import javax.swing.JTextField;
 
+import model.Listing;
 import model.User;
 
 
@@ -132,4 +133,21 @@ public class eProduceController {
 			JOptionPane.showMessageDialog(null, "Invalid email. Email not sent.");
 		}
 	}
+	
+	public void searchListings(ArrayList<Listing> listings, String search){
+		ArrayList<Listing> temp = new ArrayList<Listing>();
+		for(int i=0; i<listings.size(); i++){
+			String tags = listings.get(i).getTags();
+			StringTokenizer st = new StringTokenizer(tags, ", ");
+			String token = "";
+			while(st.hasMoreTokens()){
+				token = st.nextToken();
+				if(search.contains(token)){
+					temp.add(listings.get(i));
+					break;
+				}
+			}
+		}
+	}
+	
 }
