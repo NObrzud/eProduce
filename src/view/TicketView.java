@@ -41,7 +41,7 @@ import controller.eProduceController;
 import controller.eProduceDatabase;
 import model.Ticket;
 import model.User;
-//TODO: FIX ALL THIS SHIT
+
 public class TicketView {
 
 	public JFrame frame = new JFrame("eProduce");
@@ -49,8 +49,6 @@ public class TicketView {
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
-	private eProduceController controller = new eProduceController();
-	private eProduceDatabase db = new eProduceDatabase();
 	private int i = 0;
 	/**
 	 * Set the Listings up in this method each method called is a panel.
@@ -154,7 +152,7 @@ public class TicketView {
 								JOptionPane.showMessageDialog(frame, "No changes were made.");
 								
 							}
-							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							else if(eProduceController.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
@@ -276,7 +274,7 @@ public class TicketView {
 				{
 					if(!destxt.getText().equals(""))	
 					{
-						if(db.createTicket(currentUser.getEmail(), destxt.getText()))
+						if(eProduceDatabase.createTicket(currentUser.getEmail(), destxt.getText()))
 						{
 							String msg = "Ticket created!";
 							JOptionPane.showMessageDialog(frame, msg);
@@ -310,9 +308,9 @@ public class TicketView {
 	public void middlePanel(){
 		ArrayList<Ticket> myTickets = new ArrayList<Ticket>();
 		if(currentUser.getAdmin() == 1)
-			db.getAllTickets(myTickets);
+			eProduceDatabase.getAllTickets(myTickets);
 		else
-			db.getMyTickets(currentUser.getEmail(),myTickets);
+			eProduceDatabase.getMyTickets(currentUser.getEmail(),myTickets);
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
@@ -426,7 +424,7 @@ public class TicketView {
 				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
 					
-					boolean created = db.updateTicket(destxt.getText(), restxt.getText(), myTickets.get(table.getSelectedRow()).getTicketNum());
+					boolean created = eProduceDatabase.updateTicket(destxt.getText(), restxt.getText(), myTickets.get(table.getSelectedRow()).getTicketNum());
 					
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
@@ -437,7 +435,7 @@ public class TicketView {
 					String message = "Deleted";
 					if(currentUser.getAdmin() == 1)
 						message = "Closed";
-					db.deleteTicket(myTickets.get(table.getSelectedRow()).getTicketNum());
+					eProduceDatabase.deleteTicket(myTickets.get(table.getSelectedRow()).getTicketNum());
 					JOptionPane.showMessageDialog(frame,message);
 					frame.dispose();
 					TicketView tv = new TicketView(currentUser);

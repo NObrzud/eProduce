@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,7 +16,6 @@ import controller.eProduceController;
 import model.User;
 
 public class StartView {
-	eProduceController controller = new eProduceController();
 	
 	public JFrame frame = new JFrame("eProduce");
 
@@ -93,7 +91,7 @@ public class StartView {
 		loginButton.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				   if(!(passwordPF.getText().equals("")) && controller.validateLogin(currentUser, emailTF, passwordPF))
+				   if(!(passwordPF.getText().equals("")) && eProduceController.validateLogin(currentUser, emailTF, passwordPF))
 		            {
 		               if(currentUser.getBlocked() == 1)
 		               {

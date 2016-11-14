@@ -53,8 +53,6 @@ public class MyMeetingsView {
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
-	private eProduceController controller = new eProduceController();
-	private eProduceDatabase db = new eProduceDatabase();
 
 	public MyMeetingsView(User user) {		
 		currentUser = user;
@@ -159,7 +157,7 @@ public class MyMeetingsView {
 								JOptionPane.showMessageDialog(frame, "No changes were made.");
 								
 							}
-							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							else if(eProduceController.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
@@ -249,7 +247,7 @@ public class MyMeetingsView {
 	 */
 	public void middlePanel(){
 		ArrayList<Meetup> myMeetups = new ArrayList<Meetup>();
-		db.getMyMeetups(currentUser.getEmail(),myMeetups);
+		eProduceDatabase.getMyMeetups(currentUser.getEmail(),myMeetups);
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
@@ -382,7 +380,7 @@ public class MyMeetingsView {
 						java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						String foo = sdf.format(new Date(model.getYear()-1900, model.getMonth(), model.getDay(), model2.getDate().getHours(), model2.getDate().getMinutes()));
 						System.out.println(foo);
-						boolean ret = db.editMeetup(meetupNumLabel2.getText(),participantstxt.getText(),loctxt.getText(),  model, model2);
+						boolean ret = eProduceDatabase.editMeetup(meetupNumLabel2.getText(),participantstxt.getText(),loctxt.getText(),  model, model2);
 						if(ret)
 						{
 							JOptionPane.showMessageDialog(frame, "Meetup has been successfully edited!");
@@ -407,7 +405,7 @@ public class MyMeetingsView {
 				}
 				if(result == JOptionPane.NO_OPTION)
 				{
-					db.deleteMeetup(myMeetups.get(table.getSelectedRow()).getMeetupNum());
+					eProduceDatabase.deleteMeetup(myMeetups.get(table.getSelectedRow()).getMeetupNum());
 					JOptionPane.showMessageDialog(frame, "Meetup has been successfully deleted!");
 					frame.dispose();
 					MyMeetingsView mmv = new MyMeetingsView(currentUser);
