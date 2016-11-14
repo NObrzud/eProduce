@@ -12,13 +12,15 @@ public class User {
 	private int currentRating;
 	private int numReports;
 	
-	public User(String firstName, String lastName, String email, String password, int blocked, int admin, int numReports){
+	public User(String firstName, String lastName, String email, String password, int blocked, int admin, int currentRating, int numReports){
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this. password = password;
 		this.blocked = blocked;
 		this.admin = admin;
+		this.currentRating = currentRating;
+		this.numReports = numReports;
 	}
 	public User()
 	{

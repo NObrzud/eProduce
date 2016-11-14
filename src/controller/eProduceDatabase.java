@@ -206,7 +206,7 @@ public class eProduceDatabase {
 			while(returnValues.next())
 			{
 				myUsers.add(new User(returnValues.getString("firstname"), returnValues.getString("lastname"), returnValues.getString("username"), 
-						returnValues.getString("password"), returnValues.getInt("isblocked"), returnValues.getInt("isadmin"), returnValues.getInt("numReports")));
+						returnValues.getString("password"), returnValues.getInt("isblocked"), returnValues.getInt("isadmin"),returnValues.getInt("currentrating"), returnValues.getInt("numReports")));
 			}
 		}
 		catch(SQLException e)
@@ -446,20 +446,116 @@ public class eProduceDatabase {
 		}
 				
 	}
-	public boolean createTicket(String email, String text) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean createTicket(String email, String description) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String insertString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			insertString = "insert into eproduce.tickets (owner, description) values (\'"+email+"\',\'"+description+"\')";
+			System.out.println(insertString);
+			returnVal = stmt.executeUpdate(insertString);
+			if(returnVal == 1) // 1 new account was created
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+			return false;
+		}	
 	}
 	public void getMyTickets(String email, ArrayList<Ticket> myTickets) {
-		// TODO Auto-generated method stub
+		try {
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.tickets where owner = \'" + email + "\'"; // single quotes protect against SQL injection
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				myTickets.add(new Ticket(returnValues.getString("owner"), returnValues.getString("description"), returnValues.getString("response"), Integer.toString(returnValues.getInt("ticketnum"))));
+			}
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+		}
 		
 	}
 	public void deleteTicket(String ticketNum) {
-		// TODO Auto-generated method stub
-		
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "delete from eProduce.tickets where ticketNum = " + ticketNum;
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+		}		
 	}
-	public boolean updateTicket(String email, String ticketNum) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updateTicket(String description, String ticketNum) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			updateString = "update eProduce.tickets set description=\'"+description+"\' where ticketnum = "+ticketNum;
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+			//return true;
+			if(returnVal == 0) // 1 new account was created
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			//System.exit(-1);
+			return false;
+		}
+	}
+	public void reportUser(String username) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "update eProduce.users set numreports= numreports + 1 where username = \'" +username+ "\'";
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}
+		
 	}
 }

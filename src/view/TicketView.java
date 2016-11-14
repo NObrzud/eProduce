@@ -32,7 +32,9 @@ import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
@@ -241,7 +243,7 @@ public class TicketView {
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 		sidePanel.add(myListings);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myMeetings	);
+		sidePanel.add(myMeetings);
 		
 		/*
 		 * create ticket action button listener
@@ -330,9 +332,9 @@ public class TicketView {
 			if(currTicket != null)
 			{
 				tickets[i][0].setText(currTicket.getTicketNum());
-				tickets[i][1].setText(currTicket.getOwner().getEmail());
-				tickets[i][2].setText(currTicket.getDescription());
-				tickets[i][3].setText(currTicket.getFollowup());
+				tickets[i][1].setText(currTicket.getDescription());
+				tickets[i][2].setText(currTicket.getOwner().getEmail());
+				tickets[i][3].setText(currTicket.getResponse());
 
 			}
 		}
@@ -362,7 +364,9 @@ public class TicketView {
 		
 
 		ticketPanel.setLayout(new BoxLayout(ticketPanel,BoxLayout.Y_AXIS));
-		JTable table = new JTable(ticketData, new String[] {"Ticket #","Ticket Description"});
+		String[] columnNames = new String[] {"Ticket #", "Ticket Description"};
+		DefaultTableModel model = new DefaultTableModel(ticketData, columnNames);
+		JTable table = new JTable(model);
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
 		table.setGridColor(Color.black); //changes the gridline's colors to black
@@ -395,7 +399,7 @@ public class TicketView {
 
 				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
-					boolean created = db.updateTicket(currentUser.getEmail(), myTickets.get(table.getSelectedRow()).getTicketNum());
+					boolean created = db.updateTicket(destxt.getText(), myTickets.get(table.getSelectedRow()).getTicketNum());
 					
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
