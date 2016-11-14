@@ -13,6 +13,7 @@ import javax.swing.SpinnerDateModel;
 
 import model.Listing;
 import model.Meetup;
+import model.Ticket;
 import model.User;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
@@ -444,5 +445,21 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 		}
 				
+	}
+	public boolean createTicket(String email, String text) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public void getMyTickets(String email, ArrayList<Ticket> myTickets) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void deleteTicket(String ticketNum) {
+		// TODO Auto-generated method stub
+		
+	}
+	public boolean updateTicket(String email, String ticketNum) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

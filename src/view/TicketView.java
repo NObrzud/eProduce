@@ -37,7 +37,7 @@ import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
 import controller.eProduceDatabase;
-import model.Listing;
+import model.Ticket;
 import model.User;
 //TODO: FIX ALL THIS SHIT
 public class TicketView {
@@ -77,7 +77,7 @@ public class TicketView {
 	 * This a method to hold all of the top panel information
 	 */
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce - MyListings");
+		JLabel titleLabel = new JLabel("eProduce - MyTickets");
 		JButton myAccount = new JButton();
 		JButton logout = new JButton();
 		JPanel rightSide = new JPanel();
@@ -191,23 +191,23 @@ public class TicketView {
 	public void sidePanel(){
 		JButton home = new JButton();
 		JButton myMeetings = new JButton();
-		JButton myTickets = new JButton();
-		JButton createListing = new JButton();
+		JButton myListings = new JButton();
+		JButton createTicket = new JButton();
 		
 		home.setMinimumSize(new Dimension(110, 26));
 		home.setMaximumSize(new Dimension(110,26));
 		myMeetings.setMinimumSize(new Dimension(110, 26));
 		myMeetings.setMaximumSize(new Dimension(110,26));
-		myTickets.setMinimumSize(new Dimension(110, 26));
-		myTickets.setMaximumSize(new Dimension(110,26));
-		createListing.setMinimumSize(new Dimension(110, 26));
-		createListing.setMaximumSize(new Dimension(110,26));
+		myListings.setMinimumSize(new Dimension(110, 26));
+		myListings.setMaximumSize(new Dimension(110,26));
+		createTicket.setMinimumSize(new Dimension(110, 26));
+		createTicket.setMaximumSize(new Dimension(110,26));
 		
-		myTickets.addActionListener(new ActionListener() {
+		myListings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
-				TicketView tix = new TicketView(currentUser);
-				tix.frame.setVisible(true);
+				MyListingsView mlv = new MyListingsView(currentUser);
+				mlv.frame.setVisible(true);
 				
 			}
 		});
@@ -228,83 +228,70 @@ public class TicketView {
 			}
 		});
 		
-	
 		home.setText("Home");
 		myMeetings.setText("MyMeetings");
-		myTickets.setText("MyTickets");
-		createListing.setText("New Listing");
+		myListings.setText("MyListings");
+		createTicket.setText("New Ticket");
 		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
 	
 		sidePanel.add(home);
 		
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(createListing);
+		sidePanel.add(createTicket);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myMeetings);
+		sidePanel.add(myListings);
 		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myTickets);
+		sidePanel.add(myMeetings	);
 		
 		/*
 		 * create ticket action button listener
 		 */
 		
-		createListing.addActionListener(new ActionListener(){
+		createTicket.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JPanel lstPanel = new JPanel();
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
-				JLabel title = new JLabel();
-				JLabel tags = new JLabel();
 				JLabel des = new JLabel();
-				JTextField titletxt = new JTextField();
-				JTextField tagstxt = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
 				Border border = BorderFactory.createLineBorder(Color.BLACK);
 				lstPanel.setLayout(new BorderLayout());
 				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
 				
-				title.setText("Title: ");
-				tags.setText("Tags: (Separate each tag with a comma \',\')");
-				des.setText("Description:");
+				des.setText("Description of Issue:");
 				destxt.setLineWrap(true);
 				destxt.setBorder(border);
 				JScrollPane sp = new JScrollPane(destxt);
-				top.add(title);
-				top.add(titletxt);
-				top.add(tags);
-				top.add(tagstxt);
 				bottom.add(des,BorderLayout.NORTH);
 				bottom.add(sp,BorderLayout.SOUTH);
 				lstPanel.add(top,BorderLayout.NORTH);
 				lstPanel.add(bottom,BorderLayout.SOUTH);
 			
 				
-				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Listing Info", JOptionPane.OK_CANCEL_OPTION);
+				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Ticket Info", JOptionPane.OK_CANCEL_OPTION);
 				if(result == JOptionPane.OK_OPTION)
 				{
-					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
+					if(!destxt.getText().equals(""))	
 					{
-						if(db.createListing(currentUser.getEmail(), titletxt.getText(), destxt.getText(), tagstxt.getText()))
+						if(db.createTicket(currentUser.getEmail(), destxt.getText()))
 						{
-							String msg = "Listing created!";
+							String msg = "Ticket created!";
 							JOptionPane.showMessageDialog(frame, msg);
 							frame.dispose();
-							MyListingsView mlv = new MyListingsView(currentUser);
-							frame = mlv.frame;
+							TicketView tv = new TicketView(currentUser);
+							frame = tv.frame;
 							frame.setVisible(true);
 						}
 						else
 						{
-							String msg = "Unable to create listing. Database error.";
+							String msg = "Unable to create ticket. Database error.";
 							JOptionPane.showMessageDialog(frame, msg);
 						}
 					}
 					else
 					{
-						String emptyFieldMsg = "Unable to create listing. The following fields are empty: \n";
-						if(titletxt.getText().equals("")) emptyFieldMsg += "      Title\n";
-						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
+						String emptyFieldMsg = "Unable to create ticket. The following fields are empty: \n";
 						if(destxt.getText().equals("")) emptyFieldMsg += "      Description\n";
 						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
 						
@@ -319,39 +306,41 @@ public class TicketView {
 	 * This a method to hold all of the middle panel information
 	 */
 	public void middlePanel(){
-		ArrayList<Listing> myListings = new ArrayList<Listing>();
-		db.getMyListings(currentUser.getEmail(),myListings);
+		ArrayList<Ticket> myTickets = new ArrayList<Ticket>();
+		db.getMyTickets(currentUser.getEmail(),myTickets);
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
-		JTextField[][] listings = new JTextField[myListings.size()][4];
-		String[][] listingData = new String[myListings.size()][4];
-		for(int i = 0; i < listings.length; i++){
-			listings[i][0] = new JTextField("Listing Title "+i);
-			listings[i][1] = new JTextField("Listing Content " + i);
-			listings[i][2] = new JTextField("Listing Tags " + i);
-			listings[i][3] = new JTextField("Listing Num " + i);
+		JTextField[][] tickets = new JTextField[myTickets.size()][4];
+		String[][] ticketData = new String[myTickets.size()][4];
+		for(int i = 0; i < tickets.length; i++){
+			tickets[i][0] = new JTextField("Ticket Number"+i);
+			tickets[i][1] = new JTextField("Ticket Owner" + i);
+			tickets[i][2] = new JTextField("Ticket Description"+ i);
+			tickets[i][3] = new JTextField("Ticket Followup"+ i);
+
 		}
 		
 		JPanel leftSide = new JPanel();
-		JPanel listing = new JPanel();
+		JPanel ticketPanel = new JPanel();
 		
-		for(int i = 0; i < myListings.size(); i++)
+		for(int i = 0; i < myTickets.size(); i++)
 		{
-			Listing currListing = myListings.get(i);
-			if(currListing != null)
+			Ticket currTicket = myTickets.get(i);
+			if(currTicket != null)
 			{
-				listings[i][0].setText(Integer.toString(currListing.getListingNum()));
-				listings[i][1].setText(currListing.getTitle());
-				listings[i][2].setText(currListing.getContent());
-				listings[i][3].setText(currListing.getTags());
+				tickets[i][0].setText(currTicket.getTicketNum());
+				tickets[i][1].setText(currTicket.getOwner().getEmail());
+				tickets[i][2].setText(currTicket.getDescription());
+				tickets[i][3].setText(currTicket.getFollowup());
+
 			}
 		}
-		for(int i = 0; i < listingData.length; i++)
+		for(int i = 0; i < ticketData.length; i++)
 		{
-			for(int j = 0; j < listingData[i].length; j++)
+			for(int j = 0; j < ticketData[i].length; j++)
 			{
-				listingData[i][j] = listings[i][j].getText();
+				ticketData[i][j] = tickets[i][j].getText();
 			}
 		}
 		search.setText("Search.....");
@@ -365,15 +354,15 @@ public class TicketView {
 		
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
-		for(i = 0; i < listings.length; i++)
+		for(i = 0; i < tickets.length; i++)
 		{
-			for(int j = 0; j < listings[i].length; j++)
-				listings[i][j].setEditable(false);
+			for(int j = 0; j < tickets[i].length; j++)
+				tickets[i][j].setEditable(false);
 		}
 		
 
-		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = new JTable(listingData, new String[] {"Listing #","Title","Content","Tags"});
+		ticketPanel.setLayout(new BoxLayout(ticketPanel,BoxLayout.Y_AXIS));
+		JTable table = new JTable(ticketData, new String[] {"Ticket #","Ticket Description"});
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
 		table.setGridColor(Color.black); //changes the gridline's colors to black
@@ -384,59 +373,42 @@ public class TicketView {
 		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				JPanel listPanel = new JPanel();
-				JPanel top = new JPanel();
-				JPanel bottom = new JPanel();
-				JLabel title = new JLabel();
-				JLabel tags = new JLabel();
+				JPanel listPanel = new JPanel();				JPanel bottom = new JPanel();
 				JLabel des = new JLabel();
-				JTextField titletxt = new JTextField(10);
-				JTextField tagstxt = new JTextField(10);
 				JTextArea destxt = new JTextArea(5,10);
-				Object[] options1 = { "Save Changes","Delete Listing", "Cancel" };
+				Object[] options1 = { "Save Changes","Delete Ticket", "Cancel" };
 
 				listPanel.setLayout(new GridLayout(0,1));
-				top.setLayout(new GridLayout(0,1));
 				bottom.setLayout(new BorderLayout());
 				//Add SQL statement after text below
-				title.setText("Title: ");
-				tags.setText("Tags: ");
 				des.setText("Description:");
 				destxt.setLineWrap(true);
-				tagstxt.setText(myListings.get(table.getSelectedRow()).getTags());
-				titletxt.setText(myListings.get(table.getSelectedRow()).getTitle());
-				destxt.setText(myListings.get(table.getSelectedRow()).getContent());
-				top.add(title);
-				top.add(titletxt);
-				top.add(tags);
-				top.add(tagstxt);
-				top.setSize(new Dimension(30, 30));
+				destxt.setText(myTickets.get(table.getSelectedRow()).getDescription());
 				bottom.add(des,BorderLayout.NORTH);
 				bottom.add(destxt,BorderLayout.SOUTH);
-				listPanel.add(top);
 				listPanel.add(bottom,BorderLayout.SOUTH);
 
 
-				int result = JOptionPane.showOptionDialog(null, listPanel, "Edit Listing",
+				int result = JOptionPane.showOptionDialog(null, listPanel, "Edit Ticket",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 						null, options1, null);
 
 				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
-					boolean created = db.updateListing(titletxt.getText(), destxt.getText(),myListings.get(table.getSelectedRow()).getListingNum(), tagstxt.getText());
+					boolean created = db.updateTicket(currentUser.getEmail(), myTickets.get(table.getSelectedRow()).getTicketNum());
 					
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
-					MyListingsView mlv = new MyListingsView(currentUser);
-					frame = mlv.frame;
+					TicketView tv = new TicketView(currentUser);
+					frame = tv.frame;
 					frame.setVisible(true);
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
 					String message = "Deleted";
-					db.deleteListing(myListings.get(table.getSelectedRow()).getListingNum());
+					db.deleteTicket(myTickets.get(table.getSelectedRow()).getTicketNum());
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
-					MyListingsView mlv = new MyListingsView(currentUser);
-					frame = mlv.frame;
+					TicketView tv = new TicketView(currentUser);
+					frame = tv.frame;
 					frame.setVisible(true);
 				}
 			}
@@ -455,14 +427,14 @@ public class TicketView {
 				column.setMaxWidth(100);
 			}
 		}
-		listing.add(new JScrollPane(table));
+		ticketPanel.add(new JScrollPane(table));
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		
-		middlePanel.add(listing);
+		middlePanel.add(ticketPanel);
 		
 		leftSide.add(search);
 		leftSide.add(sort);

@@ -292,7 +292,7 @@ public class MyMeetingsView {
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
 		sort = new JComboBox(comboBoxInputs);
 		meetup.setLayout(new BoxLayout(meetup, BoxLayout.Y_AXIS));
-		JTable table = new JTable(meetupData, new String[] {"Meetup #", "Date", "Time", "Location","Participants"});
+		JTable table = new JTable(meetupData, new String[] {"Meeting #", "Date", "Time", "Location","Participants"});
 		
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
