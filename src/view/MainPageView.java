@@ -329,13 +329,14 @@ public class MainPageView {
 				JLabel owner = new JLabel();
 				JLabel ownerRating = new JLabel();
 				JLabel des = new JLabel();
-								
+				JLabel fb = new JLabel("Feedback");
+				JTable feedbacktbl = new JTable(listingData,new String[] {"Feedback #","Creator","Title"});	
 				JTextField titletxt = new JTextField();
 				JTextField ownertxt = new JTextField();
 				JButton reportButton = new JButton("Report");
 				JTextField rating = new JTextField();
 				JTextArea destxt = new JTextArea(5,10);
-				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Exit" };
+				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Create Feedback", "Exit" };
 				 	
 				
 				 	listPanel.setLayout(new GridLayout(0,1));
@@ -358,7 +359,15 @@ public class MainPageView {
 					destxt.setEditable(false);
 					destxt.setText(list.get(table.getSelectedRow()).getContent());
 					destxt.setLineWrap(true);
-					
+					feedbacktbl.setShowVerticalLines(false);
+					feedbacktbl.setGridColor(Color.black);
+					feedbacktbl.setIntercellSpacing(new Dimension(0, 0));
+					feedbacktbl.setFont(new Font("Serif", Font.PLAIN, 15));
+					feedbacktbl.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+					feedbacktbl.setRowHeight(25);
+					feedbacktbl.setFillsViewportHeight(true);
+					feedbacktbl.setPreferredScrollableViewportSize(feedbacktbl.getPreferredSize());
+					feedbacktbl.setDefaultEditor(Object.class, null);
 					try {
 						ImageIcon plusImg = new ImageIcon(ImageIO.read(new File("res/plus.png")));
 						ImageIcon minusImg = new ImageIcon(ImageIO.read(new File("res/minus.png")));
@@ -443,9 +452,10 @@ public class MainPageView {
 					top.add(userPanel);
 					top.add(ratingPanel);
 					bottom.add(des,BorderLayout.NORTH);
-					bottom.add(destxt,BorderLayout.SOUTH);
-					listPanel.add(top,BorderLayout.NORTH);
-					listPanel.add(bottom,BorderLayout.SOUTH);
+					bottom.add(destxt,BorderLayout.CENTER);
+					bottom.add(new JScrollPane(feedbacktbl),BorderLayout.SOUTH);
+					listPanel.add(top);
+					listPanel.add(bottom);
 					
 					} catch (IOException e) {
 						System.out.println("Image file not found!");
@@ -457,10 +467,10 @@ public class MainPageView {
 					
 				
 				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
-			                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+			                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
 			                null, options1, null);
 				
-				if(result == JOptionPane.YES_OPTION){
+				if(result == 0){
 					JPanel meetingPanel = new JPanel();
 					JLabel participantsLabel = new JLabel();
 					JLabel whenLabel = new JLabel();
@@ -543,7 +553,7 @@ public class MainPageView {
 						
 					}
 				}
-				if(result == JOptionPane.NO_OPTION){
+				if(result == 1){
 					JPanel contactPanel = new JPanel();
 					JPanel north = new JPanel();
 					JPanel south = new JPanel();
@@ -600,7 +610,39 @@ public class MainPageView {
 						}
 					}
 				}
+				if(result == 2){
+					JPanel lstPanel = new JPanel();
+					JPanel top1 = new JPanel();
+					JPanel bottom1 = new JPanel();
+					JLabel title1 = new JLabel();
+					JLabel des1 = new JLabel();
+					JTextField titletxt1 = new JTextField();
+					JTextArea destxt1 = new JTextArea(5,10);
+					Border border = BorderFactory.createLineBorder(Color.BLACK);
+					lstPanel.setLayout(new BorderLayout());
+					top1.setLayout(new GridLayout(0,1));
+					bottom1.setLayout(new BorderLayout());
+					
+					title1.setText("Title: ");
+					des1.setText("Description:");
+					destxt1.setLineWrap(true);
+					destxt1.setBorder(border);
+					JScrollPane sp = new JScrollPane(destxt1);
+					top1.add(title1);
+					top1.add(titletxt1);
+					bottom1.add(des1,BorderLayout.NORTH);
+					bottom1.add(sp,BorderLayout.SOUTH);
+					lstPanel.add(top1,BorderLayout.NORTH);
+					lstPanel.add(bottom1,BorderLayout.SOUTH);
 				
+					
+					int result3 = JOptionPane.showConfirmDialog(null, lstPanel, "Create Feedback Info", JOptionPane.OK_CANCEL_OPTION);
+					if(result3 == JOptionPane.OK_OPTION)
+					{
+						//DB Stuff goes here
+						
+					}
+				}
 			}
 		});
 		for(int i = 0; i < table.getColumnCount(); i++)
