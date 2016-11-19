@@ -330,7 +330,7 @@ public class MainPageView {
 				JLabel ownerRating = new JLabel();
 				JLabel des = new JLabel();
 				JLabel fb = new JLabel("Feedback");
-				JTable feedbacktbl = new JTable(listingData,new String[] {"Feedback #","Creator","Title"});	
+				JTable feedbacktbl = new JTable(listingData,new String[] {"Feedback #","Creator","Description"});	
 				JTextField titletxt = new JTextField();
 				JTextField ownertxt = new JTextField();
 				JButton reportButton = new JButton("Report");
@@ -364,7 +364,7 @@ public class MainPageView {
 					feedbacktbl.setIntercellSpacing(new Dimension(0, 0));
 					feedbacktbl.setFont(new Font("Serif", Font.PLAIN, 15));
 					feedbacktbl.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
-					feedbacktbl.setRowHeight(25);
+					feedbacktbl.setRowHeight(25); 
 					feedbacktbl.setFillsViewportHeight(true);
 					feedbacktbl.setPreferredScrollableViewportSize(feedbacktbl.getPreferredSize());
 					feedbacktbl.setDefaultEditor(Object.class, null);
