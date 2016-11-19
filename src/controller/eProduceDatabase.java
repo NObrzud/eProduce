@@ -18,9 +18,11 @@ import model.User;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class eProduceDatabase {
-	String myDB;
-	Connection DBConn;
-	public eProduceDatabase()
+	static String myDB;
+	static Connection DBConn;
+	static String dbLogin = "itkstu";
+	static String dbPass = "student";
+	public  eProduceDatabase()
 	{
 		try
 		{
@@ -36,10 +38,10 @@ public class eProduceDatabase {
 	/*
 	 * Looks for the user in db, compares password, if it matches returns true. if not returns false.
 	 */
-	public boolean validateLogin(User model, String user, String pass)
+	public static boolean validateLogin(User model, String user, String pass)
 	{
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -71,7 +73,7 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
-	private void setModelValuesAfterLogin(User user, ResultSet returnValues) 
+	private static void setModelValuesAfterLogin(User user, ResultSet returnValues) 
 	{
 		try {
 			user.setAdmin(returnValues.getInt("isAdmin"));
@@ -89,11 +91,11 @@ public class eProduceDatabase {
 		
 		
 	}
-	public boolean createAccount(String first, String last, String email, String pass) 
+	public static boolean createAccount(String first, String last, String email, String pass) 
 	{
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -116,10 +118,10 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
-	public boolean updateAccount(String first, String last, String email, String pass, String rePass) {
+	public static boolean updateAccount(String first, String last, String email, String pass, String rePass) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -143,10 +145,10 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
-	public boolean createListing(String email, String title, String text, String tags) {
+	public static boolean createListing(String email, String title, String text, String tags) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String insertString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -169,9 +171,9 @@ public class eProduceDatabase {
 			return false;
 		}	
 	}
-	public void getMyListings(String email, ArrayList<Listing> myListings) {
+	public static void getMyListings(String email, ArrayList<Listing> myListings) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -192,9 +194,9 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void getAllUsers(ArrayList<User> myUsers) {
+	public static void getAllUsers(ArrayList<User> myUsers) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -216,9 +218,9 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void getAllListings(ArrayList<Listing> myListings) {
+	public static void getAllListings(ArrayList<Listing> myListings) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -240,10 +242,10 @@ public class eProduceDatabase {
 		
 		
 	}
-	public boolean updateListing(String title, String des, int listingNum, String tags) {
+	public static boolean updateListing(String title, String des, int listingNum, String tags) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -267,11 +269,11 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
-	public boolean createMeetup(String owner, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
+	public static boolean createMeetup(String owner, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
 		//model = correct year, model2 = correct time
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String insertString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -301,9 +303,9 @@ public class eProduceDatabase {
 		}	
 		
 	}
-	public void getMyMeetups(String email, ArrayList<Meetup> myMeetups) {
+	public static void getMyMeetups(String email, ArrayList<Meetup> myMeetups) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -325,10 +327,10 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void deleteListing(int listingNum) {
+	public static void deleteListing(int listingNum) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -344,9 +346,9 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public User getOwnerDetails(String username) {
+	public static User getOwnerDetails(String username) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -375,10 +377,10 @@ public class eProduceDatabase {
 			return null;
 		}
 	}
-	public void increaseUserRating(String username) {
+	public static void increaseUserRating(String username) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -392,10 +394,10 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 		}
 	}
-	public void decreaseUserRating(String username) {
+	public static void decreaseUserRating(String username) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -410,10 +412,10 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void setUserBanStatus(String username, int isBanned) {
+	public static void setUserBanStatus(String username, int isBanned) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -428,10 +430,10 @@ public class eProduceDatabase {
 		}
 				
 	}
-	public void setUserAdminStatus(String username, int isAdmin) {
+	public static void setUserAdminStatus(String username, int isAdmin) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -446,10 +448,10 @@ public class eProduceDatabase {
 		}
 				
 	}
-	public boolean createTicket(String email, String description) {
+	public static boolean createTicket(String email, String description) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String insertString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -472,9 +474,9 @@ public class eProduceDatabase {
 			return false;
 		}	
 	}
-	public void getMyTickets(String email, ArrayList<Ticket> myTickets) {
+	public static void getMyTickets(String email, ArrayList<Ticket> myTickets) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -495,10 +497,10 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void deleteTicket(String ticketNum) {
+	public static void deleteTicket(String ticketNum) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -513,10 +515,10 @@ public class eProduceDatabase {
 			//System.exit(-1);
 		}		
 	}
-	public boolean updateTicket(String description, String response, String ticketNum) {
+	public static boolean updateTicket(String description, String response, String ticketNum) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -540,10 +542,10 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
-	public void reportUser(String username) {
+	public static void reportUser(String username) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
@@ -558,9 +560,9 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public void getAllTickets(ArrayList<Ticket> myTickets) {
+	public static void getAllTickets(ArrayList<Ticket> myTickets) {
 		try {
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
 			ResultSet returnValues;
 			Statement stmt = DBConn.createStatement();
@@ -580,11 +582,11 @@ public class eProduceDatabase {
 			System.exit(-1);
 		}
 	}
-	public boolean editMeetup(String meetupNum, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
+	public static boolean editMeetup(String meetupNum, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
 		//model = correct year, model2 = correct time
 				try 
 				{
-					DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+					DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 					String insertString;
 					int returnVal;
 					Statement stmt = DBConn.createStatement();
@@ -614,10 +616,10 @@ public class eProduceDatabase {
 					return false;
 				}	
 	}
-	public void deleteMeetup(String meetupNum) {
+	public static void deleteMeetup(String meetupNum) {
 		try 
 		{
-			DBConn = DriverManager.getConnection(myDB, "itkstu", "student");
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();

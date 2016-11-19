@@ -10,6 +10,7 @@ public class eProduceApp {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run(){
+				eProduceDatabase db = new eProduceDatabase(); //instantiate the db once. Statically call it the rest of the time.
 				StartView start = new StartView(null);
 				start.frame.setVisible(true);
 			}

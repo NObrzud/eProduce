@@ -47,8 +47,6 @@ public class MyListingsView {
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
-	private eProduceController controller = new eProduceController();
-	private eProduceDatabase db = new eProduceDatabase();
 	private int i = 0;
 	/**
 	 * Set the Listings up in this method each method called is a panel.
@@ -152,7 +150,7 @@ public class MyListingsView {
 								JOptionPane.showMessageDialog(frame, "No changes were made.");
 								
 							}
-							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							else if(eProduceController.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
@@ -285,7 +283,7 @@ public class MyListingsView {
 				{
 					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
 					{
-						if(db.createListing(currentUser.getEmail(), titletxt.getText(), destxt.getText(), tagstxt.getText()))
+						if(eProduceDatabase.createListing(currentUser.getEmail(), titletxt.getText(), destxt.getText(), tagstxt.getText()))
 						{
 							String msg = "Listing created!";
 							JOptionPane.showMessageDialog(frame, msg);
@@ -320,7 +318,7 @@ public class MyListingsView {
 	 */
 	public void middlePanel(){
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
-		db.getMyListings(currentUser.getEmail(),myListings);
+		eProduceDatabase.getMyListings(currentUser.getEmail(),myListings);
 		
 		JTextField search = new JTextField();
 		JComboBox sort;
@@ -423,7 +421,7 @@ public class MyListingsView {
 
 				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
 					String message = "Saved";
-					boolean created = db.updateListing(titletxt.getText(), destxt.getText(),myListings.get(table.getSelectedRow()).getListingNum(), tagstxt.getText());
+					boolean created = eProduceDatabase.updateListing(titletxt.getText(), destxt.getText(),myListings.get(table.getSelectedRow()).getListingNum(), tagstxt.getText());
 					
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
@@ -432,7 +430,7 @@ public class MyListingsView {
 					frame.setVisible(true);
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
 					String message = "Deleted";
-					db.deleteListing(myListings.get(table.getSelectedRow()).getListingNum());
+					eProduceDatabase.deleteListing(myListings.get(table.getSelectedRow()).getListingNum());
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
 					MyListingsView mlv = new MyListingsView(currentUser);

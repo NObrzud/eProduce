@@ -16,11 +16,9 @@ import model.User;
 
 public class eProduceController {
 	private User userModel;
-	private eProduceDatabase db;
 	
 	public eProduceController()
 	{
-		db = new eProduceDatabase();
 	}
 	public eProduceController(User model)
 	{
@@ -31,19 +29,19 @@ public class eProduceController {
 	 * NOTE: username and password are both case-sensitive, e.g. "Test" != "test"
 	 */
 	@SuppressWarnings("deprecation")
-	public boolean validateLogin(User model, JTextField user, JPasswordField pass)
+	public static boolean validateLogin(User model, JTextField user, JPasswordField pass)
 	{
-		return (db.validateLogin(model, user.getText(), pass.getText()));
+		return (eProduceDatabase.validateLogin(model, user.getText(), pass.getText()));
 	}
 	@SuppressWarnings("deprecation")
-	public  boolean createNewAccount(JTextField firstNameTF, JTextField lastNameTF, JTextField emailTF,
+	public static  boolean createNewAccount(JTextField firstNameTF, JTextField lastNameTF, JTextField emailTF,
 									   JPasswordField passwordPF, JPasswordField rePasswordPF) 
 	{
-		return db.createAccount(firstNameTF.getText(), lastNameTF.getText(), emailTF.getText(), passwordPF.getText());
+		return eProduceDatabase.createAccount(firstNameTF.getText(), lastNameTF.getText(), emailTF.getText(), passwordPF.getText());
 	}
-	public boolean updateAccount(String first, String last, String email, String pass, String rePass) {
+	public static boolean updateAccount(String first, String last, String email, String pass, String rePass) {
 		
-		return db.updateAccount(first, last, email, pass, rePass);
+		return eProduceDatabase.updateAccount(first, last, email, pass, rePass);
 	}
 	public static boolean validateEmail(String emailAddress)
 	{
@@ -89,7 +87,7 @@ public class eProduceController {
 		
 	}
 	
-	public void sendEmail(String recipient, String sender, String subject, String content){
+	public static void sendEmail(String recipient, String sender, String subject, String content){
 		String to = recipient;
 		String from = sender;
 		String host = "smtp.gmail.com";
@@ -134,7 +132,7 @@ public class eProduceController {
 		}
 	}
 	
-	public void searchListings(ArrayList<Listing> listings, String search){
+	public static void searchListings(ArrayList<Listing> listings, String search){
 		ArrayList<Listing> temp = new ArrayList<Listing>();
 		for(int i=0; i<listings.size(); i++){
 			String tags = listings.get(i).getTags();

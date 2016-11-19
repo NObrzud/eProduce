@@ -40,8 +40,6 @@ public class AdminMainPageView{
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
-	private eProduceController controller = new eProduceController();
-	private eProduceDatabase db = new eProduceDatabase();
 	private int i = 0;
 	/**
 	 * Set the Listings up in this method each method called is a panel.
@@ -154,7 +152,7 @@ public class AdminMainPageView{
 	 */
 	public void middlePanel(){
 		ArrayList<User> allUsers = new ArrayList<User>();
-		db.getAllUsers(allUsers);
+		eProduceDatabase.getAllUsers(allUsers);
 		
 		JTextField[][] usersTF = new JTextField[allUsers.size()][7];
 		String[][] userData = new String[allUsers.size()][7];
@@ -256,7 +254,7 @@ public class AdminMainPageView{
 
 				if(result == JOptionPane.YES_OPTION){ //ban user button is clicked
 					String message = "Change user's block status!";
-					db.setUserBanStatus(emailtxt.getText(), Integer.parseInt(bannedtxt.getText()) == 1 ? 0 : 1);
+					eProduceDatabase.setUserBanStatus(emailtxt.getText(), Integer.parseInt(bannedtxt.getText()) == 1 ? 0 : 1);
 					
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
@@ -265,7 +263,7 @@ public class AdminMainPageView{
 					frame.setVisible(true);
 				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
 					String message = "Changed user's admin status!";
-					db.setUserAdminStatus(emailtxt.getText(), Integer.parseInt(admintxt.getText()) == 1 ? 0 : 1);
+					eProduceDatabase.setUserAdminStatus(emailtxt.getText(), Integer.parseInt(admintxt.getText()) == 1 ? 0 : 1);
 					JOptionPane.showMessageDialog(frame,message );
 					frame.dispose();
 					AdminMainPageView ampv = new AdminMainPageView(currentUser);

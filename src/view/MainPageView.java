@@ -61,8 +61,6 @@ public class MainPageView {
 	public JPanel middlePanel = new JPanel();
 	private JPanel topPanel = new JPanel();
 	private User currentUser;
-	private eProduceController controller = new eProduceController();
-	private eProduceDatabase db = new eProduceDatabase();
 
 	/**
 	 * Set the main page up in this method each method called is a panel.
@@ -168,7 +166,7 @@ public class MainPageView {
 								JOptionPane.showMessageDialog(frame, "No changes were made.");
 								
 							}
-							else if(controller.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
+							else if(eProduceController.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
 							{
 								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
 								frame.dispose();
@@ -259,7 +257,7 @@ public class MainPageView {
 	 */
 	public void middlePanel(){
 		ArrayList<Listing> list = new ArrayList<Listing>();
-		db.getAllListings(list);
+		eProduceDatabase.getAllListings(list);
 		JTextField search = new JTextField();
 		JComboBox sort;
 		JTextField[][] listings = new JTextField[list.size()][3];
@@ -385,7 +383,7 @@ public class MainPageView {
 									int newRating = Integer.parseInt(rating.getText())-1;
 									rating.setText(Integer.toString(newRating));
 									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									db.decreaseUserRating(ownertxt.getText());									
+									eProduceDatabase.decreaseUserRating(ownertxt.getText());									
 									plus.setIcon(plusImgGrey);
 								}
 								else // pressing plus
@@ -398,7 +396,7 @@ public class MainPageView {
 									}
 									rating.setText(Integer.toString(newRating));
 									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									db.increaseUserRating(ownertxt.getText());
+									eProduceDatabase.increaseUserRating(ownertxt.getText());
 									plus.setIcon(plusImg);
 								}
 							}
@@ -413,7 +411,7 @@ public class MainPageView {
 									int newRating = Integer.parseInt(rating.getText())+1;
 									rating.setText(Integer.toString(newRating));
 									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									db.increaseUserRating(ownertxt.getText());
+									eProduceDatabase.increaseUserRating(ownertxt.getText());
 									minus.setIcon(minusImgGrey);
 								}
 								else //pressing minus
@@ -426,7 +424,7 @@ public class MainPageView {
 									}
 									rating.setText(Integer.toString(newRating));
 									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									db.decreaseUserRating(ownertxt.getText());									
+									eProduceDatabase.decreaseUserRating(ownertxt.getText());									
 									minus.setIcon(minusImg);
 								}
 							}
@@ -436,7 +434,7 @@ public class MainPageView {
 							public void actionPerformed(ActionEvent e) {
 								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
 									; //don't do anything if you're viewing your own listing, that's cheating.
-								db.reportUser(list.get(table.getSelectedRow()).getOwner().getEmail());
+								eProduceDatabase.reportUser(list.get(table.getSelectedRow()).getOwner().getEmail());
 								JOptionPane.showMessageDialog(frame, "User has been reported. Thanks!");
 							}
 						});
@@ -527,7 +525,7 @@ public class MainPageView {
 							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							String foo = sdf.format(new Date(model.getYear()-1900, model.getMonth(), model.getDay(), model2.getDate().getHours(), model2.getDate().getMinutes()));
 							System.out.println(foo);
-							boolean ret = db.createMeetup(currentUser.getEmail(),participantstxt.getText(),loctxt.getText(),  model, model2);
+							boolean ret = eProduceDatabase.createMeetup(currentUser.getEmail(),participantstxt.getText(),loctxt.getText(),  model, model2);
 							if(ret)
 							{
 								JOptionPane.showMessageDialog(frame, "Meetup has been successfully created!");
@@ -603,7 +601,7 @@ public class MainPageView {
 									+ "The following is a message from " + fromTF.getText() +":\n"
 											+ "\n" + contentArea.getText() +"\n"
 											+ "\n If you would like to contact this user, you may contact him using the following email address: " + fromTF.getText();
-							controller.sendEmail(toTF.getText(), fromTF.getText(), subjectTF.getText(), emailMsg);
+							eProduceController.sendEmail(toTF.getText(), fromTF.getText(), subjectTF.getText(), emailMsg);
 						}
 						else{
 							JOptionPane.showMessageDialog(null, "Email failed to send. Cannot have an empty body.");

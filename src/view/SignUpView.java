@@ -20,7 +20,6 @@ public class SignUpView {
 	public JFrame frame= new JFrame("eProduce - Signup");
 	private JPanel panel = new JPanel();
 	
-	public eProduceController controller = new eProduceController();
 	private User currentUser = new User();
 	
 	private JTextField firstNameTF = new JTextField();
@@ -108,7 +107,7 @@ public class SignUpView {
 						{
 							if(eProduceController.validateEmail(emailTF.getText()))
 							{
-								if(controller.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
+								if(eProduceController.createNewAccount(firstNameTF, lastNameTF, emailTF, passwordPF, rePasswordPF))
 								{
 									JOptionPane.showMessageDialog(frame, "Account has been successfully created!");
 									frame.dispose();
