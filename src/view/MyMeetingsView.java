@@ -41,6 +41,7 @@ import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
 import controller.eProduceDatabase;
+import controller.eProducePanels;
 import model.Meetup;
 import model.User;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
@@ -81,166 +82,14 @@ public class MyMeetingsView {
 	 */
 	
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce - MyMeetings");
-		JButton myAccount = new JButton();
-		JButton logout = new JButton();
-		JPanel rightSide = new JPanel();
-		JPanel leftSide = new JPanel();
-		
-		topPanel.setLayout(new BorderLayout());
-		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
-		myAccount.setText("MyAccount");
-		logout.setText("Log Out");
-		titleLabel.setBounds(150, 10, 150, 150);
-		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
-		
-		leftSide.add(titleLabel);
-		rightSide.add(myAccount);
-		rightSide.add(logout);
-		
-		/*
-		 * Log outs action button listener logs the user out
-		 */
-		logout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				currentUser = null;
-				frame.dispose();
-				StartView start = new StartView(currentUser);
-				start.frame.setVisible(true);
-				
-			}
-		});
-		
-		/*
-		 * My Account action button listener
-		 */
-		
-		myAccount.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				/*frame.dispose();
-				MyAccountView start = new MyAccountView();
-				start.frame.setVisible(true);*/
-				JPanel accPanel = new JPanel();
-				accPanel.setLayout(new GridLayout(0,1));
-				JTextField fname = new JTextField(currentUser.getFirstName(),20);
-				JTextField lname = new JTextField(currentUser.getLastName(),20);
-				JTextField email = new JTextField(currentUser.getEmail(),20);
-				JPasswordField password = new JPasswordField(currentUser.getPassword(),20);
-				password.setEchoChar('*');
-				JPasswordField passConfirm = new JPasswordField(currentUser.getPassword(),20);
-				passConfirm.setEchoChar('*');
-				accPanel.add(new JLabel("First Name:"));
-				accPanel.add(fname);
-				accPanel.add(new JLabel("Last Name:"));
-				accPanel.add(lname);
-				accPanel.add(new JLabel("Email:"));
-				accPanel.add(email);
-				accPanel.add(new JLabel("Password:"));
-				accPanel.add(password);
-				accPanel.add(new JLabel("Confirm Password:"));
-				accPanel.add(passConfirm);
-				
-				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
-				if(result == JOptionPane.OK_OPTION)
-				{
-
-					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
-							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
-						{
-							// if no changes are made by user to account info, nothing happens
-							if(currentUser.getFirstName().equals(fname.getText()) &&
-									currentUser.getLastName().equals(lname.getText()) &&
-									currentUser.getEmail().equals(email.getText()) &&
-									currentUser.getPassword().equals(password.getText())){
-								JOptionPane.showMessageDialog(frame, "No changes were made.");
-								
-							}
-							else if(eProduceController.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
-							{
-								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
-								frame.dispose();
-								StartView sv = new StartView(currentUser);
-								frame = sv.frame;
-								frame.setVisible(true);
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
-							}
-						}
-					else
-					{
-						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
-						if(fname.getText().equals("")) emptyFieldMsg += "      First Name\n";
-						if(lname.getText().equals("")) emptyFieldMsg += "      Last Name\n";
-						if(email.getText().equals("")) emptyFieldMsg += "      Email\n";
-						if(password.getText().equals("")) emptyFieldMsg += "      Password\n";
-						if(passConfirm.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
-						if(!password.getText().equals(passConfirm.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
-						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-					}
-				}
-				
-			}
-		}); 
-		topPanel.add(leftSide,BorderLayout.WEST);
-		topPanel.add(rightSide,BorderLayout.EAST);
-		
-	
+		String titleLabel = "eProduce - MyMeetings";
+		topPanel = eProducePanels.topPanel(frame, titleLabel, true, true, topPanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		JButton home = new JButton();
-		JButton myListings = new JButton();
-		JButton myTickets = new JButton();
-		home.setMinimumSize(new Dimension(110, 26));
-		home.setMaximumSize(new Dimension(110,26));
-		myListings.setMinimumSize(new Dimension(110, 26));
-		myListings.setMaximumSize(new Dimension(110,26));
-		myTickets.setMinimumSize(new Dimension(110, 26));
-		myTickets.setMaximumSize(new Dimension(110,26));
-	
-		myTickets.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				TicketView tix = new TicketView(currentUser);
-				tix.frame.setVisible(true);
-				
-			}
-		});
-
-		myListings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyListingsView mlv = new MyListingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
-			}
-		});
-		home.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MainPageView mpv = new MainPageView(currentUser);
-				mpv.frame.setVisible(true);
-				
-			}
-		});
-		
-		home.setText("Home");
-		myListings.setText("MyListings");
-		myTickets.setText("MyTickets");
-		
-		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-	
-		sidePanel.add(home);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myListings);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myTickets);
+		sidePanel = eProducePanels.sidePanel(frame, false, false, false, true, true, true, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information

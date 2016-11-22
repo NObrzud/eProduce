@@ -31,6 +31,7 @@ import javax.swing.table.TableColumn;
 
 import controller.eProduceController;
 import controller.eProduceDatabase;
+import controller.eProducePanels;
 import model.User;
 
 public class AdminMainPageView{
@@ -68,84 +69,14 @@ public class AdminMainPageView{
 	 * This a method to hold all of the top panel information
 	 */
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce - Admin Home");
-		JButton logout = new JButton();
-		JPanel rightSide = new JPanel();
-		JPanel leftSide = new JPanel();
-		
-		topPanel.setLayout(new BorderLayout());
-		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
-		logout.setText("Log Out");
-		titleLabel.setBounds(150, 10, 150, 150);
-		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
-		
-		leftSide.add(titleLabel);
-		rightSide.add(logout);
-		
-		/*
-		 * Log outs action button listener logs the user out
-		 */
-		logout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				currentUser = null;
-				frame.dispose();
-				StartView start = new StartView(currentUser);
-				start.frame.setVisible(true);
-				
-			}
-		});
-		
-		topPanel.add(leftSide,BorderLayout.WEST);
-		topPanel.add(rightSide,BorderLayout.EAST);
-		
-	
+		String titleLabel = "eProduce - Admin Home";
+		topPanel = eProducePanels.topPanel(frame, titleLabel, false, true, topPanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		JButton allUsers = new JButton();
-		JButton allTickets = new JButton();
-		allUsers.setText("Manage Users");
-		allTickets.setText("System Tickets");
-		
-		allUsers.setMinimumSize(new Dimension(130, 26));
-		allUsers.setMaximumSize(new Dimension(130,26));
-		allTickets.setMinimumSize(new Dimension(130, 26));
-		allTickets.setMaximumSize(new Dimension(130,26));
-		
-		allUsers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				AdminMainPageView ampv = new AdminMainPageView(currentUser);
-				ampv.frame.setVisible(true);
-				
-			}
-		});
-		allTickets.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				TicketView atv = new TicketView(currentUser);
-				atv.frame.setVisible(true);
-				
-			}
-		});
-		
-	
-		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-	
-		sidePanel.add(allUsers);
-		
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(allTickets);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		
-		/*
-		 * create ticket action button listener
-		 */
-		
+		sidePanel = eProducePanels.adminSidePanel(frame, false, true, sidePanel, currentUser);				
 	}
 	/*
 	 * This a method to hold all of the middle panel information

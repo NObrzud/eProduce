@@ -37,8 +37,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import controller.eProduceActionListeners;
 import controller.eProduceController;
 import controller.eProduceDatabase;
+import controller.eProducePanels;
 import model.Ticket;
 import model.User;
 
@@ -77,230 +79,17 @@ public class TicketView {
 	 * This a method to hold all of the top panel information
 	 */
 	public void topPanel(){
-		JLabel titleLabel = new JLabel("eProduce - MyTickets");
-		JButton myAccount = new JButton();
-		JButton logout = new JButton();
-		JPanel rightSide = new JPanel();
-		JPanel leftSide = new JPanel();
-		
-		topPanel.setLayout(new BorderLayout());
-		rightSide.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
-		myAccount.setText("MyAccount");
-		logout.setText("Log Out");
-		titleLabel.setBounds(150, 10, 150, 150);
-		titleLabel.setFont(titleLabel.getFont().deriveFont(30f));
-		
-		leftSide.add(titleLabel);
-		rightSide.add(myAccount);
-		rightSide.add(logout);
-		
-		/*
-		 * Log outs action button listener logs the user out
-		 */
-		logout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				currentUser = null;
-				frame.dispose();
-				StartView start = new StartView(currentUser);
-				start.frame.setVisible(true);
-				
-			}
-		});
-		
-		/*
-		 * My Account action button listener
-		 */
-		myAccount.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				/*frame.dispose();
-				MyAccountView start = new MyAccountView();
-				start.frame.setVisible(true);*/
-				JPanel accPanel = new JPanel();
-				accPanel.setLayout(new GridLayout(0,1));
-				JTextField fname = new JTextField(currentUser.getFirstName(),20);
-				JTextField lname = new JTextField(currentUser.getLastName(),20);
-				JTextField email = new JTextField(currentUser.getEmail(),20);
-				JPasswordField password = new JPasswordField(currentUser.getPassword(),20);
-				password.setEchoChar('*');
-				JPasswordField passConfirm = new JPasswordField(currentUser.getPassword(),20);
-				passConfirm.setEchoChar('*');
-				accPanel.add(new JLabel("First Name:"));
-				accPanel.add(fname);
-				accPanel.add(new JLabel("Last Name:"));
-				accPanel.add(lname);
-				accPanel.add(new JLabel("Email:"));
-				accPanel.add(email);
-				accPanel.add(new JLabel("Password:"));
-				accPanel.add(password);
-				accPanel.add(new JLabel("Confirm Password:"));
-				accPanel.add(passConfirm);
-				
-				int result = JOptionPane.showConfirmDialog(null, accPanel, "Edit Account Info", JOptionPane.OK_CANCEL_OPTION);
-				if(result == JOptionPane.OK_OPTION)
-				{
-
-					if(!(fname.getText().equals("")) && !(lname.getText().equals("")) && !email.getText().equals("")  //if firstname, lastname, email, password, confirm pass 
-							   && !(password.getText().equals("")) && password.getText().equals(passConfirm.getText()))			   //are not null, and password and confirm pass are equal...
-						{
-							// if no changes are made by user to account info, nothing happens
-							if(currentUser.getFirstName().equals(fname.getText()) &&
-									currentUser.getLastName().equals(lname.getText()) &&
-									currentUser.getEmail().equals(email.getText()) &&
-									currentUser.getPassword().equals(password.getText())){
-								JOptionPane.showMessageDialog(frame, "No changes were made.");
-								
-							}
-							else if(eProduceController.updateAccount(fname.getText(), lname.getText(), email.getText(), password.getText(), passConfirm.getText()))
-							{
-								JOptionPane.showMessageDialog(frame, "Account has been successfully updated! Please login again.");
-								frame.dispose();
-								StartView sv = new StartView(currentUser);
-								frame = sv.frame;
-								frame.setVisible(true);
-							}
-							else
-							{
-								JOptionPane.showMessageDialog(frame, "Could not connect to database. Please check internet access"); //temporary way to handle db-side account failing
-							}
-						}
-					else
-					{
-						String emptyFieldMsg = "Unable to create account. The following fields are empty: \n";
-						if(fname.getText().equals("")) emptyFieldMsg += "      First Name\n";
-						if(lname.getText().equals("")) emptyFieldMsg += "      Last Name\n";
-						if(email.getText().equals("")) emptyFieldMsg += "      Email\n";
-						if(password.getText().equals("")) emptyFieldMsg += "      Password\n";
-						if(passConfirm.getText().equals("")) emptyFieldMsg += "      Confirm Password\n";
-						if(!password.getText().equals(passConfirm.getText())) emptyFieldMsg = "Unable to create account. Passwords do not match.";
-						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-					}
-				}
-				
-			}
-		});
-		topPanel.add(leftSide,BorderLayout.WEST);
-		topPanel.add(rightSide,BorderLayout.EAST);
-		
-	
+		String titleLabel = "eProduce - MyTickets";
+		topPanel = eProducePanels.topPanel(frame, titleLabel, true, true, topPanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		JButton home = new JButton();
-		JButton myMeetings = new JButton();
-		JButton myListings = new JButton();
-		JButton createTicket = new JButton();
-		
-		home.setMinimumSize(new Dimension(110, 26));
-		home.setMaximumSize(new Dimension(110,26));
-		myMeetings.setMinimumSize(new Dimension(110, 26));
-		myMeetings.setMaximumSize(new Dimension(110,26));
-		myListings.setMinimumSize(new Dimension(110, 26));
-		myListings.setMaximumSize(new Dimension(110,26));
-		createTicket.setMinimumSize(new Dimension(110, 26));
-		createTicket.setMaximumSize(new Dimension(110,26));
-		
-		myListings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyListingsView mlv = new MyListingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
-			}
-		});
-		home.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MainPageView mpv = new MainPageView(currentUser);
-				mpv.frame.setVisible(true);
-				
-			}
-		});
-		myMeetings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyMeetingsView mlv = new MyMeetingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
-			}
-		});
-		
-		home.setText("Home");
-		myMeetings.setText("MyMeetings");
-		myListings.setText("MyListings");
-		createTicket.setText("New Ticket");
-		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-	
-		sidePanel.add(home);
-		
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(createTicket);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myListings);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myMeetings);
-		
-		/*
-		 * create ticket action button listener
-		 */
-		
-		createTicket.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				JPanel lstPanel = new JPanel();
-				JPanel top = new JPanel();
-				JPanel bottom = new JPanel();
-				JLabel des = new JLabel();
-				JTextArea destxt = new JTextArea(5,10);
-				Border border = BorderFactory.createLineBorder(Color.BLACK);
-				lstPanel.setLayout(new BorderLayout());
-				top.setLayout(new GridLayout(0,1));
-				bottom.setLayout(new BorderLayout());
-				
-				des.setText("Description of Issue:");
-				destxt.setLineWrap(true);
-				destxt.setBorder(border);
-				JScrollPane sp = new JScrollPane(destxt);
-				bottom.add(des,BorderLayout.NORTH);
-				bottom.add(sp,BorderLayout.SOUTH);
-				lstPanel.add(top,BorderLayout.NORTH);
-				lstPanel.add(bottom,BorderLayout.SOUTH);
-			
-				
-				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Ticket Info", JOptionPane.OK_CANCEL_OPTION);
-				if(result == JOptionPane.OK_OPTION)
-				{
-					if(!destxt.getText().equals(""))	
-					{
-						if(eProduceDatabase.createTicket(currentUser.getEmail(), destxt.getText()))
-						{
-							String msg = "Ticket created!";
-							JOptionPane.showMessageDialog(frame, msg);
-							frame.dispose();
-							TicketView tv = new TicketView(currentUser);
-							frame = tv.frame;
-							frame.setVisible(true);
-						}
-						else
-						{
-							String msg = "Unable to create ticket. Database error.";
-							JOptionPane.showMessageDialog(frame, msg);
-						}
-					}
-					else
-					{
-						String emptyFieldMsg = "Unable to create ticket. The following fields are empty: \n";
-						if(destxt.getText().equals("")) emptyFieldMsg += "      Description\n";
-						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-						
-					}
-					
-				}
-				
-			}
-		});
+		if(currentUser.getAdmin() == 1)
+			sidePanel = eProducePanels.adminSidePanel(frame, true, false, sidePanel, currentUser);
+		else
+			sidePanel = eProducePanels.sidePanel(frame, true, true, false, false, true, true, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -348,6 +137,7 @@ public class TicketView {
 		}
 		search.setText("Search.....");
 		search.setColumns(50);
+		//Clears text when the search bar is clicked.
 		search.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e){
@@ -367,11 +157,12 @@ public class TicketView {
 		ticketPanel.setLayout(new BoxLayout(ticketPanel,BoxLayout.Y_AXIS));
 		String[] columnNames = new String[] {"Ticket #", "Ticket Description", "Ticket Response", "Ticket Owner"};
 		DefaultTableModel model = new DefaultTableModel(ticketData, columnNames);
+		JTable table = new JTable(model);
+		ListSelectionListener ticketTableListener = eProduceActionListeners.createTicketTableListener(frame, table, myTickets, currentUser);
 		if(currentUser.getAdmin() == 1)
 			model.setColumnCount(4);
 		else
 			model.setColumnCount(2);
-		JTable table = new JTable(model);
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
 		table.setGridColor(Color.black); //changes the gridline's colors to black
@@ -380,70 +171,8 @@ public class TicketView {
 		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black)); //Gives a black border around the table
 		table.setRowHeight(30); //number of rows to have in the table.
 		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent event) {
-				JPanel main = new JPanel();
-				JPanel top = new JPanel();
-				JPanel bottom = new JPanel();
-				JLabel des = new JLabel();
-				JTextArea destxt = new JTextArea(5,30);
-				JLabel res = new JLabel();
-				JTextArea restxt = new JTextArea(5,30);
-				Object[] options1 = { "Save Changes","Delete Ticket", "Cancel" };
-				if(currentUser.getAdmin() == 1)
-					options1[1] = "Close ticket";
-				destxt.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
-				
-				restxt.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
-				main.setLayout(new GridLayout(2,1));
-				//Add SQL statement after text below
-				des.setText("Description:");
-				res.setText("   Response:");
-				res.setSize(des.getSize());
-				destxt.setLineWrap(true);
-				restxt.setLineWrap(true);
-				if(currentUser.getAdmin() == 1)
-					destxt.setEditable(false);
-				else
-					restxt.setEditable(false);
-					
-				destxt.setText(myTickets.get(table.getSelectedRow()).getDescription());
-				restxt.setText(myTickets.get(table.getSelectedRow()).getResponse());
-				top.add(des);
-				top.add(destxt);
-				bottom.add(res);
-				bottom.add(restxt);
-				
-				main.add(top);
-				main.add(bottom);
-
-				int result = JOptionPane.showOptionDialog(null, main, "Edit Ticket",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-						null, options1, null);
-
-				if(result == JOptionPane.YES_OPTION){ //saved button is clicked
-					String message = "Saved";
-					
-					boolean created = eProduceDatabase.updateTicket(destxt.getText(), restxt.getText(), myTickets.get(table.getSelectedRow()).getTicketNum());
-					
-					JOptionPane.showMessageDialog(frame,message );
-					frame.dispose();
-					TicketView tv = new TicketView(currentUser);
-					frame = tv.frame;
-					frame.setVisible(true);
-				}else if(result == JOptionPane.NO_OPTION){ //deleted button is clicked
-					String message = "Deleted";
-					if(currentUser.getAdmin() == 1)
-						message = "Closed";
-					eProduceDatabase.deleteTicket(myTickets.get(table.getSelectedRow()).getTicketNum());
-					JOptionPane.showMessageDialog(frame,message);
-					frame.dispose();
-					TicketView tv = new TicketView(currentUser);
-					frame = tv.frame;
-					frame.setVisible(true);
-				}
-			}
-		});
+		
+		table.getSelectionModel().addListSelectionListener(ticketTableListener);
 
 		for(i = 0; i < table.getColumnCount(); i++)
 		{

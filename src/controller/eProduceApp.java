@@ -2,6 +2,7 @@ package controller;
 
 import javax.swing.SwingUtilities;
 
+import model.User;
 import view.MainPageView;
 import view.StartView;
 
@@ -11,7 +12,7 @@ public class eProduceApp {
 			@Override
 			public void run(){
 				eProduceDatabase db = new eProduceDatabase(); //instantiate the db once. Statically call it the rest of the time.
-				StartView start = new StartView(null);
+				StartView start = new StartView(new User());
 				start.frame.setVisible(true);
 			}
 		});
