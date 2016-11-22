@@ -3,6 +3,7 @@ package controller;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
@@ -13,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.User;
+import view.AdminMainPageView;
+import view.TicketView;
 
 /*
  * This class handles all panel creation to be passed back to the respective views. 
@@ -87,9 +90,13 @@ public class eProducePanels {
 		}
 		if(showTickets)
 		{
-			sidePanel.add(Box.createRigidArea(new Dimension(5,5);
+			sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 			JButton myTickets = new JButton("MyTickets");
 			ActionListener myTicketsActionListener = eProduceActionListeners.createMyTicketsActionListener(frame, currentUser);
+			myTickets.setMinimumSize(new Dimension(110, 26));
+			myTickets.setMaximumSize(new Dimension(110, 26));
+			myTickets.addActionListener(myTicketsActionListener);
+			sidePanel.add(myTickets);
 		}
 		if(showMeetings)
 		{
@@ -110,6 +117,33 @@ public class eProducePanels {
 			myListings.setMaximumSize(new Dimension(110, 26));
 			myListings.addActionListener(myListingsActionListener);
 			sidePanel.add(myListings);
+		}
+		return sidePanel;
+	}
+	public static JPanel adminSidePanel(JFrame frame, boolean showHome, boolean showTickets, JPanel sidePanel, User currentUser)
+	{
+		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
+		
+		if(showHome)
+		{
+			JButton allUsers = new JButton();
+			ActionListener allUsersActionListener = eProduceActionListeners.createAllUsersActionListener(frame, currentUser);
+			allUsers.setText("Manage Users");
+			allUsers.setMinimumSize(new Dimension(130, 26));
+			allUsers.setMaximumSize(new Dimension(130,26));
+			allUsers.addActionListener(allUsersActionListener);
+			sidePanel.add(allUsers);
+			sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
+		}
+		if(showTickets)
+		{
+			JButton sysTickets = new JButton();
+			ActionListener sysTicketsActionListener = eProduceActionListeners.createSysTicketsActionListener(frame, currentUser);
+			sysTickets.setText("System Tickets");
+			sysTickets.setMinimumSize(new Dimension(130, 26));
+			sysTickets.setMaximumSize(new Dimension(130,26));
+			sysTickets.addActionListener(sysTicketsActionListener);
+			sidePanel.add(sysTickets);
 		}
 		return sidePanel;
 	}

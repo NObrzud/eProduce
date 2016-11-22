@@ -86,7 +86,10 @@ public class TicketView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		sidePanel = eProducePanels.sidePanel(frame, true, true, false, false, true, true, sidePanel, currentUser);
+		if(currentUser.getAdmin() == 1)
+			sidePanel = eProducePanels.adminSidePanel(frame, true, false, sidePanel, currentUser);
+		else
+			sidePanel = eProducePanels.sidePanel(frame, true, true, false, false, true, true, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information

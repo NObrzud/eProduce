@@ -89,53 +89,7 @@ public class MyMeetingsView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		JButton home = new JButton();
-		JButton myListings = new JButton();
-		JButton myTickets = new JButton();
-		home.setMinimumSize(new Dimension(110, 26));
-		home.setMaximumSize(new Dimension(110,26));
-		myListings.setMinimumSize(new Dimension(110, 26));
-		myListings.setMaximumSize(new Dimension(110,26));
-		myTickets.setMinimumSize(new Dimension(110, 26));
-		myTickets.setMaximumSize(new Dimension(110,26));
-	
-		myTickets.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				TicketView tix = new TicketView(currentUser);
-				tix.frame.setVisible(true);
-				
-			}
-		});
-
-		myListings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyListingsView mlv = new MyListingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
-			}
-		});
-		home.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MainPageView mpv = new MainPageView(currentUser);
-				mpv.frame.setVisible(true);
-				
-			}
-		});
-		
-		home.setText("Home");
-		myListings.setText("MyListings");
-		myTickets.setText("MyTickets");
-		
-		sidePanel.setLayout(new BoxLayout(sidePanel,BoxLayout.Y_AXIS));
-	
-		sidePanel.add(home);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myListings);
-		sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
-		sidePanel.add(myTickets);
+		sidePanel = eProducePanels.sidePanel(frame, false, false, false, true, true, true, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information

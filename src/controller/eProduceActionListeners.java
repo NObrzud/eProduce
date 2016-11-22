@@ -133,6 +133,19 @@ public class eProduceActionListeners {
 		return homeActionListener;
 	}
 	
+	public static ActionListener createMyListingsActionListener(JFrame frame, User currentUser)
+	{
+		ActionListener myListingsActionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				MyListingsView mlv = new MyListingsView(currentUser);
+				mlv.frame.setVisible(true);
+				
+			}
+		};
+		return myListingsActionListener;
+	}
+	
 	public static ActionListener createMyMeetingsActionListener(JFrame frame, User currentUser)
 	{
 		ActionListener myMeetingsActionListener = new ActionListener() {
@@ -146,17 +159,15 @@ public class eProduceActionListeners {
 		return myMeetingsActionListener;
 	}
 	
-	public static ActionListener createMyListingsActionListener(JFrame frame, User currentUser)
-	{
-		ActionListener myListingsActionListener = new ActionListener() {
+	public static ActionListener createMyTicketsActionListener(JFrame frame, User currentUser) {
+		ActionListener myTicketsActionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				MyListingsView mlv = new MyListingsView(currentUser);
-				mlv.frame.setVisible(true);
-				
+			frame.dispose();
+			TicketView tix = new TicketView(currentUser);
+			tix.frame.setVisible(true);
 			}
 		};
-		return myListingsActionListener;
+		return myTicketsActionListener;
 	}
 	
 	public static ActionListener createCreateTicketActionListener(JFrame frame, User currentUser)
@@ -216,10 +227,33 @@ public class eProduceActionListeners {
 		};
 		return createTicketActionListener;
 	}
+
 	//*********************************END OF GENERAL ACTIONLISTENERS************************************************
 	
 	//*********************************START OF AdminMainPageView.java ACTIONLISTENERS*******************************
+	public static ActionListener createAllUsersActionListener(JFrame frame, User currentUser)
+	{
+		ActionListener allUsersActionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				AdminMainPageView ampv = new AdminMainPageView(currentUser);
+				ampv.frame.setVisible(true);
+				
+			}
+		};
+		return allUsersActionListener;
+	}
 	
+	public static ActionListener createSysTicketsActionListener(JFrame frame, User currentUser) {
+		ActionListener sysTicketsActionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				TicketView atv = new TicketView(currentUser);
+				atv.frame.setVisible(true);
+			}
+		};
+		return sysTicketsActionListener;
+	}
 	//*********************************END OF AdminMainPageView.java ACTIONLISTENERS*********************************
 	
 	//*********************************START OF MainPageView.java ACTIONLISTENERS************************************
@@ -413,5 +447,4 @@ public class eProduceActionListeners {
 		return ticketTableListener;
 	}
 	//*********************************END OF TicketView.java ACTIONLISTENERS****************************************
-
 }
