@@ -2,28 +2,45 @@ package controller;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
+import model.Feedback;
+import model.Listing;
 import model.Ticket;
 import model.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import view.AdminMainPageView;
 import view.MainPageView;
 import view.MyListingsView;
@@ -33,11 +50,9 @@ import view.StartView;
 import view.TicketView;
 /*
  * This class handles all ActionListener and ListSelectionListener creation to be passed back to the respective views. 
- * Take note of grouping based on class the method will be utilized in.
+ * 
  */
 public class eProduceActionListeners {
-	
-	//*********************************START OF GENERAL ACTIONLISTENERS**********************************************
 	public static ActionListener createLogoutActionListener(JFrame frame, User currentUser)
 	{
 		ActionListener logoutActionListener = new ActionListener() {
@@ -227,10 +242,77 @@ public class eProduceActionListeners {
 		};
 		return createTicketActionListener;
 	}
-
-	//*********************************END OF GENERAL ACTIONLISTENERS************************************************
 	
-	//*********************************START OF AdminMainPageView.java ACTIONLISTENERS*******************************
+	public static ActionListener createListingActionListener(JFrame frame, User currentUser)
+	{
+		ActionListener createListingActionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel lstPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JLabel title = new JLabel();
+				JLabel tags = new JLabel();
+				JLabel des = new JLabel();
+				JTextField titletxt = new JTextField();
+				JTextField tagstxt = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				Border border = BorderFactory.createLineBorder(Color.BLACK);
+				lstPanel.setLayout(new BorderLayout());
+				top.setLayout(new GridLayout(0,1));
+				bottom.setLayout(new BorderLayout());
+				
+				title.setText("Title: ");
+				tags.setText("Tags: (Separate each tag with a comma \',\')");
+				des.setText("Description:");
+				destxt.setLineWrap(true);
+				destxt.setBorder(border);
+				JScrollPane sp = new JScrollPane(destxt);
+				top.add(title);
+				top.add(titletxt);
+				top.add(tags);
+				top.add(tagstxt);
+				bottom.add(des,BorderLayout.NORTH);
+				bottom.add(sp,BorderLayout.SOUTH);
+				lstPanel.add(top,BorderLayout.NORTH);
+				lstPanel.add(bottom,BorderLayout.SOUTH);
+			
+				
+				int result = JOptionPane.showConfirmDialog(null, lstPanel, "Create Listing Info", JOptionPane.OK_CANCEL_OPTION);
+				if(result == JOptionPane.OK_OPTION)
+				{
+					if(!(titletxt.getText().equals("")) && !(tagstxt.getText().equals("")) && !destxt.getText().equals("") )	
+					{
+						if(eProduceDatabase.createListing(currentUser.getEmail(), titletxt.getText(), destxt.getText(), tagstxt.getText()))
+						{
+							String msg = "Listing created!";
+							JOptionPane.showMessageDialog(frame, msg);
+							frame.dispose();
+							MyListingsView mlv = new MyListingsView(currentUser);
+							mlv.frame.setVisible(true);
+						}
+						else
+						{
+							String msg = "Unable to create listing. Database error.";
+							JOptionPane.showMessageDialog(frame, msg);
+						}
+					}
+					else
+					{
+						String emptyFieldMsg = "Unable to create listing. The following fields are empty: \n";
+						if(titletxt.getText().equals("")) emptyFieldMsg += "      Title\n";
+						if(tagstxt.getText().equals("")) emptyFieldMsg += "      Tags\n";
+						if(destxt.getText().equals("")) emptyFieldMsg += "      Description\n";
+						JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+						
+					}
+					
+				}
+				
+			}
+		};
+		return createListingActionListener;
+	}
+	
 	public static ActionListener createAllUsersActionListener(JFrame frame, User currentUser)
 	{
 		ActionListener allUsersActionListener = new ActionListener() {
@@ -254,22 +336,7 @@ public class eProduceActionListeners {
 		};
 		return sysTicketsActionListener;
 	}
-	//*********************************END OF AdminMainPageView.java ACTIONLISTENERS*********************************
 	
-	//*********************************START OF MainPageView.java ACTIONLISTENERS************************************
-	
-	//*********************************END OF MainPageView.java ACTIONLISTENERS**************************************
-
-	//*********************************START OF MyListingsView.java ACTIONLISTENERS**********************************
-	
-	//*********************************END OF MyListingsView.java ACTIONLISTENERS************************************
-
-	//*********************************START OF MyMeetingsView.java ACTIONLISTENERS**********************************
-	
-	//*********************************END OF MyMeetingsView.java ACTIONLISTENERS************************************
-
-	//*********************************START OF SignUpView.java ACTIONLISTENERS**************************************
-
 	public static ActionListener createCancelActionListener(JFrame frame, User currentUser)
 	{
 		ActionListener cancelActionListener = new ActionListener() {
@@ -326,9 +393,6 @@ public class eProduceActionListeners {
 		};
 		return submitActionListener;
 	}
-	//*********************************END OF SignUpView.java ACTIONLISTENERS****************************************
-	
-	//*********************************START OF StartView.java ACTIONLISTENERS***************************************
 	
 	public static ActionListener createSignupActionListener(JFrame frame, User currentUser)
 	{
@@ -375,11 +439,7 @@ public class eProduceActionListeners {
 		};
 		return loginActionListener;
 	}
-		
-	//*********************************END OF StartView.java ACTIONLISTENERS*****************************************
-		
-	//*********************************START OF TicketView.java ACTIONLISTENERS**************************************
-	
+
 	public static ListSelectionListener createTicketTableListener(JFrame frame, JTable table, ArrayList<Ticket> myTickets, User currentUser)
 	{
 		ListSelectionListener ticketTableListener = new ListSelectionListener() {
@@ -446,5 +506,381 @@ public class eProduceActionListeners {
 		};
 		return ticketTableListener;
 	}
-	//*********************************END OF TicketView.java ACTIONLISTENERS****************************************
+	public static ListSelectionListener createAllListingsTableListener(JFrame frame, String[][] listingData, JTable table, ArrayList<Listing> list, User currentUser)
+	{
+		ListSelectionListener listingTableListener = new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				JPanel listPanel = new JPanel();
+				JPanel top = new JPanel();
+				JPanel bottom = new JPanel();
+				JPanel ratingPanel = new JPanel();
+				JPanel userPanel = new JPanel();
+				JLabel title = new JLabel();
+				JLabel owner = new JLabel();
+				JLabel ownerRating = new JLabel();
+				JLabel des = new JLabel();
+				
+				ArrayList<Feedback> feedback = eProduceDatabase.getFeedbackForListing(list.get(table.getSelectedRow()).getListingNum());
+				JTable feedbacktbl = eProduceController.createFeedbackTable(frame, feedback, list, new String[] {"Feedback #","Creator","Description"}, currentUser);	
+				
+				JTextField titletxt = new JTextField();
+				JTextField ownertxt = new JTextField();
+				JButton reportButton = new JButton("Report");
+				JTextField rating = new JTextField();
+				JTextArea destxt = new JTextArea(5,10);
+				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Create Feedback", "Exit" };
+				 	
+				
+				listPanel.setLayout(new GridLayout(0,1));
+				ratingPanel.setLayout(new GridLayout(0,4));
+				userPanel.setLayout(new GridLayout(0,3));
+				top.setLayout(new GridLayout(0,1));
+				bottom.setLayout(new BorderLayout());
+				//Add SQL statement after text below
+				title.setText("Title: ");
+				titletxt.setEditable(false);
+				titletxt.setText(list.get(table.getSelectedRow()).getTitle());
+				owner.setText("Owner: ");
+				ownertxt.setEditable(false);
+				ownertxt.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
+				ownerRating.setText("Owner Rating: ");
+				rating.setEditable(false);
+				rating.setText(Integer.toString(list.get(table.getSelectedRow()).getOwner().getCurrentRating()));
+				rating.setHorizontalAlignment(JTextField.CENTER);
+				des.setText("Description:");
+				destxt.setEditable(false);
+				destxt.setText(list.get(table.getSelectedRow()).getContent());
+				destxt.setLineWrap(true);
+
+				try {
+					ImageIcon plusImg = new ImageIcon(ImageIO.read(new File("res/plus.png")));
+					ImageIcon minusImg = new ImageIcon(ImageIO.read(new File("res/minus.png")));
+					ImageIcon plusImgGrey = new ImageIcon(ImageIO.read(new File("res/plus-grey.png")));
+					ImageIcon minusImgGrey = new ImageIcon(ImageIO.read(new File("res/minus-grey.png")));
+					final JButton plus = new JButton(plusImgGrey);
+					final JButton minus = new JButton(minusImgGrey);
+					
+					plus.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
+								; //don't do anything if you're viewing your own listing, that's cheating.
+							else if(plus.getIcon().equals(plusImg)) //de-pressing plus
+							{	
+								int newRating = Integer.parseInt(rating.getText())-1;
+								rating.setText(Integer.toString(newRating));
+								list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+								eProduceDatabase.decreaseUserRating(ownertxt.getText());									
+								plus.setIcon(plusImgGrey);
+							}
+							else // pressing plus
+							{
+								int newRating = Integer.parseInt(rating.getText())+1;
+								if(minus.getIcon().equals(minusImg)) //if minus is already pressed.
+								{
+									minus.setIcon(minusImgGrey);
+									newRating++;
+								}
+								rating.setText(Integer.toString(newRating));
+								list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+								eProduceDatabase.increaseUserRating(ownertxt.getText());
+								plus.setIcon(plusImg);
+							}
+						}
+					});
+					
+					minus.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
+								; //don't do anything if you're viewing your own listing, that's cheating.
+							else if(minus.getIcon().equals(minusImg)) //they're de-pressing minus
+							{
+								int newRating = Integer.parseInt(rating.getText())+1;
+								rating.setText(Integer.toString(newRating));
+								list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+								eProduceDatabase.increaseUserRating(ownertxt.getText());
+								minus.setIcon(minusImgGrey);
+							}
+							else //pressing minus
+							{	
+								int newRating = Integer.parseInt(rating.getText())-1;
+								if(plus.getIcon().equals(plusImg)) //if plus is already pressed.
+								{
+									plus.setIcon(plusImgGrey);
+									newRating--;
+								}
+								rating.setText(Integer.toString(newRating));
+								list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
+								eProduceDatabase.decreaseUserRating(ownertxt.getText());									
+								minus.setIcon(minusImg);
+						}
+						}
+					});
+					reportButton.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
+									; //don't do anything if you're viewing your own listing, that's cheating.
+								eProduceDatabase.reportUser(list.get(table.getSelectedRow()).getOwner().getEmail());
+								JOptionPane.showMessageDialog(frame, "User has been reported. Thanks!");
+							}
+						});
+					ratingPanel.add(ownerRating);
+					ratingPanel.add(minus);
+					ratingPanel.add(rating);
+					ratingPanel.add(plus);
+					userPanel.add(owner);
+					userPanel.add(ownertxt);
+					userPanel.add(reportButton);
+					top.add(title);
+					top.add(titletxt);
+					top.add(userPanel);
+					top.add(ratingPanel);
+					bottom.add(des,BorderLayout.NORTH);
+					bottom.add(destxt,BorderLayout.CENTER);
+					if(feedback.size()>0)
+						bottom.add(new JScrollPane(feedbacktbl),BorderLayout.SOUTH);
+					listPanel.add(top);
+					listPanel.add(bottom);
+					
+					} catch (IOException e) {
+						System.out.println("Image file not found!");
+					}
+					
+					
+					
+					
+					
+				
+				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
+			                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+			                null, options1, null);
+				
+				if(result == 0){
+					JPanel meetingPanel = new JPanel();
+					JLabel participantsLabel = new JLabel();
+					JLabel whenLabel = new JLabel();
+					JLabel timeLabel = new JLabel();
+					JLabel locationLabel = new JLabel();
+					JTextField whenTF = new JTextField(10);
+					JPanel metPanel = new JPanel();
+					JLabel participantslbl = new JLabel();
+					JLabel whenlbl = new JLabel();
+					JLabel timelbl = new JLabel();
+					JLabel loclbl = new JLabel();
+					JTextField participantstxt = new JTextField(10);
+					JTextField loctxt = new JTextField(10);
+					SpinnerDateModel model2 = new SpinnerDateModel();
+					model2.setCalendarField(Calendar.MINUTE);
+					JSpinner spinner= new JSpinner();
+					spinner.setModel(model2);
+					spinner.setEditor(new JSpinner.DateEditor(spinner, "hh:mm a"));
+					
+					spinner.setSize(10,10);
+					meetingPanel.setLayout(new GridLayout(0,1));
+					
+					
+					participantsLabel.setText("Participants: ");
+					whenLabel.setText("When: ");
+					timeLabel.setText("Time");
+					locationLabel.setText("Location:");
+					participantslbl.setText("Participants: ");
+					whenlbl.setText("When: ");
+					timelbl.setText("Time");
+					loclbl.setText("Location:");
+					participantstxt.setText(currentUser.getEmail() + ", " + list.get(table.getSelectedRow()).getOwner().getEmail());
+					UtilDateModel model = new UtilDateModel();
+					JDatePanelImpl datePanel = new JDatePanelImpl(model);
+					JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+					
+				
+					meetingPanel.add(participantsLabel);
+					meetingPanel.add(participantstxt);
+					meetingPanel.add(whenLabel);
+					meetingPanel.add(datePicker);
+					meetingPanel.add(timeLabel);
+					meetingPanel.add(spinner);
+					meetingPanel.add(locationLabel);
+					meetingPanel.add(loctxt);
+					
+				
+					
+					int result2 = JOptionPane.showConfirmDialog(null, meetingPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
+					if(result2 == JOptionPane.OK_OPTION)
+					{
+						if(!(participantstxt.getText().equals("")) && !(datePicker.getModel().getValue().toString().equals("")) && !loctxt.getText().equals("") )	
+						{
+							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							String foo = sdf.format(new Date(model.getYear()-1900, model.getMonth(), model.getDay(), model2.getDate().getHours(), model2.getDate().getMinutes()));
+							System.out.println(foo);
+							boolean ret = eProduceDatabase.createMeetup(currentUser.getEmail(),participantstxt.getText(),loctxt.getText(),  model, model2);
+							if(ret)
+							{
+								JOptionPane.showMessageDialog(frame, "Meetup has been successfully created!");
+								frame.dispose();
+								MainPageView mpv = new MainPageView(currentUser);
+								mpv.frame.setVisible(true);
+							}
+						}
+						else
+						{
+							String emptyFieldMsg = "Unable to create meetup. The following fields are empty: \n";
+							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
+							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
+							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
+							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
+							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
+							
+							
+						}
+						
+					}
+				}
+				if(result == 1){
+					JPanel contactPanel = new JPanel();
+					JPanel north = new JPanel();
+					JPanel south = new JPanel();
+					JLabel toLabel = new JLabel("To:");
+					JLabel fromLabel = new JLabel("From:");
+					JLabel subjectLabel = new JLabel("Subject:");
+					JLabel contentLabel = new JLabel("Email Content:");
+					JTextField toTF = new JTextField(20);
+					JTextField fromTF = new JTextField(20);
+					JTextField subjectTF = new JTextField(20);
+					JTextArea contentArea = new JTextArea(8,30);
+					
+					
+					Border border = BorderFactory.createLineBorder(Color.BLACK);
+					contentArea.setLineWrap(true);
+					contentArea.setBorder(border);
+					JScrollPane sp = new JScrollPane(contentArea);
+					
+					contactPanel.setLayout(new BorderLayout());
+					north.setLayout(new GridLayout(0,1));
+					south.setLayout(new BorderLayout());
+					toTF.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
+					fromTF.setText(currentUser.getEmail());
+					subjectTF.setText("Another eProduce user would like to contact you!");
+					toTF.setEditable(false);
+					fromTF.setEditable(false);
+					subjectTF.setEditable(false);
+					
+					north.add(toLabel);
+					north.add(toTF);
+					north.add(fromLabel);
+					north.add(fromTF);
+					north.add(subjectLabel);
+					north.add(subjectTF);
+					south.add(contentLabel, BorderLayout.NORTH);
+					south.add(sp, BorderLayout.SOUTH);
+					
+					
+					contactPanel.add(north, BorderLayout.NORTH);
+					contactPanel.add(south, BorderLayout.SOUTH);
+					
+					int result2 = JOptionPane.showConfirmDialog(null, contactPanel, "Contact Owner", JOptionPane.OK_CANCEL_OPTION);
+					if(result2 == JOptionPane.OK_OPTION)
+					{
+						if(!contentArea.getText().isEmpty()){
+							String emailMsg = "Hello eProduce User!\nAccording to our system, there is a user that would like to contact you in regards to your listing. "
+									+ "The following is a message from " + fromTF.getText() +":\n"
+											+ "\n" + contentArea.getText() +"\n"
+											+ "\n If you would like to contact this user, you may contact him using the following email address: " + fromTF.getText();
+							eProduceController.sendEmail(toTF.getText(), fromTF.getText(), subjectTF.getText(), emailMsg);
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Email failed to send. Cannot have an empty body.");
+						}
+					}
+				}
+				if(result == 2){
+					JPanel lstPanel = new JPanel();
+					JPanel top1 = new JPanel();
+					JPanel bottom1 = new JPanel();
+					JLabel title1 = new JLabel();
+					JLabel des1 = new JLabel();
+					JTextArea destxt1 = new JTextArea(5,10);
+					Border border = BorderFactory.createLineBorder(Color.BLACK);
+					lstPanel.setLayout(new BorderLayout());
+					top1.setLayout(new GridLayout(0,1));
+					bottom1.setLayout(new BorderLayout());
+					
+					des1.setText("Description:");
+					destxt1.setLineWrap(true);
+					destxt1.setBorder(border);
+					JScrollPane sp = new JScrollPane(destxt1);
+					bottom1.add(des1,BorderLayout.NORTH);
+					bottom1.add(sp,BorderLayout.SOUTH);
+					lstPanel.add(top1,BorderLayout.NORTH);
+					lstPanel.add(bottom1,BorderLayout.SOUTH);
+				
+					
+					int result3 = JOptionPane.showConfirmDialog(null, lstPanel, "Create Feedback Info", JOptionPane.OK_CANCEL_OPTION);
+					if(result3 == JOptionPane.OK_OPTION)
+					{
+						if(eProduceDatabase.createFeedback(currentUser.getEmail(), destxt1.getText(), list.get(table.getSelectedRow()).getListingNum()))
+							JOptionPane.showMessageDialog(null, "Feedback created!");
+						else
+							JOptionPane.showMessageDialog(null, "Uh oh. Your feedback couldn't be created.");
+
+						
+					}
+				}
+			}
+		};
+		return listingTableListener;
+	}
+
+	public static ListSelectionListener createFeedbackTableListener(JFrame frame, String[][] feedbackData, JTable feedbacktbl, ArrayList<Feedback> list, User currentUser) 
+	{		
+		if(list.size() > 0)
+		{
+			ListSelectionListener feedbackListener = null;
+				feedbackListener = new ListSelectionListener() {
+					public void valueChanged(ListSelectionEvent event) 
+					{				
+							Feedback currentFeedback;
+							if(feedbacktbl.getSelectedRow()>0)
+								currentFeedback = list.get(feedbacktbl.getSelectedRow());
+							else
+								return;
+							if(currentFeedback.getOwner().equals(currentUser.getEmail()))
+							{
+								JPanel panel = new JPanel();
+								JTextArea contentArea = new JTextArea(currentFeedback.getContent(), 10, 20);
+								JScrollPane sp = new JScrollPane(contentArea);
+								panel.add(sp);
+								int result = JOptionPane.showOptionDialog(null, panel, "Edit Feedback", JOptionPane.YES_NO_CANCEL_OPTION, 
+											 JOptionPane.PLAIN_MESSAGE, null, new String[] {"Save Changes", "Delete Feedback", "Cancel"}, null);
+								
+								if(result == JOptionPane.YES_OPTION) //save
+								{
+									if(contentArea.getText().equals(currentFeedback.getContent()))
+										JOptionPane.showMessageDialog(null, "No changes were made.");
+									else if(eProduceDatabase.editFeedback(currentFeedback.getFeedbackNum(), contentArea.getText()))
+									{
+										JOptionPane.showMessageDialog(null, "Changes updated.");
+										feedbacktbl.setValueAt((Object)contentArea.getText(),feedbacktbl.getSelectedRow(), 3);
+										currentFeedback.setContent(contentArea.getText());
+									}
+								}
+								else if(result == JOptionPane.NO_OPTION) //delete
+								{
+									if(eProduceDatabase.deleteFeedback(currentFeedback.getFeedbackNum()))
+									{
+										JOptionPane.showMessageDialog(null, "Feedback deleted.");
+										((DefaultTableModel)feedbacktbl.getModel()).removeRow(feedbacktbl.getSelectedRow());
+									}
+									else
+										JOptionPane.showMessageDialog(null, "Oops something went wrong deleting your feedback.");
+								}
+							}
+					}
+				};
+			return feedbackListener;
+		}
+		else
+			return null;
+		
+	}
 }

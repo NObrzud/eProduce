@@ -11,7 +11,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controller.eProduceActionListeners;
-import controller.eProduceController;
 import model.User;
 
 public class StartView {

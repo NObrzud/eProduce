@@ -7,35 +7,28 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import controller.eProduceController;
 import controller.eProduceDatabase;
 import controller.eProducePanels;
 import model.Listing;
@@ -83,7 +76,7 @@ public class MyListingsView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		sidePanel = eProducePanels.sidePanel(frame, false, false, false, true, true, true, sidePanel, currentUser);
+		sidePanel = eProducePanels.sidePanel(frame, true, false, true, true, true, false, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -111,7 +104,7 @@ public class MyListingsView {
 			Listing currListing = myListings.get(i);
 			if(currListing != null)
 			{
-				listings[i][0].setText(Integer.toString(currListing.getListingNum()));
+				listings[i][0].setText(currListing.getListingNum());
 				listings[i][1].setText(currListing.getTitle());
 				listings[i][2].setText(currListing.getContent());
 				listings[i][3].setText(currListing.getTags());

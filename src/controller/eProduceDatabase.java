@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
+import model.Feedback;
 import model.Listing;
 import model.Meetup;
 import model.Ticket;
@@ -32,7 +33,6 @@ public class eProduceDatabase {
 		catch(ClassNotFoundException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(0);
 		}
 	}
 	/*
@@ -69,7 +69,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
 			return false;
 		}
 	}
@@ -84,9 +83,7 @@ public class eProduceDatabase {
 			user.setFirstName(returnValues.getString("firstName"));
 			user.setLastName(returnValues.getString("lastName"));
 		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-			System.exit(-1);
-			
+			System.err.println(e.getMessage());			
 		}
 		
 		
@@ -114,7 +111,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}
 	}
@@ -141,7 +137,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}
 	}
@@ -167,7 +162,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}	
 	}
@@ -184,13 +178,12 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), returnValues.getInt("listingnum")));
+				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), Integer.toString(returnValues.getInt("listingnum"))));
 			}
 		}
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
 		}
 		
 	}
@@ -214,7 +207,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
 		}
 		
 	}
@@ -231,18 +223,17 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), returnValues.getInt("listingnum")));
+				myListings.add(new Listing(returnValues.getString("owner"), returnValues.getString("title"), returnValues.getString("content"), returnValues.getString("tags"), Integer.toString(returnValues.getInt("listingnum"))));
 			}
 		}
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
 		}
 		
 		
 	}
-	public static boolean updateListing(String title, String des, int listingNum, String tags) {
+	public static boolean updateListing(String title, String des, String listingNum, String tags) {
 		try 
 		{
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
@@ -265,7 +256,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}
 	}
@@ -298,7 +288,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}	
 		
@@ -327,7 +316,7 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public static void deleteListing(int listingNum) {
+	public static void deleteListing(String listingNum) {
 		try 
 		{
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
@@ -342,7 +331,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 		}
 		
 	}
@@ -470,7 +458,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}	
 	}
@@ -493,7 +480,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
 		}
 		
 	}
@@ -512,7 +498,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 		}		
 	}
 	public static boolean updateTicket(String description, String response, String ticketNum) {
@@ -538,7 +523,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 			return false;
 		}
 	}
@@ -579,7 +563,6 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			System.exit(-1);
 		}
 	}
 	public static boolean editMeetup(String meetupNum, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
@@ -612,7 +595,6 @@ public class eProduceDatabase {
 				catch(SQLException e)
 				{
 					System.err.println(e.getMessage());
-					//System.exit(-1);
 					return false;
 				}	
 	}
@@ -631,7 +613,104 @@ public class eProduceDatabase {
 		catch(SQLException e)
 		{
 			System.err.println(e.getMessage());
-			//System.exit(-1);
 		}				
+	}
+	public static ArrayList<Feedback> getFeedbackForListing(String listingNum) {
+		try {
+			ArrayList<Feedback> feedback = new ArrayList<Feedback>();
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
+			String selectString;
+			ResultSet returnValues;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			selectString = "select * from eproduce.listingfeedback where listingNum = " + listingNum;
+			System.out.println(selectString);
+			returnValues = stmt.executeQuery(selectString);
+			while(returnValues.next())
+			{
+				feedback.add(new Feedback(returnValues.getString("owner"), returnValues.getString("content"), Integer.toString(returnValues.getInt("feedbackNum"))));
+			}
+			return feedback;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			System.exit(-1);
+			return null;
+		}
+	}
+	public static boolean editFeedback(String feedbackNum, String content ) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
+			String insertString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			insertString = "update eproduce.listingfeedback set content = \'"+ content+"\' where feedbackNum = " + feedbackNum;
+			System.out.println(insertString);
+			returnVal = stmt.executeUpdate(insertString);
+			if(returnVal == 1) // 1 new meetup was created
+			{
+				System.out.println("true");
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			return false;
+		}	
+	}
+	public static boolean createFeedback(String email, String content, String listingNum) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
+			String insertString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			
+			insertString = "insert into eproduce.listingfeedback (owner, content, listingNum) values (\'"+email+"\',\'"+content+"\', " + listingNum + ")";
+			System.out.println(insertString);
+			returnVal = stmt.executeUpdate(insertString);
+			if(returnVal == 1) // 1 new account was created
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+			return false;
+		}	
+	}
+	public static boolean deleteFeedback(String feedbackNum) {
+		try 
+		{
+			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
+			String updateString;
+			int returnVal;
+			Statement stmt = DBConn.createStatement();
+			stmt = DBConn.createStatement();
+			updateString = "delete from eProduce.listingfeedback where feedbackNum = " + feedbackNum;
+			System.out.println(updateString);
+			returnVal = stmt.executeUpdate(updateString);
+			if(returnVal == 1)
+				return true;
+			else 
+				return false;
+		}
+		catch(SQLException e)
+		{
+			System.err.println(e.getMessage());
+		}				
+		return false;
 	}
 }

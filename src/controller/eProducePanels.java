@@ -82,7 +82,7 @@ public class eProducePanels {
 		{
 			sidePanel.add(Box.createRigidArea(new Dimension(5,5)));
 			JButton createListing = new JButton("New Listing");
-			ActionListener createListingActionListener = eProduceActionListeners.createMyListingsActionListener(frame, currentUser);
+			ActionListener createListingActionListener = eProduceActionListeners.createListingActionListener(frame, currentUser);
 			createListing.setMinimumSize(new Dimension(110, 26));
 			createListing.setMaximumSize(new Dimension(110, 26));
 			createListing.addActionListener(createListingActionListener);

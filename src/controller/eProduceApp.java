@@ -3,7 +3,6 @@ package controller;
 import javax.swing.SwingUtilities;
 
 import model.User;
-import view.MainPageView;
 import view.StartView;
 
 public class eProduceApp {
@@ -11,7 +10,7 @@ public class eProduceApp {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run(){
-				eProduceDatabase db = new eProduceDatabase(); //instantiate the db once. Statically call it the rest of the time.
+				new eProduceDatabase(); //create a static db
 				StartView start = new StartView(new User());
 				start.frame.setVisible(true);
 			}

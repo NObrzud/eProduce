@@ -6,13 +6,13 @@ import controller.eProduceDatabase;
 
 public class Listing {
 	private User owner;
-	private int listingNum;
+	private String listingNum;
 	private String content;
 	private String[] tags;
 	private String title;
 	private eProduceDatabase db = new eProduceDatabase();
 
-	public Listing(String owner, String title, String content, String tags, int listNum) {
+	public Listing(String owner, String title, String content, String tags, String listNum) {
 		this.owner = db.getOwnerDetails(owner);
 		this.title = title;
 		this.content = content;
@@ -21,7 +21,7 @@ public class Listing {
 	}
 	public Listing() {
 		owner = new User();
-		listingNum = 0;
+		listingNum = "";
 		content = "";
 		tags = new String[0];
 		title = "";
@@ -36,11 +36,11 @@ public class Listing {
 	{
 		this.owner = db.getOwnerDetails(owner);
 	}
-	public int getListingNum() {
+	public String getListingNum() {
 		return listingNum;
 	}
-	public void setListingNum(int listingNumb) {
-		this.listingNum = listingNumb;
+	public void setListingNum(String listingNum) {
+		this.listingNum = listingNum;
 	}
 	public String getContent() {
 		return content;

@@ -1,20 +1,48 @@
 package controller;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
+import model.Feedback;
 import model.Listing;
 import model.User;
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import view.AdminMainPageView;
 import view.MainPageView;
 import view.SignUpView;
@@ -153,5 +181,73 @@ public class eProduceController {
 				}
 			}
 		}
+	}
+	/*
+	 * To be used in MainPageView. Creates the Table of listings to be shown in the middle panel
+	 */
+	public static JTable createListingTable(JFrame frame, ArrayList<Listing> list, String[][] listingData, String[] columnHeadings, User currentUser) {
+		JTable table = new JTable(listingData, columnHeadings);
+		table.setBackground(frame.getBackground());
+		table.setShowVerticalLines(false);
+		table.setGridColor(Color.black);
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setFont(new Font("Serif", Font.PLAIN, 24));
+		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+		table.setRowHeight(30);
+		table.setDefaultEditor(Object.class, null);
+		
+		ListSelectionListener tableListener = eProduceActionListeners.createAllListingsTableListener(frame,listingData, table, list, currentUser);
+		
+		for(int i = 0; i < table.getColumnCount(); i++)
+		{
+			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+			center.setHorizontalAlignment(SwingConstants.CENTER);
+			TableColumn column = table.getColumnModel().getColumn(i);
+			column.setCellRenderer(center);
+			if(i == 0)
+			{
+				column.setMinWidth(75);
+				column.setPreferredWidth(75);
+				column.setMaxWidth(100);
+			}
+			if(i == 1)
+			{
+				column.setMaxWidth(300);
+			}
+			column.setPreferredWidth(348);
+		}
+		
+		table.getSelectionModel().addListSelectionListener(tableListener);
+		return table;
+	}
+	public static JTable createFeedbackTable(JFrame frame, ArrayList<Feedback> feedback, ArrayList<Listing> list, String[] columnHeadings, User currentUser) {
+		String[][] feedbackData;
+		if(feedback.size()>0)
+			feedbackData = new String[feedback.size()][3];
+		else
+			feedbackData = new String[0][0];
+		
+		for(int i = 0; i < feedbackData.length; i++)
+		{
+			feedbackData[i][0] = feedback.get(i).getFeedbackNum();
+			feedbackData[i][1] = feedback.get(i).getOwner();
+			feedbackData[i][2] = feedback.get(i).getContent();
+		}
+		DefaultTableModel model = new DefaultTableModel(feedbackData, columnHeadings);
+		JTable feedbacktbl = new JTable(model);
+		feedbacktbl.setShowVerticalLines(false);
+		feedbacktbl.setGridColor(Color.black);
+		feedbacktbl.setIntercellSpacing(new Dimension(0, 0));
+		feedbacktbl.setFont(new Font("Serif", Font.PLAIN, 15));
+		feedbacktbl.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+		feedbacktbl.setRowHeight(25); 
+		feedbacktbl.setFillsViewportHeight(true);
+		feedbacktbl.setPreferredScrollableViewportSize(feedbacktbl.getPreferredSize());
+		feedbacktbl.setDefaultEditor(Object.class, null);
+		
+		ListSelectionListener feedbackListener = eProduceActionListeners.createFeedbackTableListener(frame, feedbackData,  feedbacktbl, feedback, currentUser);
+		feedbacktbl.getSelectionModel().addListSelectionListener(feedbackListener);
+		
+		return feedbacktbl;
 	}
 }

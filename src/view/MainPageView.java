@@ -1,59 +1,25 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.imageio.ImageIO;
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.border.Border;
-import javax.swing.SwingConstants;
-import javax.swing.border.MatteBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-
 import controller.eProduceController;
 import controller.eProduceDatabase;
 import controller.eProducePanels;
 import model.Listing;
 import model.User;
-import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
-import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
-import net.sourceforge.jdatepicker.impl.UtilDateModel;
+
 
 public class MainPageView {
 
@@ -119,7 +85,7 @@ public class MainPageView {
 		for(int i = 0; i < listingData.length; i++)
 		{
 			Listing currListing = list.get(i);
-			listings[i][0].setText(Integer.toString(currListing.getListingNum()));
+			listings[i][0].setText(currListing.getListingNum());
 			listings[i][1].setText(currListing.getOwner().getEmail());
 			listings[i][2].setText(currListing.getTitle());
 		}
@@ -131,6 +97,7 @@ public class MainPageView {
 				listingData[i][j] = listings[i][j].getText();
 			}
 		}
+		
 		JPanel leftSide = new JPanel();
 		JPanel listing = new JPanel();
 		
@@ -144,7 +111,7 @@ public class MainPageView {
 		});
 		
 		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox(comboBoxInputs);
+		sort = new JComboBox<String>(comboBoxInputs);
 		
 		for(int i = 0; i < listings.length; i++)
 		{
@@ -154,361 +121,8 @@ public class MainPageView {
 		
 		
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = new JTable(listingData, new String[] {"Listing #","Creator","Title"});
-		table.setBackground(frame.getBackground());
+		JTable table = eProduceController.createListingTable(frame, list, listingData, new String[] {"Listing #", "Creator", "Title"}, currentUser);
 		
-		table.setShowVerticalLines(false);
-		table.setGridColor(Color.black);
-		table.setIntercellSpacing(new Dimension(0, 0));
-		table.setFont(new Font("Serif", Font.PLAIN, 24));
-		table.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
-		table.setRowHeight(30);
-		table.setDefaultEditor(Object.class, null);
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent event) {
-				JPanel listPanel = new JPanel();
-				JPanel top = new JPanel();
-				JPanel bottom = new JPanel();
-				JPanel ratingPanel = new JPanel();
-				JPanel userPanel = new JPanel();
-				JLabel title = new JLabel();
-				JLabel owner = new JLabel();
-				JLabel ownerRating = new JLabel();
-				JLabel des = new JLabel();
-				JLabel fb = new JLabel("Feedback");
-				JTable feedbacktbl = new JTable(listingData,new String[] {"Feedback #","Creator","Description"});	
-				JTextField titletxt = new JTextField();
-				JTextField ownertxt = new JTextField();
-				JButton reportButton = new JButton("Report");
-				JTextField rating = new JTextField();
-				JTextArea destxt = new JTextArea(5,10);
-				Object[] options1 = { "Schedule Meetup", "Contact Owner", "Create Feedback", "Exit" };
-				 	
-				
-				 	listPanel.setLayout(new GridLayout(0,1));
-				 	ratingPanel.setLayout(new GridLayout(0,4));
-				 	userPanel.setLayout(new GridLayout(0,3));
-					top.setLayout(new GridLayout(0,1));
-					bottom.setLayout(new BorderLayout());
-					//Add SQL statement after text below
-					title.setText("Title: ");
-					titletxt.setEditable(false);
-					titletxt.setText(list.get(table.getSelectedRow()).getTitle());
-					owner.setText("Owner: ");
-					ownertxt.setEditable(false);
-					ownertxt.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
-					ownerRating.setText("Owner Rating: ");
-					rating.setEditable(false);
-					rating.setText(Integer.toString(list.get(table.getSelectedRow()).getOwner().getCurrentRating()));
-					rating.setHorizontalAlignment(JTextField.CENTER);
-					des.setText("Description:");
-					destxt.setEditable(false);
-					destxt.setText(list.get(table.getSelectedRow()).getContent());
-					destxt.setLineWrap(true);
-					feedbacktbl.setShowVerticalLines(false);
-					feedbacktbl.setGridColor(Color.black);
-					feedbacktbl.setIntercellSpacing(new Dimension(0, 0));
-					feedbacktbl.setFont(new Font("Serif", Font.PLAIN, 15));
-					feedbacktbl.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
-					feedbacktbl.setRowHeight(25); 
-					feedbacktbl.setFillsViewportHeight(true);
-					feedbacktbl.setPreferredScrollableViewportSize(feedbacktbl.getPreferredSize());
-					feedbacktbl.setDefaultEditor(Object.class, null);
-					try {
-						ImageIcon plusImg = new ImageIcon(ImageIO.read(new File("res/plus.png")));
-						ImageIcon minusImg = new ImageIcon(ImageIO.read(new File("res/minus.png")));
-						ImageIcon plusImgGrey = new ImageIcon(ImageIO.read(new File("res/plus-grey.png")));
-						ImageIcon minusImgGrey = new ImageIcon(ImageIO.read(new File("res/minus-grey.png")));
-						final JButton plus = new JButton(plusImgGrey);
-						final JButton minus = new JButton(minusImgGrey);
-						
-						plus.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
-									; //don't do anything if you're viewing your own listing, that's cheating.
-								else if(plus.getIcon().equals(plusImg)) //de-pressing plus
-								{	
-									int newRating = Integer.parseInt(rating.getText())-1;
-									rating.setText(Integer.toString(newRating));
-									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									eProduceDatabase.decreaseUserRating(ownertxt.getText());									
-									plus.setIcon(plusImgGrey);
-								}
-								else // pressing plus
-								{
-									int newRating = Integer.parseInt(rating.getText())+1;
-									if(minus.getIcon().equals(minusImg)) //if minus is already pressed.
-									{
-										minus.setIcon(minusImgGrey);
-										newRating++;
-									}
-									rating.setText(Integer.toString(newRating));
-									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									eProduceDatabase.increaseUserRating(ownertxt.getText());
-									plus.setIcon(plusImg);
-								}
-							}
-						});
-						
-						minus.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
-									; //don't do anything if you're viewing your own listing, that's cheating.
-								else if(minus.getIcon().equals(minusImg)) //they're de-pressing minus
-								{
-									int newRating = Integer.parseInt(rating.getText())+1;
-									rating.setText(Integer.toString(newRating));
-									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									eProduceDatabase.increaseUserRating(ownertxt.getText());
-									minus.setIcon(minusImgGrey);
-								}
-								else //pressing minus
-								{	
-									int newRating = Integer.parseInt(rating.getText())-1;
-									if(plus.getIcon().equals(plusImg)) //if plus is already pressed.
-									{
-										plus.setIcon(plusImgGrey);
-										newRating--;
-									}
-									rating.setText(Integer.toString(newRating));
-									list.get(table.getSelectedRow()).getOwner().setCurrentRating(newRating);
-									eProduceDatabase.decreaseUserRating(ownertxt.getText());									
-									minus.setIcon(minusImg);
-								}
-							}
-						});
-						
-						reportButton.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								if(list.get(table.getSelectedRow()).getOwner().getEmail().equals(currentUser.getEmail()))
-									; //don't do anything if you're viewing your own listing, that's cheating.
-								eProduceDatabase.reportUser(list.get(table.getSelectedRow()).getOwner().getEmail());
-								JOptionPane.showMessageDialog(frame, "User has been reported. Thanks!");
-							}
-						});
-					ratingPanel.add(ownerRating);
-					ratingPanel.add(minus);
-					ratingPanel.add(rating);
-					ratingPanel.add(plus);
-					userPanel.add(owner);
-					userPanel.add(ownertxt);
-					userPanel.add(reportButton);
-					top.add(title);
-					top.add(titletxt);
-					top.add(userPanel);
-					top.add(ratingPanel);
-					bottom.add(des,BorderLayout.NORTH);
-					bottom.add(destxt,BorderLayout.CENTER);
-					bottom.add(new JScrollPane(feedbacktbl),BorderLayout.SOUTH);
-					listPanel.add(top);
-					listPanel.add(bottom);
-					
-					} catch (IOException e) {
-						System.out.println("Image file not found!");
-					}
-					
-					
-					
-					
-					
-				
-				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
-			                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-			                null, options1, null);
-				
-				if(result == 0){
-					JPanel meetingPanel = new JPanel();
-					JLabel participantsLabel = new JLabel();
-					JLabel whenLabel = new JLabel();
-					JLabel timeLabel = new JLabel();
-					JLabel locationLabel = new JLabel();
-					JTextField whenTF = new JTextField(10);
-					JPanel metPanel = new JPanel();
-					JLabel participantslbl = new JLabel();
-					JLabel whenlbl = new JLabel();
-					JLabel timelbl = new JLabel();
-					JLabel loclbl = new JLabel();
-					JTextField participantstxt = new JTextField(10);
-					JTextField loctxt = new JTextField(10);
-					SpinnerDateModel model2 = new SpinnerDateModel();
-					model2.setCalendarField(Calendar.MINUTE);
-					JSpinner spinner= new JSpinner();
-					spinner.setModel(model2);
-					spinner.setEditor(new JSpinner.DateEditor(spinner, "hh:mm a"));
-					
-					spinner.setSize(10,10);
-					meetingPanel.setLayout(new GridLayout(0,1));
-					
-					
-					participantsLabel.setText("Participants: ");
-					whenLabel.setText("When: ");
-					timeLabel.setText("Time");
-					locationLabel.setText("Location:");
-					participantslbl.setText("Participants: ");
-					whenlbl.setText("When: ");
-					timelbl.setText("Time");
-					loclbl.setText("Location:");
-					participantstxt.setText(currentUser.getEmail() + ", " + list.get(table.getSelectedRow()).getOwner());
-					UtilDateModel model = new UtilDateModel();
-					JDatePanelImpl datePanel = new JDatePanelImpl(model);
-					JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
-					
-				
-					meetingPanel.add(participantsLabel);
-					meetingPanel.add(participantstxt);
-					meetingPanel.add(whenLabel);
-					meetingPanel.add(datePicker);
-					meetingPanel.add(timeLabel);
-					meetingPanel.add(spinner);
-					meetingPanel.add(locationLabel);
-					meetingPanel.add(loctxt);
-					
-				
-					
-					int result2 = JOptionPane.showConfirmDialog(null, meetingPanel, "Create Meeting Info", JOptionPane.OK_CANCEL_OPTION);
-					if(result2 == JOptionPane.OK_OPTION)
-					{
-						if(!(participantstxt.getText().equals("")) && !(datePicker.getModel().getValue().toString().equals("")) && !loctxt.getText().equals("") )	
-						{
-							java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							String foo = sdf.format(new Date(model.getYear()-1900, model.getMonth(), model.getDay(), model2.getDate().getHours(), model2.getDate().getMinutes()));
-							System.out.println(foo);
-							boolean ret = eProduceDatabase.createMeetup(currentUser.getEmail(),participantstxt.getText(),loctxt.getText(),  model, model2);
-							if(ret)
-							{
-								JOptionPane.showMessageDialog(frame, "Meetup has been successfully created!");
-								frame.dispose();
-								MainPageView mpv = new MainPageView(currentUser);
-								frame = mpv.frame;
-								frame.setVisible(true);
-							}
-						}
-						else
-						{
-							String emptyFieldMsg = "Unable to create meetup. The following fields are empty: \n";
-							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
-							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
-							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
-							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
-							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
-							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
-							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-							
-							
-						}
-						
-					}
-				}
-				if(result == 1){
-					JPanel contactPanel = new JPanel();
-					JPanel north = new JPanel();
-					JPanel south = new JPanel();
-					JLabel toLabel = new JLabel("To:");
-					JLabel fromLabel = new JLabel("From:");
-					JLabel subjectLabel = new JLabel("Subject:");
-					JLabel contentLabel = new JLabel("Email Content:");
-					JTextField toTF = new JTextField(20);
-					JTextField fromTF = new JTextField(20);
-					JTextField subjectTF = new JTextField(20);
-					JTextArea contentArea = new JTextArea(8,30);
-					
-					
-					Border border = BorderFactory.createLineBorder(Color.BLACK);
-					contentArea.setLineWrap(true);
-					contentArea.setBorder(border);
-					JScrollPane sp = new JScrollPane(contentArea);
-					
-					contactPanel.setLayout(new BorderLayout());
-					north.setLayout(new GridLayout(0,1));
-					south.setLayout(new BorderLayout());
-					toTF.setText(list.get(table.getSelectedRow()).getOwner().getEmail());
-					fromTF.setText(currentUser.getEmail());
-					subjectTF.setText("Another eProduce user would like to contact you!");
-					toTF.setEditable(false);
-					fromTF.setEditable(false);
-					subjectTF.setEditable(false);
-					
-					north.add(toLabel);
-					north.add(toTF);
-					north.add(fromLabel);
-					north.add(fromTF);
-					north.add(subjectLabel);
-					north.add(subjectTF);
-					south.add(contentLabel, BorderLayout.NORTH);
-					south.add(sp, BorderLayout.SOUTH);
-					
-					
-					contactPanel.add(north, BorderLayout.NORTH);
-					contactPanel.add(south, BorderLayout.SOUTH);
-					
-					int result2 = JOptionPane.showConfirmDialog(null, contactPanel, "Contact Owner", JOptionPane.OK_CANCEL_OPTION);
-					if(result2 == JOptionPane.OK_OPTION)
-					{
-						if(!contentArea.getText().isEmpty()){
-							String emailMsg = "Hello eProduce User!\nAccording to our system, there is a user that would like to contact you in regards to your listing. "
-									+ "The following is a message from " + fromTF.getText() +":\n"
-											+ "\n" + contentArea.getText() +"\n"
-											+ "\n If you would like to contact this user, you may contact him using the following email address: " + fromTF.getText();
-							eProduceController.sendEmail(toTF.getText(), fromTF.getText(), subjectTF.getText(), emailMsg);
-						}
-						else{
-							JOptionPane.showMessageDialog(null, "Email failed to send. Cannot have an empty body.");
-						}
-					}
-				}
-				if(result == 2){
-					JPanel lstPanel = new JPanel();
-					JPanel top1 = new JPanel();
-					JPanel bottom1 = new JPanel();
-					JLabel title1 = new JLabel();
-					JLabel des1 = new JLabel();
-					JTextField titletxt1 = new JTextField();
-					JTextArea destxt1 = new JTextArea(5,10);
-					Border border = BorderFactory.createLineBorder(Color.BLACK);
-					lstPanel.setLayout(new BorderLayout());
-					top1.setLayout(new GridLayout(0,1));
-					bottom1.setLayout(new BorderLayout());
-					
-					title1.setText("Title: ");
-					des1.setText("Description:");
-					destxt1.setLineWrap(true);
-					destxt1.setBorder(border);
-					JScrollPane sp = new JScrollPane(destxt1);
-					top1.add(title1);
-					top1.add(titletxt1);
-					bottom1.add(des1,BorderLayout.NORTH);
-					bottom1.add(sp,BorderLayout.SOUTH);
-					lstPanel.add(top1,BorderLayout.NORTH);
-					lstPanel.add(bottom1,BorderLayout.SOUTH);
-				
-					
-					int result3 = JOptionPane.showConfirmDialog(null, lstPanel, "Create Feedback Info", JOptionPane.OK_CANCEL_OPTION);
-					if(result3 == JOptionPane.OK_OPTION)
-					{
-						//DB Stuff goes here
-						
-					}
-				}
-			}
-		});
-		for(int i = 0; i < table.getColumnCount(); i++)
-		{
-			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
-			center.setHorizontalAlignment(SwingConstants.CENTER);
-			TableColumn column = table.getColumnModel().getColumn(i);
-			column.setCellRenderer(center);
-			if(i == 0)
-			{
-				column.setMinWidth(75);
-				column.setPreferredWidth(75);
-				column.setMaxWidth(100);
-			}
-			if(i == 1)
-			{
-				column.setMaxWidth(300);
-			}
-			column.setPreferredWidth(348);
-		}
 		listing.add(new JScrollPane(table));
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
