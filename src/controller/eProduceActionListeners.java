@@ -840,14 +840,15 @@ public class eProduceActionListeners {
 					public void valueChanged(ListSelectionEvent event) 
 					{				
 							Feedback currentFeedback;
-							if(feedbacktbl.getSelectedRow()>0)
+							//if(feedbacktbl.getSelectedRow()>0)
 								currentFeedback = list.get(feedbacktbl.getSelectedRow());
-							else
-								return;
+							//else
+							//	return;
 							if(currentFeedback.getOwner().equals(currentUser.getEmail()))
 							{
 								JPanel panel = new JPanel();
 								JTextArea contentArea = new JTextArea(currentFeedback.getContent(), 10, 20);
+								contentArea.setLineWrap(true);
 								JScrollPane sp = new JScrollPane(contentArea);
 								panel.add(sp);
 								int result = JOptionPane.showOptionDialog(null, panel, "Edit Feedback", JOptionPane.YES_NO_CANCEL_OPTION, 
@@ -860,7 +861,7 @@ public class eProduceActionListeners {
 									else if(eProduceDatabase.editFeedback(currentFeedback.getFeedbackNum(), contentArea.getText()))
 									{
 										JOptionPane.showMessageDialog(null, "Changes updated.");
-										feedbacktbl.setValueAt((Object)contentArea.getText(),feedbacktbl.getSelectedRow(), 3);
+										feedbacktbl.setValueAt((Object)contentArea.getText(),feedbacktbl.getSelectedRow(), 2);
 										currentFeedback.setContent(contentArea.getText());
 									}
 								}
