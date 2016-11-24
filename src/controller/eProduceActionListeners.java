@@ -840,10 +840,10 @@ public class eProduceActionListeners {
 					public void valueChanged(ListSelectionEvent event) 
 					{				
 							Feedback currentFeedback;
-							//if(feedbacktbl.getSelectedRow()>0)
+							if(feedbacktbl.getSelectedRow()>=0)
 								currentFeedback = list.get(feedbacktbl.getSelectedRow());
-							//else
-							//	return;
+							else
+								return;
 							if(currentFeedback.getOwner().equals(currentUser.getEmail()))
 							{
 								JPanel panel = new JPanel();
