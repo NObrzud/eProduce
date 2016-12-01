@@ -159,7 +159,7 @@ public class eProduceController {
 			
 			//Send email
 			Transport.send(msg);
-			System.out.println("Email sent successfully!");
+			JOptionPane.showMessageDialog(null, "Email sent!");
 		}
 		//authentication did not work
 		catch (MessagingException e){
@@ -177,15 +177,9 @@ public class eProduceController {
 			while(st.hasMoreTokens()){
 				contains = false;
 				token = st.nextToken();
-				System.out.print(token + " == " + search + "?");
 				if(search.contains(token)){
-					System.out.println(" yes"); contains = true;
 					temp.add(listings.get(i));
-					System.out.println("Listing #: " + listings.get(i).getListingNum());
 					break;
-				}
-				else {
-					System.out.println(" no");
 				}
 			}
 			if(!contains)

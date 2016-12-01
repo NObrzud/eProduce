@@ -802,7 +802,6 @@ public class eProduceActionListeners {
 									+ "The following is a message from " + fromTF.getText() +":\n"
 											+ "\n" + contentArea.getText() +"\n"
 											+ "\n If you would like to contact this user, you may contact him using the following email address: " + fromTF.getText();
-							eProduceController.sendEmail(toTF.getText(), fromTF.getText(), subjectTF.getText(), emailMsg);
 						}
 						else{
 							JOptionPane.showMessageDialog(null, "Email failed to send. Cannot have an empty body.");

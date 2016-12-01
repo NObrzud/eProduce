@@ -1,9 +1,9 @@
 package model;
 
 public class Feedback {
-	String owner;
-	String content;
-	String feedbackNum;
+	private String owner;
+	private String content;
+	private String feedbackNum;
 	
 	public Feedback(String owner, String content, String listingNum)
 	{
