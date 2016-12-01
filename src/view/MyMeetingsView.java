@@ -92,7 +92,6 @@ public class MyMeetingsView {
 		eProduceDatabase.getMyMeetups(currentUser.getEmail(),myMeetups);
 		
 		JTextField search = new JTextField();
-		JComboBox sort;
 		JTextField[][] meetups = new JTextField[myMeetups.size()][6];
 		String[][] meetupData = new String[myMeetups.size()][6];
 		for(int i = 0; i < meetups.length; i++){
@@ -140,8 +139,6 @@ public class MyMeetingsView {
 			}
 		});
 		
-		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox(comboBoxInputs);
 		meetup.setLayout(new BoxLayout(meetup, BoxLayout.Y_AXIS));
 		JTable table = new JTable(meetupData, new String[] {"Meeting #", "Date", "Time", "Location","Participants"});
 		
@@ -292,7 +289,6 @@ public class MyMeetingsView {
 		middlePanel.add(meetup);
 		
 		leftSide.add(search);
-		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 	}
 }

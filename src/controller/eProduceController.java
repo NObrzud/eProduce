@@ -167,26 +167,52 @@ public class eProduceController {
 		}
 	}
 	
-	public static void searchListings(ArrayList<Listing> listings, String search){
+	public static void searchListings(JFrame frame, ArrayList<Listing> listings, String[][] listingData, JTable table, String search, String[] columnHeadings, User currentUser){
 		ArrayList<Listing> temp = new ArrayList<Listing>();
 		for(int i=0; i<listings.size(); i++){
 			String tags = listings.get(i).getTags();
 			StringTokenizer st = new StringTokenizer(tags, ", ");
 			String token = "";
+			boolean contains = false;
 			while(st.hasMoreTokens()){
+				contains = false;
 				token = st.nextToken();
+				System.out.print(token + " == " + search + "?");
 				if(search.contains(token)){
+					System.out.println(" yes"); contains = true;
 					temp.add(listings.get(i));
+					System.out.println("Listing #: " + listings.get(i).getListingNum());
 					break;
 				}
+				else {
+					System.out.println(" no");
+				}
+			}
+			if(!contains)
+			{	
+				if(table.getRowCount() > 0)
+				((DefaultTableModel)table.getModel()).removeRow(i);
+
 			}
 		}
+		String[][] tempData = new String[temp.size()][3]; 
+		for(int i = 0; i < tempData.length; i++)
+		{
+			Listing currListing = temp.get(i);
+			tempData[i][0] = currListing.getListingNum();
+			tempData[i][1] = currListing.getOwner().getEmail();
+			tempData[i][2] = currListing.getTitle();
+		}
+		listings = temp;
+		listingData = tempData;
+		table.getSelectionModel().addListSelectionListener(eProduceActionListeners.createAllListingsTableListener(frame, listingData, table, listings, currentUser));
 	}
 	/*
 	 * To be used in MainPageView. Creates the Table of listings to be shown in the middle panel
 	 */
 	public static JTable createListingTable(JFrame frame, ArrayList<Listing> list, String[][] listingData, String[] columnHeadings, User currentUser) {
-		JTable table = new JTable(listingData, columnHeadings);
+		DefaultTableModel model = new DefaultTableModel(listingData, columnHeadings);
+		JTable table = new JTable(model);
 		table.setBackground(frame.getBackground());
 		table.setShowVerticalLines(false);
 		table.setGridColor(Color.black);

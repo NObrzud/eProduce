@@ -8,12 +8,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import controller.eProduceActionListeners;
 import controller.eProduceController;
 import controller.eProduceDatabase;
 import controller.eProducePanels;
@@ -70,10 +73,11 @@ public class MainPageView {
 	 * This a method to hold all of the middle panel information
 	 */
 	public void middlePanel(){
+		JButton searchButton = new JButton("Search");
+		
 		ArrayList<Listing> list = new ArrayList<Listing>();
 		eProduceDatabase.getAllListings(list);
 		JTextField search = new JTextField();
-		JComboBox sort;
 		JTextField[][] listings = new JTextField[list.size()][3];
 		String[][] listingData = new String[list.size()][3];
 		for(int i = 0; i < listings.length; i++){
@@ -103,15 +107,8 @@ public class MainPageView {
 		
 		search.setText("Search.....");
 		search.setColumns(50);
-		search.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e){
-				search.setText("");
-			}
-		});
-		
-		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox<String>(comboBoxInputs);
+		search.addMouseListener(eProduceActionListeners.createSearchMouseListener(frame,search,searchButton));
+				
 		
 		for(int i = 0; i < listings.length; i++)
 		{
@@ -121,17 +118,20 @@ public class MainPageView {
 		
 		
 		listing.setLayout(new BoxLayout(listing,BoxLayout.Y_AXIS));
-		JTable table = eProduceController.createListingTable(frame, list, listingData, new String[] {"Listing #", "Creator", "Title"}, currentUser);
+		String[] columnHeadings = new String[] {"Listing #", "Creator", "Title"};
+		JTable table = eProduceController.createListingTable(frame, list, listingData, columnHeadings, currentUser);
 		
 		listing.add(new JScrollPane(table));
 		
+		searchButton.addActionListener(eProduceActionListeners.createSearchActionListener(frame, currentUser, listingData, list, search, table, columnHeadings));
+
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
 		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		leftSide.add(search);
+		leftSide.add(searchButton);
 		middlePanel.add(listing);
-		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 	}
 }

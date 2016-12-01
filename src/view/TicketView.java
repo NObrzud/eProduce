@@ -89,7 +89,6 @@ public class TicketView {
 			eProduceDatabase.getMyTickets(currentUser.getEmail(),myTickets);
 		
 		JTextField search = new JTextField();
-		JComboBox sort;
 		JTextField[][] tickets = new JTextField[myTickets.size()][4];
 		String[][] ticketData = new String[myTickets.size()][4];
 		for(int i = 0; i < tickets.length; i++){
@@ -132,8 +131,6 @@ public class TicketView {
 			}
 		});
 		
-		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox(comboBoxInputs);
 		for(i = 0; i < tickets.length; i++)
 		{
 			for(int j = 0; j < tickets[i].length; j++)
@@ -184,7 +181,6 @@ public class TicketView {
 		middlePanel.add(ticketPanel);
 		
 		leftSide.add(search);
-		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		
 	}

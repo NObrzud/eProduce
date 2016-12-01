@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,6 +68,16 @@ public class eProduceActionListeners {
 		return logoutActionListener;
 	}
 	
+	public static MouseAdapter createSearchMouseListener(JFrame frame, JTextField search,  JButton defaultButton)
+	{
+		return new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				search.setText("");
+				frame.getRootPane().setDefaultButton(defaultButton);
+			}
+		};
+	}
 	public static ActionListener createMyAccountActionListener(JFrame frame, User currentUser) 
 	{
 		ActionListener myAccountActionListener = new ActionListener() {
@@ -520,7 +532,11 @@ public class eProduceActionListeners {
 				JLabel ownerRating = new JLabel();
 				JLabel des = new JLabel();
 				
-				ArrayList<Feedback> feedback = eProduceDatabase.getFeedbackForListing(list.get(table.getSelectedRow()).getListingNum());
+				ArrayList<Feedback> feedback ;
+				if(table.getSelectedRow()>=0)
+					feedback = eProduceDatabase.getFeedbackForListing(list.get(table.getSelectedRow()).getListingNum());
+				else
+					feedback = new ArrayList<Feedback>();
 				JTable feedbacktbl = eProduceController.createFeedbackTable(frame, feedback, list, new String[] {"Feedback #","Creator","Description"}, currentUser);	
 				
 				JTextField titletxt = new JTextField();
@@ -883,5 +899,16 @@ public class eProduceActionListeners {
 		else
 			return null;
 		
+	}
+
+	public static ActionListener createSearchActionListener(JFrame frame, User currentUser, String[][] listingData, ArrayList<Listing> listings, JTextField search, JTable table, String[] columnHeadings) {
+		ActionListener searchActionListener;
+		searchActionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eProduceController.searchListings(frame, listings, listingData, table, search.getText(), columnHeadings, currentUser);
+				((DefaultTableModel)table.getModel()).fireTableDataChanged();
+			}
+		};
+		return searchActionListener;
 	}
 }

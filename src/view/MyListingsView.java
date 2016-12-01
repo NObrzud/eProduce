@@ -86,7 +86,6 @@ public class MyListingsView {
 		eProduceDatabase.getMyListings(currentUser.getEmail(),myListings);
 		
 		JTextField search = new JTextField();
-		JComboBox sort;
 		JTextField[][] listings = new JTextField[myListings.size()][4];
 		String[][] listingData = new String[myListings.size()][4];
 		for(int i = 0; i < listings.length; i++){
@@ -126,8 +125,6 @@ public class MyListingsView {
 			}
 		});
 		
-		String [] comboBoxInputs = {"Sort By","Date - Newest", "Date - Oldest"};
-		sort = new JComboBox(comboBoxInputs);
 		for(i = 0; i < listings.length; i++)
 		{
 			for(int j = 0; j < listings[i].length; j++)
@@ -228,7 +225,6 @@ public class MyListingsView {
 		middlePanel.add(listing);
 		
 		leftSide.add(search);
-		leftSide.add(sort);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		
 	}
