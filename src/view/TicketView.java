@@ -88,7 +88,6 @@ public class TicketView {
 		else
 			eProduceDatabase.getMyTickets(currentUser.getEmail(),myTickets);
 		
-		JTextField search = new JTextField();
 		JTextField[][] tickets = new JTextField[myTickets.size()][4];
 		String[][] ticketData = new String[myTickets.size()][4];
 		for(int i = 0; i < tickets.length; i++){
@@ -121,16 +120,7 @@ public class TicketView {
 				ticketData[i][j] = tickets[i][j].getText();
 			}
 		}
-		search.setText("Search.....");
-		search.setColumns(50);
-		//Clears text when the search bar is clicked.
-		search.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e){
-				search.setText("");
-			}
-		});
-		
+
 		for(i = 0; i < tickets.length; i++)
 		{
 			for(int j = 0; j < tickets[i].length; j++)
@@ -180,7 +170,6 @@ public class TicketView {
 		
 		middlePanel.add(ticketPanel);
 		
-		leftSide.add(search);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		
 	}

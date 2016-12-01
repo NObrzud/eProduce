@@ -85,7 +85,6 @@ public class MyListingsView {
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
 		eProduceDatabase.getMyListings(currentUser.getEmail(),myListings);
 		
-		JTextField search = new JTextField();
 		JTextField[][] listings = new JTextField[myListings.size()][4];
 		String[][] listingData = new String[myListings.size()][4];
 		for(int i = 0; i < listings.length; i++){
@@ -116,14 +115,6 @@ public class MyListingsView {
 				listingData[i][j] = listings[i][j].getText();
 			}
 		}
-		search.setText("Search.....");
-		search.setColumns(50);
-		search.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e){
-				search.setText("");
-			}
-		});
 		
 		for(i = 0; i < listings.length; i++)
 		{
@@ -224,7 +215,6 @@ public class MyListingsView {
 		
 		middlePanel.add(listing);
 		
-		leftSide.add(search);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 		
 	}

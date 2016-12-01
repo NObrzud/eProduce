@@ -169,35 +169,41 @@ public class eProduceController {
 	
 	public static void searchListings(JFrame frame, ArrayList<Listing> listings, String[][] listingData, JTable table, String search, String[] columnHeadings, User currentUser){
 		ArrayList<Listing> temp = new ArrayList<Listing>();
+		table.getSelectionModel().removeListSelectionListener(eProduceActionListeners.listing);
 		for(int i=0; i<listings.size(); i++){
 			String tags = listings.get(i).getTags();
 			StringTokenizer st = new StringTokenizer(tags, ", ");
 			String token = "";
-			boolean contains = false;
+			boolean equals = false;
 			while(st.hasMoreTokens()){
-				contains = false;
 				token = st.nextToken();
 				if(search.contains(token)){
-					temp.add(listings.get(i));
-					break;
+					equals = true;
 				}
+				if(equals)
+					break;
 			}
-			if(!contains)
+			if(!equals)
 			{	
-				if(table.getRowCount() > 0)
-				((DefaultTableModel)table.getModel()).removeRow(i);
-
+				listings.remove(i);
+				if(table.getRowCount() > i)
+				{
+					((DefaultTableModel)table.getModel()).removeRow(i);
+				} 
+				i = 0;
 			}
 		}
-		String[][] tempData = new String[temp.size()][3]; 
-		for(int i = 0; i < tempData.length; i++)
+		String[][] tempData = new String[listings.size()][3]; 
+		for(int i = 0; i < tempData.length && listings.size()>0; i++)
 		{
-			Listing currListing = temp.get(i);
+			Listing currListing = listings.get(i);
 			tempData[i][0] = currListing.getListingNum();
 			tempData[i][1] = currListing.getOwner().getEmail();
 			tempData[i][2] = currListing.getTitle();
+			System.out.println("Adding Listing # " + currListing.getListingNum());
 		}
-		listings = temp;
+		if(listings.size() == 0)
+			((DefaultTableModel)table.getModel()).setRowCount(0);
 		listingData = tempData;
 		table.getSelectionModel().addListSelectionListener(eProduceActionListeners.createAllListingsTableListener(frame, listingData, table, listings, currentUser));
 	}

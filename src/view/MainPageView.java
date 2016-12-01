@@ -67,7 +67,7 @@ public class MainPageView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		sidePanel = eProducePanels.sidePanel(frame, false, false, false, true, true, true, sidePanel, currentUser);
+		sidePanel = eProducePanels.sidePanel(frame, true, false, false, true, true, true, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -123,7 +123,7 @@ public class MainPageView {
 		
 		listing.add(new JScrollPane(table));
 		
-		searchButton.addActionListener(eProduceActionListeners.createSearchActionListener(frame, currentUser, listingData, list, search, table, columnHeadings));
+		searchButton.addActionListener(eProduceActionListeners.createSearchActionListener(frame, currentUser, listingData, list, search, table, columnHeadings, searchButton));
 
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());

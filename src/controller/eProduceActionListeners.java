@@ -55,9 +55,13 @@ import view.TicketView;
  * 
  */
 public class eProduceActionListeners {
+	static ActionListener logout, myAccount, home, myListings, myMeetings, myTickets, createTicket, createListing, allUsers, sysTickets, cancel, submit, signup, login, search;
+	static ListSelectionListener ticket, listing, feedback;
+	static MouseAdapter searchMouse;
+	
 	public static ActionListener createLogoutActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener logoutActionListener = new ActionListener() {
+		logout = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				StartView start = new StartView(currentUser);
@@ -65,22 +69,23 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return logoutActionListener;
+		return logout;
 	}
 	
 	public static MouseAdapter createSearchMouseListener(JFrame frame, JTextField search,  JButton defaultButton)
 	{
-		return new MouseAdapter() {
+		searchMouse = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				search.setText("");
 				frame.getRootPane().setDefaultButton(defaultButton);
 			}
 		};
+		return searchMouse;
 	}
 	public static ActionListener createMyAccountActionListener(JFrame frame, User currentUser) 
 	{
-		ActionListener myAccountActionListener = new ActionListener() {
+		myAccount = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JPanel accPanel = new JPanel();
 				accPanel.setLayout(new GridLayout(0,1));
@@ -144,12 +149,12 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return myAccountActionListener;
+		return myAccount;
 	}
 	
 	public static ActionListener createHomeActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener homeActionListener = new ActionListener() {
+		home = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				MainPageView mpv = new MainPageView(currentUser);
@@ -157,12 +162,12 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return homeActionListener;
+		return home;
 	}
 	
 	public static ActionListener createMyListingsActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener myListingsActionListener = new ActionListener() {
+		myListings = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				MyListingsView mlv = new MyListingsView(currentUser);
@@ -170,12 +175,12 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return myListingsActionListener;
+		return myListings;
 	}
 	
 	public static ActionListener createMyMeetingsActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener myMeetingsActionListener = new ActionListener() {
+		myMeetings = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				MyMeetingsView mlv = new MyMeetingsView(currentUser);
@@ -183,23 +188,23 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return myMeetingsActionListener;
+		return myMeetings;
 	}
 	
 	public static ActionListener createMyTicketsActionListener(JFrame frame, User currentUser) {
-		ActionListener myTicketsActionListener = new ActionListener() {
+		myTickets = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			frame.dispose();
 			TicketView tix = new TicketView(currentUser);
 			tix.frame.setVisible(true);
 			}
 		};
-		return myTicketsActionListener;
+		return myTickets;
 	}
 	
 	public static ActionListener createCreateTicketActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener createTicketActionListener = new ActionListener(){
+		createTicket = new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JPanel lstPanel = new JPanel();
 				JPanel top = new JPanel();
@@ -252,12 +257,12 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return createTicketActionListener;
+		return createTicket;
 	}
 	
 	public static ActionListener createListingActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener createListingActionListener = new ActionListener() {
+		createListing = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JPanel lstPanel = new JPanel();
 				JPanel top = new JPanel();
@@ -322,12 +327,12 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return createListingActionListener;
+		return createListing;
 	}
 	
 	public static ActionListener createAllUsersActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener allUsersActionListener = new ActionListener() {
+		allUsers = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				AdminMainPageView ampv = new AdminMainPageView(currentUser);
@@ -335,35 +340,35 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return allUsersActionListener;
+		return allUsers;
 	}
 	
 	public static ActionListener createSysTicketsActionListener(JFrame frame, User currentUser) {
-		ActionListener sysTicketsActionListener = new ActionListener() {
+		sysTickets = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				TicketView atv = new TicketView(currentUser);
 				atv.frame.setVisible(true);
 			}
 		};
-		return sysTicketsActionListener;
+		return sysTickets;
 	}
 	
 	public static ActionListener createCancelActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener cancelActionListener = new ActionListener() {
+		cancel = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				StartView sv = new StartView(currentUser);
 				sv.frame.setVisible(true);
 			}	
 		};
-		return cancelActionListener;
+		return cancel;
 	}
 	
 	public static ActionListener createSubmitActionListener(JFrame frame, JTextField firstNameTF, JTextField lastNameTF, JTextField emailTF, JPasswordField passwordPF, JPasswordField rePasswordPF, User currentUser)
 	{
-		ActionListener submitActionListener = new ActionListener()
+		submit = new ActionListener()
 		{
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e)
@@ -403,24 +408,24 @@ public class eProduceActionListeners {
 				}
 			}
 		};
-		return submitActionListener;
+		return submit;
 	}
 	
 	public static ActionListener createSignupActionListener(JFrame frame, User currentUser)
 	{
-		ActionListener signupActionListener = new ActionListener() {
+		signup = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				SignUpView signupview = new SignUpView(currentUser);
 				signupview.frame.setVisible(true);
 			}
 		};
-		return signupActionListener;
+		return signup;
 	}
 		
 	public static ActionListener createLoginActionListener(JFrame frame, JPasswordField passwordPF, JTextField emailTF, User currentUser)
 	{
-		ActionListener loginActionListener = new ActionListener() {
+		login = new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				   if(!(passwordPF.getText().equals("")) && eProduceController.validateLogin(currentUser, emailTF, passwordPF) && currentUser != null)
@@ -449,12 +454,12 @@ public class eProduceActionListeners {
 				
 			}
 		};
-		return loginActionListener;
+		return login;
 	}
 
 	public static ListSelectionListener createTicketTableListener(JFrame frame, JTable table, ArrayList<Ticket> myTickets, User currentUser)
 	{
-		ListSelectionListener ticketTableListener = new ListSelectionListener() {
+		ticket = new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				JPanel main = new JPanel();
 				JPanel top = new JPanel();
@@ -516,13 +521,15 @@ public class eProduceActionListeners {
 				}
 			}
 		};
-		return ticketTableListener;
+		return ticket;
 	}
 	public static ListSelectionListener createAllListingsTableListener(JFrame frame, String[][] listingData, JTable table, ArrayList<Listing> list, User currentUser)
 	{
-		ListSelectionListener listingTableListener = new ListSelectionListener() {
+		listing = new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
-				JPanel listPanel = new JPanel();
+				if(table.getSelectedRow() < 0)
+					return;
+				JPanel listPanel = new JPanel();	
 				JPanel top = new JPanel();
 				JPanel bottom = new JPanel();
 				JPanel ratingPanel = new JPanel();
@@ -660,13 +667,8 @@ public class eProduceActionListeners {
 					} catch (IOException e) {
 						System.out.println("Image file not found!");
 					}
-					
-					
-					
-					
-					
 				
-				  int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
+				int result = JOptionPane.showOptionDialog(null, listPanel, "Viewing #" + list.get(table.getSelectedRow()).getListingNum(),
 			                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
 			                null, options1, null);
 				
@@ -742,14 +744,8 @@ public class eProduceActionListeners {
 							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
 							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
 							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
-							if(participantstxt.getText().equals("")) emptyFieldMsg += "      Participants\n";
-							if(datePicker.getModel().getValue().toString().equals("")) emptyFieldMsg += "      When\n";
-							if(loctxt.getText().equals("")) emptyFieldMsg += "      Location\n";
 							JOptionPane.showMessageDialog(frame, emptyFieldMsg);
-							
-							
 						}
-						
 					}
 				}
 				if(result == 1){
@@ -843,15 +839,14 @@ public class eProduceActionListeners {
 				}
 			}
 		};
-		return listingTableListener;
+		return listing;
 	}
 
 	public static ListSelectionListener createFeedbackTableListener(JFrame frame, String[][] feedbackData, JTable feedbacktbl, ArrayList<Feedback> list, User currentUser) 
 	{		
 		if(list.size() > 0)
 		{
-			ListSelectionListener feedbackListener = null;
-				feedbackListener = new ListSelectionListener() {
+			feedback = new ListSelectionListener() {
 					public void valueChanged(ListSelectionEvent event) 
 					{				
 							Feedback currentFeedback;
@@ -893,21 +888,22 @@ public class eProduceActionListeners {
 							}
 					}
 				};
-			return feedbackListener;
+			return feedback;
 		}
 		else
 			return null;
 		
 	}
 
-	public static ActionListener createSearchActionListener(JFrame frame, User currentUser, String[][] listingData, ArrayList<Listing> listings, JTextField search, JTable table, String[] columnHeadings) {
-		ActionListener searchActionListener;
-		searchActionListener = new ActionListener() {
+	public static ActionListener createSearchActionListener(JFrame frame, User currentUser, String[][] listingData, ArrayList<Listing> listings, JTextField searchJTF, JTable table, String[] columnHeadings, JButton searchButton) {
+		search = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				eProduceController.searchListings(frame, listings, listingData, table, search.getText(), columnHeadings, currentUser);
+				if(searchJTF.getText().isEmpty())
+					return;
+				eProduceController.searchListings(frame, listings, listingData, table, searchJTF.getText(), columnHeadings, currentUser);
 				((DefaultTableModel)table.getModel()).fireTableDataChanged();
 			}
 		};
-		return searchActionListener;
+		return search;
 	}
 }

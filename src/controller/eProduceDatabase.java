@@ -22,7 +22,7 @@ public class eProduceDatabase {
 	static String myDB;
 	static Connection DBConn;
 	static String dbLogin = "itkstu";
-	static String dbPass = "student";
+	static String dbPass = "student"; 
 	public  eProduceDatabase()
 	{
 		try

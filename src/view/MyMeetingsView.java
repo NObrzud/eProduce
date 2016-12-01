@@ -82,7 +82,7 @@ public class MyMeetingsView {
 	 * This a method to hold all of the side panel information
 	 */
 	public void sidePanel(){
-		sidePanel = eProducePanels.sidePanel(frame, false, false, false, true, true, true, sidePanel, currentUser);
+		sidePanel = eProducePanels.sidePanel(frame, true, false, false, true, true, true, sidePanel, currentUser);
 	}
 	/*
 	 * This a method to hold all of the middle panel information
@@ -91,7 +91,6 @@ public class MyMeetingsView {
 		ArrayList<Meetup> myMeetups = new ArrayList<Meetup>();
 		eProduceDatabase.getMyMeetups(currentUser.getEmail(),myMeetups);
 		
-		JTextField search = new JTextField();
 		JTextField[][] meetups = new JTextField[myMeetups.size()][6];
 		String[][] meetupData = new String[myMeetups.size()][6];
 		for(int i = 0; i < meetups.length; i++){
@@ -130,14 +129,6 @@ public class MyMeetingsView {
 			}
 		}
 		
-		search.setText("Search.....");
-		search.setColumns(50);
-		search.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e){
-				search.setText("");
-			}
-		});
 		
 		meetup.setLayout(new BoxLayout(meetup, BoxLayout.Y_AXIS));
 		JTable table = new JTable(meetupData, new String[] {"Meeting #", "Date", "Time", "Location","Participants"});
@@ -288,7 +279,6 @@ public class MyMeetingsView {
 
 		middlePanel.add(meetup);
 		
-		leftSide.add(search);
 		middlePanel.add(leftSide,BorderLayout.NORTH);
 	}
 }
