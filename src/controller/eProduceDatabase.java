@@ -669,6 +669,8 @@ public class eProduceDatabase {
 	public static boolean createFeedback(String email, String content, String listingNum) {
 		try 
 		{
+			if(content.equals(""))
+				return false;
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String insertString;
 			int returnVal;
