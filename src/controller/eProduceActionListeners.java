@@ -874,6 +874,10 @@ public class eProduceActionListeners {
 										feedbacktbl.setValueAt((Object)contentArea.getText(),feedbacktbl.getSelectedRow(), 2);
 										currentFeedback.setContent(contentArea.getText());
 									}
+									else
+									{
+										JOptionPane.showMessageDialog(null, "Something went wrong saving your feedback changes.");
+									}
 								}
 								else if(result == JOptionPane.NO_OPTION) //delete
 								{
