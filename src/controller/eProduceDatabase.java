@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -305,8 +306,14 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				
-				myMeetups.add(new Meetup(returnValues.getDate("meetDate"), returnValues.getTime("meetTime"), returnValues.getString("owner"), returnValues.getString("participants"), returnValues.getString("meetLocation"), Integer.toString(returnValues.getInt("meetupNum"))));
+				ArrayList<User> participants = new ArrayList<User>();
+				StringTokenizer st = new StringTokenizer(returnValues.getString("owner"), ", ");
+				String token = "";
+				while(st.hasMoreTokens()){
+					token = st.nextToken();
+					participants.add(getOwnerDetails(token));
+				}
+				myMeetups.add(new Meetup(returnValues.getDate("meetDate"), returnValues.getTime("meetTime"), returnValues.getString("owner"), participants, returnValues.getString("meetLocation"), Integer.toString(returnValues.getInt("meetupNum"))));
 			}
 		}
 		catch(SQLException e)
@@ -629,7 +636,7 @@ public class eProduceDatabase {
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				feedback.add(new Feedback(returnValues.getString("owner"), returnValues.getString("content"), Integer.toString(returnValues.getInt("feedbackNum"))));
+				feedback.add(new Feedback(getOwnerDetails(returnValues.getString("owner")), returnValues.getString("content"), Integer.toString(returnValues.getInt("feedbackNum"))));
 			}
 			return feedback;
 		}

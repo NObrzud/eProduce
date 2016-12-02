@@ -256,7 +256,7 @@ public class eProduceController {
 		for(int i = 0; i < feedbackData.length; i++)
 		{
 			feedbackData[i][0] = feedback.get(i).getFeedbackNum();
-			feedbackData[i][1] = feedback.get(i).getOwner();
+			feedbackData[i][1] = feedback.get(i).getOwner().getEmail();
 			feedbackData[i][2] = feedback.get(i).getContent();
 		}
 		DefaultTableModel model = new DefaultTableModel(feedbackData, columnHeadings);

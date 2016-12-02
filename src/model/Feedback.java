@@ -1,20 +1,20 @@
 package model;
 
 public class Feedback {
-	private String owner;
+	private User owner;
 	private String content;
 	private String feedbackNum;
 	
-	public Feedback(String owner, String content, String listingNum)
+	public Feedback(User owner, String content, String listingNum)
 	{
 		this.owner = owner;
 		this.content = content;
 		this.feedbackNum = listingNum;
 	}
-	public String getOwner() {
+	public User getOwner() {
 		return owner;
 	}
-	public void setOwner(String owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 	public String getContent() {

@@ -2,16 +2,17 @@ package model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 
 public class Meetup {
 	private Date date;
 	private Time time;
 	private String owner;
-	private String participants;
+	private ArrayList<User> participants;
 	private String location;
 	private String meetupNum;
 	
-	public Meetup(Date d, Time t, String o, String p, String l, String n)
+	public Meetup(Date d, Time t, String o, ArrayList<User> p, String l, String n)
 	{
 		date = d;
 		time = t;
@@ -38,11 +39,14 @@ public class Meetup {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public String getParticipants() {
+	public ArrayList<User> getParticipants() {
 		return participants;
 	}
-	public void setParticipants(String participants) {
+	public void setParticipants(ArrayList<User> participants) {
 		this.participants = participants;
+	}
+	public void addParticipant(User participant){
+		participants.add(participant);
 	}
 	public String getLocation() {
 		return location;

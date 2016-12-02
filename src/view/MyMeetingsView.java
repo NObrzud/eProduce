@@ -183,7 +183,15 @@ public class MyMeetingsView {
 				loclbl.setText("Location:");
 				meetupNumLabel.setText("Meetup #: ");
 				meetupNumLabel2.setText(myMeetups.get(table.getSelectedRow()).getMeetupNum());
-				participantstxt.setText(myMeetups.get(table.getSelectedRow()).getParticipants());
+				String partString = "";
+				for(int i = 0; i < myMeetups.get(table.getSelectedRow()).getParticipants().size(); i++)
+				{
+					partString += myMeetups.get(table.getSelectedRow()).getParticipants().get(i).getEmail();
+					if(i != myMeetups.get(table.getSelectedRow()).getParticipants().size() - 1)
+						partString += ", ";
+						
+				}
+				participantstxt.setText(partString);
 				loctxt.setText(myMeetups.get(table.getSelectedRow()).getLocation());
 				UtilDateModel model = new UtilDateModel(myMeetups.get(table.getSelectedRow()).getDate());
 				JDatePanelImpl datePanel = new JDatePanelImpl(model);
