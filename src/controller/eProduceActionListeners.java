@@ -93,6 +93,7 @@ public class eProduceActionListeners {
 				JTextField lname = new JTextField(currentUser.getLastName(),20);
 				JTextField email = new JTextField(currentUser.getEmail(),20);
 				JPasswordField password = new JPasswordField(currentUser.getPassword(),20);
+				email.setEditable(false);
 				password.setEchoChar('*');
 				JPasswordField passConfirm = new JPasswordField(currentUser.getPassword(),20);
 				passConfirm.setEchoChar('*');
