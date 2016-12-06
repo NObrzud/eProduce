@@ -83,7 +83,7 @@ public class MyListingsView {
 	 */
 	public void middlePanel(){
 		ArrayList<Listing> myListings = new ArrayList<Listing>();
-		eProduceDatabase.getMyListings(currentUser.getEmail(),myListings);
+		eProduceDatabase.getMyListings(currentUser.getEmail(),myListings); //get all of the listings of the current user and put into myListings ArrayList
 		
 		JTextField[][] listings = new JTextField[myListings.size()][4];
 		String[][] listingData = new String[myListings.size()][4];
@@ -193,7 +193,7 @@ public class MyListingsView {
 			}
 		});
 
-		for(i = 0; i < table.getColumnCount(); i++)
+		for(i = 0; i < table.getColumnCount(); i++) //this loop simply sets the text to display in the center
 		{
 			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
 			center.setHorizontalAlignment(SwingConstants.CENTER);

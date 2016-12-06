@@ -386,6 +386,10 @@ public class eProduceActionListeners {
 							StartView sv = new StartView(currentUser);
 							sv.frame.setVisible(true);
 						}
+						else
+						{
+							JOptionPane.showMessageDialog(frame, "There was an error making your account.\n Are you sure you don't already have an account associated with that email?");
+						}
 					}
 					else if(!eProduceController.validateEmail(emailTF.getText()))
 					{
@@ -850,12 +854,13 @@ public class eProduceActionListeners {
 			feedback = new ListSelectionListener() {
 					public void valueChanged(ListSelectionEvent event) 
 					{				
+						System.out.println("hi");
 							Feedback currentFeedback;
 							if(feedbacktbl.getSelectedRow()>=0)
 								currentFeedback = list.get(feedbacktbl.getSelectedRow());
 							else
 								return;
-							if(currentFeedback.getOwner().equals(currentUser.getEmail()))
+							if(currentFeedback.getOwner().getEmail().equals(currentUser.getEmail()))
 							{
 								JPanel panel = new JPanel();
 								JTextArea contentArea = new JTextArea(currentFeedback.getContent(), 10, 20);

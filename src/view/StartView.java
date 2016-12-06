@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 
 import controller.eProduceActionListeners;
 import model.User;
-
+//this is the main login page.
 public class StartView {
 	
 	public JFrame frame = new JFrame("eProduce");

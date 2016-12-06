@@ -51,9 +51,9 @@ public class AdminMainPageView{
 		frame.setLocationRelativeTo(null); 
 		frame.setLayout(new BorderLayout());
 		
-		topPanel();
-		sidePanel();
-		middlePanel();
+		topPanel(); //topPanel refers to the account/logout button portion
+		sidePanel(); //sidePanel refers to the home/system tickets portion
+		middlePanel(); //middlePanel refers to the JTable of users
 
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(sidePanel, BorderLayout.WEST);
@@ -78,7 +78,7 @@ public class AdminMainPageView{
 	 */
 	public void middlePanel(){
 		ArrayList<User> allUsers = new ArrayList<User>();
-		eProduceDatabase.getAllUsers(allUsers);
+		eProduceDatabase.getAllUsers(allUsers); //fill the allUsers ArrayList with Users
 		
 		JTextField[][] usersTF = new JTextField[allUsers.size()][7];
 		String[][] userData = new String[allUsers.size()][7];
@@ -113,7 +113,7 @@ public class AdminMainPageView{
 		{
 			for(int j = 0; j < userData[i].length; j++)
 			{
-				userData[i][j] = usersTF[i][j].getText();
+				userData[i][j] = usersTF[i][j].getText(); //fill the userData array with all the user data
 			}
 		}
 		
@@ -135,7 +135,7 @@ public class AdminMainPageView{
 		table.setRowHeight(30); //number of rows to have in the table.
 		table.setDefaultEditor(Object.class, null); //disables "double-click to edit" functionality
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent event) {
+			public void valueChanged(ListSelectionEvent event) { //this will happen when you double click on one of the JTable cells
 				JPanel listPanel = new JPanel();
 				JPanel top = new JPanel();
 				JLabel email = new JLabel();
@@ -144,7 +144,7 @@ public class AdminMainPageView{
 				JLabel emailtxt = new JLabel();
 				JLabel admintxt = new JLabel();
 				JLabel bannedtxt = new JLabel();
-				Object[] options1 = { "Ban User", "Make Admin","Cancel" };
+				Object[] options1 = { "Ban User", "Make Admin","Cancel" };//button texts
 
 				listPanel.setLayout(new GridLayout(0,1));
 				top.setLayout(new GridLayout(0,1));
@@ -152,10 +152,12 @@ public class AdminMainPageView{
 				email.setText("User Email: ");
 				admin.setText("Is Admin?: ");
 				banned.setText("Is Banned?:");
-				emailtxt.setText(allUsers.get(table.getSelectedRow()).getEmail());
+				
+				//pre-populate data
+				emailtxt.setText(allUsers.get(table.getSelectedRow()).getEmail()); 							
 				admintxt.setText(Integer.toString(allUsers.get(table.getSelectedRow()).getAdmin()));
 				bannedtxt.setText(Integer.toString(allUsers.get(table.getSelectedRow()).getBlocked()));
-				
+				//if user is banned, show "unban user" instead of "ban user" , if user is admin show "revoke admin" insetad of "Make admin"
 				if(Integer.parseInt(bannedtxt.getText()) == 1)
 				{
 					options1[0] = "Unban User";
@@ -173,7 +175,7 @@ public class AdminMainPageView{
 				top.setSize(new Dimension(30, 30));
 				listPanel.add(top);
 
-
+				//actually display listPanel, which contains the buttons to ban/unban user as well as general user info
 				int result = JOptionPane.showOptionDialog(null, listPanel, "Manage User Permissions",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
 						null, options1, null);
@@ -199,18 +201,18 @@ public class AdminMainPageView{
 			}
 		});
 
-		for(i = 0; i < table.getColumnCount(); i++)
+		for(i = 0; i < table.getColumnCount(); i++) //this loop sets the text to be center aligned.
 		{
 			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
 			center.setHorizontalAlignment(SwingConstants.CENTER);
 			TableColumn column = table.getColumnModel().getColumn(i);
 			column.setCellRenderer(center);
 		}
-		listing.add(new JScrollPane(table));
+		listing.add(new JScrollPane(table)); //allows scrollability
 		
 		leftSide.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middlePanel.setLayout(new BorderLayout());
-		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		middlePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); //10 pixels of padding
 
 		
 		middlePanel.add(listing);

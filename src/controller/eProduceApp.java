@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 
 import model.User;
 import view.StartView;
-
+//simple main method to run the app
 public class eProduceApp {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable(){

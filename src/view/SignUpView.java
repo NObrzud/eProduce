@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import controller.eProduceActionListeners;
 import model.User;
 
-
+//where a user signs up for a new account
 
 public class SignUpView {
 	public JFrame frame= new JFrame("eProduce - Signup");

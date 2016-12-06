@@ -89,7 +89,7 @@ public class MyMeetingsView {
 	 */
 	public void middlePanel(){
 		ArrayList<Meetup> myMeetups = new ArrayList<Meetup>();
-		eProduceDatabase.getMyMeetups(currentUser.getEmail(),myMeetups);
+		eProduceDatabase.getMyMeetups(currentUser.getEmail(),myMeetups); //get the current user's meetups and put them in myMeetups ArrayList
 		
 		JTextField[][] meetups = new JTextField[myMeetups.size()][6];
 		String[][] meetupData = new String[myMeetups.size()][6];
@@ -110,28 +110,19 @@ public class MyMeetingsView {
 			Meetup currMeetup = myMeetups.get(i);
 			if(currMeetup != null)
 			{
-				Date date = currMeetup.getTime();
 				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
-				meetups[i][0].setText(currMeetup.getMeetupNum());
-				meetups[i][1].setText(currMeetup.getDate().toString());
-				meetups[i][2].setText(sdf.format(currMeetup.getTime()));
-				meetups[i][3].setText(currMeetup.getLocation().toString());
-				meetups[i][4].setText(currMeetup.getParticipants().toString());
-				meetups[i][5].setText(currMeetup.getOwner().toString());
+				meetupData[i][0] = currMeetup.getMeetupNum();
+				meetupData[i][1] = currMeetup.getDate().toString();
+				meetupData[i][2] = sdf.format(currMeetup.getTime()); //convert the time to a more readable format
+				meetupData[i][3] = currMeetup.getLocation().toString();
+				meetupData[i][4] = currMeetup.getParticipants().get(0).getEmail() + ", " + currMeetup.getParticipants().get(1).getEmail();
+				meetupData[i][5] = currMeetup.getOwner();
+				System.out.println(currMeetup.getOwner().toString());
 			}
 		}
-		
-		for(int i = 0; i < meetupData.length; i++)
-		{
-			for(int j = 0; j < meetupData[i].length; j++)
-			{
-				meetupData[i][j] = meetups[i][j].getText();
-			}
-		}
-		
 		
 		meetup.setLayout(new BoxLayout(meetup, BoxLayout.Y_AXIS));
-		JTable table = new JTable(meetupData, new String[] {"Meeting #", "Date", "Time", "Location","Participants"});
+		JTable table = new JTable(meetupData, new String[] {"Meeting #", "Date", "Time", "Location"});
 		
 		table.setBackground(frame.getBackground()); //sets background color of each cell to the frame's background.
 		table.setShowVerticalLines(false); //doesn't show vertical gridlines
@@ -209,9 +200,9 @@ public class MyMeetingsView {
 				meetingPanel.add(loctxt);
 				
 			
-				String[] options = new String[] {"Save Changes", "Delete Meeting", "Cancel"};
+				String[] options = new String[] {"Save Changes", "Delete Meeting", "Cancel"}; //options to be displayed as buttons in the dialog
 				int result = JOptionPane.showOptionDialog(null, meetingPanel, "Edit Meeting Info", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
-				if(result == JOptionPane.YES_OPTION)
+				if(result == JOptionPane.YES_OPTION) //save changes button clicked
 				{
 					if(!(participantstxt.getText().equals("")) && !(datePicker.getModel().getValue().toString().equals("")) && !loctxt.getText().equals("") )	
 					{
@@ -241,7 +232,7 @@ public class MyMeetingsView {
 					}
 					
 				}
-				if(result == JOptionPane.NO_OPTION)
+				if(result == JOptionPane.NO_OPTION) //delete button clicked
 				{
 					eProduceDatabase.deleteMeetup(myMeetups.get(table.getSelectedRow()).getMeetupNum());
 					JOptionPane.showMessageDialog(frame, "Meetup has been successfully deleted!");
@@ -253,7 +244,7 @@ public class MyMeetingsView {
 			}
 		});
 		
-		for(int i = 0; i < table.getColumnCount(); i++){
+		for(int i = 0; i < table.getColumnCount(); i++){ //this sets the JTable's text to be centered
 			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
 			center.setHorizontalAlignment(SwingConstants.CENTER);
 			TableColumn column = table.getColumnModel().getColumn(i);

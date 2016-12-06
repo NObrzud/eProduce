@@ -18,7 +18,7 @@ import view.AdminMainPageView;
 import view.TicketView;
 
 /*
- * This class handles all panel creation to be passed back to the respective views. 
+ * This class handles panel creation for panels that look/act VERY similarly (e.g. top and mid panels of main views) to be passed back to the respective views. 
  */
 public class eProducePanels {
 	public static JPanel topPanel(JFrame frame, String title, boolean showMyAccount, boolean showLogout, JPanel topPanel, User currentUser)

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+//Simple model class for User
 public class User {
 	private String firstName;
 	private String lastName;
@@ -24,7 +25,7 @@ public class User {
 	}
 	public User()
 	{
-		
+
 	}
 	
 	public String getFirstName() {

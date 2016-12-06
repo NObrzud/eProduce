@@ -18,7 +18,7 @@ import model.Meetup;
 import model.Ticket;
 import model.User;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
-
+ //this class handles all database calls
 public class eProduceDatabase {
 	static String myDB;
 	static Connection DBConn;
@@ -28,8 +28,11 @@ public class eProduceDatabase {
 	{
 		try
 		{
+			dbLogin = "app"; //test environment, comment out when production
+			dbPass = "app"; //test environment, comment out when production
 			Class.forName("org.apache.derby.jdbc.ClientDriver");
-			myDB = "jdbc:derby://gfish.it.ilstu.edu:1527/IT326eProduce";
+			myDB = "jdbc:derby://localhost:1527/sample"; //test environment
+			//myDB = "jdbc:derby://gfish.it.ilstu.edu:1527/IT326eProduce"; //production
 		}
 		catch(ClassNotFoundException e)
 		{
@@ -49,7 +52,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.users where username = \'" + user + "\'"; // single quotes protect against SQL injection
-			System.out.println(selectString);
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
@@ -73,6 +75,7 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
+	//sets all the user variables. simple private helper method
 	private static void setModelValuesAfterLogin(User user, ResultSet returnValues) 
 	{
 		try {
@@ -89,6 +92,7 @@ public class eProduceDatabase {
 		
 		
 	}
+	// creates an account using the given firstName, lastName, email, and password
 	public static boolean createAccount(String first, String last, String email, String pass) 
 	{
 		try 
@@ -97,11 +101,17 @@ public class eProduceDatabase {
 			String updateString;
 			int returnVal;
 			Statement stmt = DBConn.createStatement();
-			stmt = DBConn.createStatement();
+			
+			ResultSet rs = stmt.executeQuery("select * from eproduce.users where username = \'" + email + "'");
+			while(rs.next())
+			{//if the account already exists. don't make the account
+				return false;
+			}
+			Statement stmt2 = DBConn.createStatement();
+			
 			
 			updateString = "insert into eProduce.users (firstname, lastname, username, password) values (\'"+first+"\',\'"+last+"\',\'"+email+"\',"+"\'"+pass+"\')"; // single quotes protect against SQL injection
-			System.out.println(updateString);
-			returnVal = stmt.executeUpdate(updateString);
+			returnVal = stmt2.executeUpdate(updateString);
 			if(returnVal == 1) // 1 new account was created
 			{
 				return true;
@@ -125,15 +135,8 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			updateString = "update eProduce.users set firstname=\'"+first+"\',lastname=\'"+last+"\',username=\'"+email+"\',password=\'"+pass+"\' where username=\'"+email+"\'";
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 			return true;
-			/*if(returnVal == 0) // 1 new account was created
-			{
-				return true;
-			}
-			else
-				return false;*/
 		}
 		catch(SQLException e)
 		{
@@ -141,6 +144,7 @@ public class eProduceDatabase {
 			return false;
 		}
 	}
+	//creates a listing by @param=email, titled title with the content text and tags tags
 	public static boolean createListing(String email, String title, String text, String tags) {
 		try 
 		{
@@ -151,7 +155,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			insertString = "insert into eproduce.listings (owner, title, content, tags ) values (\'"+email+"\',\'"+title+"\',\'"+text+"\',\'"+tags+", "+email+"\')";
-			System.out.println(insertString);
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new account was created
 			{
@@ -166,6 +169,7 @@ public class eProduceDatabase {
 			return false;
 		}	
 	}
+	//gets all the listings created by the email given in parameter, stores in the myListings ArrayList
 	public static void getMyListings(String email, ArrayList<Listing> myListings) {
 		try {
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
@@ -175,7 +179,7 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.listings where owner = \'" + email + "\'"; // single quotes protect against SQL injection
-			System.out.println(selectString);
+			
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
@@ -197,7 +201,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.users"; // single quotes protect against SQL injection
-			System.out.println(selectString);
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
@@ -220,7 +223,7 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.listings"; // single quotes protect against SQL injection
-			System.out.println(selectString);
+			
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
@@ -234,6 +237,7 @@ public class eProduceDatabase {
 		
 		
 	}
+	//updates the listing figured out by listingNum to have the new title, description, and tags passed in
 	public static boolean updateListing(String title, String des, String listingNum, String tags) {
 		try 
 		{
@@ -244,10 +248,9 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			updateString = "update eProduce.listings set title=\'"+title+"\',content=\'"+des+"\',tags=\'"+tags+"\' where listingnum = "+listingNum;
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 			//return true;
-			if(returnVal == 0) // 1 new account was created
+			if(returnVal == 0) // listing was updated
 			{
 				return true;
 			}
@@ -270,6 +273,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			
+			//converts Java's date/time to MySQL's date/time formats
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
 			String time = sdf.format(model2.getValue());
 			sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -277,7 +281,6 @@ public class eProduceDatabase {
 			
 			
 			insertString = "insert into eproduce.meetups (owner, participants, meettime, meetdate, meetlocation) values (\'"+owner+"\',\'"+participants+"\',\'"+time+"\',\'"+date+"\',\'"+location+"\')";
-			System.out.println(insertString);
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new meetup was created
 			{
@@ -293,6 +296,7 @@ public class eProduceDatabase {
 		}	
 		
 	}
+	//get all meetups where the owner is the parameter "email" and puts them in the ArrayList myMeetups
 	public static void getMyMeetups(String email, ArrayList<Meetup> myMeetups) {
 		try {
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
@@ -302,12 +306,12 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.meetups where owner = \'" + email + "\'"; // single quotes protect against SQL injection
-			System.out.println(selectString);
+			
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
 				ArrayList<User> participants = new ArrayList<User>();
-				StringTokenizer st = new StringTokenizer(returnValues.getString("owner"), ", ");
+				StringTokenizer st = new StringTokenizer(returnValues.getString("participants"), ", ");
 				String token = "";
 				while(st.hasMoreTokens()){
 					token = st.nextToken();
@@ -323,6 +327,7 @@ public class eProduceDatabase {
 		}
 		
 	}
+	//deletes the listing with listing number as the parameter
 	public static void deleteListing(String listingNum) {
 		try 
 		{
@@ -332,7 +337,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "delete from eProduce.listings where listingNum = " + listingNum;
-			System.out.println(updateString);
+			
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -341,6 +346,7 @@ public class eProduceDatabase {
 		}
 		
 	}
+	//gives all the owner's details (except password) with the username given by the parameter
 	public static User getOwnerDetails(String username) {
 		try {
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
@@ -350,7 +356,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.users where username = \'" + username + "\'"; // single quotes protect against SQL injection
-			System.out.println(selectString);
 			returnValues = stmt.executeQuery(selectString);
 			
 			User result = new User();
@@ -381,7 +386,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "update eProduce.users set currentrating=currentrating + 1 where username = \'" +username+ "\'";
-			System.out.println(updateString);
+			
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -398,7 +403,6 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "update eProduce.users set currentrating=currentrating - 1 where username = \'" +username+ "\'";
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -416,7 +420,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "update eProduce.users set isBlocked = "+isBanned+" where username = \'" +username+ "\'";
-			System.out.println(updateString);
+			
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -434,7 +438,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "update eProduce.users set isadmin = "+isAdmin + " where username = \'" +username+ "\'";
-			System.out.println(updateString);
+
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -453,7 +457,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			insertString = "insert into eproduce.tickets (owner, description) values (\'"+email+"\',\'"+description+"\')";
-			System.out.println(insertString);
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new account was created
 			{
@@ -468,6 +471,8 @@ public class eProduceDatabase {
 			return false;
 		}	
 	}
+	
+	//gets  all the tickets made by the account with the email given by the parameter, places into the ArrayList given by the parameter
 	public static void getMyTickets(String email, ArrayList<Ticket> myTickets) {
 		try {
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
@@ -477,7 +482,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.tickets where owner = \'" + email + "\'"; // single quotes protect against SQL injection
-			System.out.println(selectString);
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
@@ -499,7 +503,6 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "delete from eProduce.tickets where ticketNum = " + ticketNum;
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -507,6 +510,7 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 		}		
 	}
+	//updates the ticket with ticket number given by the 3rd parameter with the description and response given by the 1st and second parameters, respectively.
 	public static boolean updateTicket(String description, String response, String ticketNum) {
 		try 
 		{
@@ -517,9 +521,7 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			updateString = "update eProduce.tickets set description=\'"+description+"\', response=\'"+response+"\' where ticketnum = "+ticketNum;
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
-			//return true;
 			if(returnVal == 0) // 1 new account was created
 			{
 				return true;
@@ -542,7 +544,6 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "update eProduce.users set numreports= numreports + 1 where username = \'" +username+ "\'";
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -551,7 +552,8 @@ public class eProduceDatabase {
 		}
 		
 	}
-	public static void getAllTickets(ArrayList<Ticket> myTickets) {
+	//get all the tickets in the db and add to the array given here
+	public static void getAllTickets(ArrayList<Ticket> tickets) {
 		try {
 			DBConn = DriverManager.getConnection(myDB, dbLogin, dbPass);
 			String selectString;
@@ -560,11 +562,11 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			selectString = "select * from eproduce.tickets";
-			System.out.println(selectString);
+			
 			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
-				myTickets.add(new Ticket(returnValues.getString("owner"), returnValues.getString("description"), returnValues.getString("response"), Integer.toString(returnValues.getInt("ticketnum"))));
+				tickets.add(new Ticket(returnValues.getString("owner"), returnValues.getString("description"), returnValues.getString("response"), Integer.toString(returnValues.getInt("ticketnum"))));
 			}
 		}
 		catch(SQLException e)
@@ -572,6 +574,8 @@ public class eProduceDatabase {
 			System.err.println(e.getMessage());
 		}
 	}
+	
+	//edits the meetup using the updated models passed in through the parameters
 	public static boolean editMeetup(String meetupNum, String participants, String location, UtilDateModel model, SpinnerDateModel model2) {
 		//model = correct year, model2 = correct time
 				try 
@@ -590,7 +594,6 @@ public class eProduceDatabase {
 					
 					insertString = "update eproduce.meetups set participants = \'"+participants+"\', meettime = \'"+time+"\', meetdate = \'"+date+"\', meetlocation = \'"+location+"\'"
 								   + "where meetupNum = " + meetupNum;
-					System.out.println(insertString);
 					returnVal = stmt.executeUpdate(insertString);
 					if(returnVal == 1) // 1 new meetup was created
 					{
@@ -614,7 +617,6 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "delete from eProduce.meetups where meetupNum = " + meetupNum;
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 		}
 		catch(SQLException e)
@@ -631,9 +633,7 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			
-			selectString = "select * from eproduce.listingfeedback where listingNum = " + listingNum;
-			System.out.println(selectString);
-			returnValues = stmt.executeQuery(selectString);
+			selectString = "select * from eproduce.listingfeedback where listingNum = " + listingNum;			returnValues = stmt.executeQuery(selectString);
 			while(returnValues.next())
 			{
 				feedback.add(new Feedback(getOwnerDetails(returnValues.getString("owner")), returnValues.getString("content"), Integer.toString(returnValues.getInt("feedbackNum"))));
@@ -657,11 +657,10 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			insertString = "update eproduce.listingfeedback set content = \'"+ content+"\' where feedbackNum = " + feedbackNum;
-			System.out.println(insertString);
+			
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new meetup was created
 			{
-				System.out.println("true");
 				return true;
 			}
 			else
@@ -685,7 +684,6 @@ public class eProduceDatabase {
 			stmt = DBConn.createStatement();
 			
 			insertString = "insert into eproduce.listingfeedback (owner, content, listingNum) values (\'"+email+"\',\'"+content+"\', " + listingNum + ")";
-			System.out.println(insertString);
 			returnVal = stmt.executeUpdate(insertString);
 			if(returnVal == 1) // 1 new account was created
 			{
@@ -709,7 +707,6 @@ public class eProduceDatabase {
 			Statement stmt = DBConn.createStatement();
 			stmt = DBConn.createStatement();
 			updateString = "delete from eProduce.listingfeedback where feedbackNum = " + feedbackNum;
-			System.out.println(updateString);
 			returnVal = stmt.executeUpdate(updateString);
 			if(returnVal == 1)
 				return true;

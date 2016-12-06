@@ -30,7 +30,7 @@ import controller.eProduceDatabase;
 import controller.eProducePanels;
 import model.Ticket;
 import model.User;
-
+//this view is where tickets are viewed. either from admin or user-side
 public class TicketView {
 
 	public JFrame frame = new JFrame("eProduce");
@@ -65,12 +65,12 @@ public class TicketView {
 	/*
 	 * This a method to hold all of the top panel information
 	 */
-	public void topPanel(){
+	public void topPanel(){  //logout, edit account details
 		String titleLabel = "eProduce - MyTickets";
 		topPanel = eProducePanels.topPanel(frame, titleLabel, true, true, topPanel, currentUser);
 	}
 	/*
-	 * This a method to hold all of the side panel information
+	 * This a method to hold all of the side panel information, buttons for show mylistings, etc..
 	 */
 	public void sidePanel(){
 		if(currentUser.getAdmin() == 1)
@@ -79,7 +79,7 @@ public class TicketView {
 			sidePanel = eProducePanels.sidePanel(frame, true, true, false, false, true, true, sidePanel, currentUser);
 	}
 	/*
-	 * This a method to hold all of the middle panel information
+	 * This a method to hold all of the middle panel information, ticket jtable
 	 */
 	public void middlePanel(){
 		ArrayList<Ticket> myTickets = new ArrayList<Ticket>();

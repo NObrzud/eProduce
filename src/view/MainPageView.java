@@ -76,7 +76,7 @@ public class MainPageView {
 		JButton searchButton = new JButton("Search");
 		
 		ArrayList<Listing> list = new ArrayList<Listing>();
-		eProduceDatabase.getAllListings(list);
+		eProduceDatabase.getAllListings(list); //get all the listings and put them into the list ArrayList
 		JTextField search = new JTextField();
 		JTextField[][] listings = new JTextField[list.size()][3];
 		String[][] listingData = new String[list.size()][3];
@@ -107,6 +107,7 @@ public class MainPageView {
 		
 		search.setText("Search.....");
 		search.setColumns(50);
+		//when you click the search box initially, clear the text
 		search.addMouseListener(eProduceActionListeners.createSearchMouseListener(frame,search,searchButton));
 				
 		

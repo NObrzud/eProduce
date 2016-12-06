@@ -2,16 +2,16 @@ package model;
 
 import controller.eProduceDatabase;
 
+//Simple model class for Ticket
 public class Ticket {
 	private User owner;
 	private String description;
 	private String response;
 	private String ticketNum;
 	
-	private eProduceDatabase db = new eProduceDatabase();
 	public Ticket(String ownerEmail, String description, String response, String ticketNum)
 	{
-		owner = db.getOwnerDetails(ownerEmail);
+		owner = eProduceDatabase.getOwnerDetails(ownerEmail);
 		this.description = description;
 		this.ticketNum = ticketNum;
 		this.response = response;
@@ -37,7 +37,7 @@ public class Ticket {
 	}
 	public void setOwner(String ownerEmail)
 	{
-		this.owner = db.getOwnerDetails(ownerEmail);
+		this.owner = eProduceDatabase.getOwnerDetails(ownerEmail);
 	}
 	public void setOwner(User owner)
 	{

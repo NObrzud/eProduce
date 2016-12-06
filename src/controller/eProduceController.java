@@ -48,7 +48,7 @@ import view.MainPageView;
 import view.SignUpView;
 import view.StartView;
 
-
+//handles  most of the back-end functionality that isn't linked to the db
 public class eProduceController {
 	private User userModel;
 	
@@ -177,7 +177,7 @@ public class eProduceController {
 			boolean equals = false;
 			while(st.hasMoreTokens()){
 				token = st.nextToken();
-				if(search.contains(token)){
+				if(search.equals(token)){
 					equals = true;
 				}
 				if(equals)
